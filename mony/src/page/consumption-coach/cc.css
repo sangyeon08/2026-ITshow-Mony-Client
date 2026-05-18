@@ -1,3 +1,6 @@
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
 .cc-page {
   min-height: 100vh;
   background: #050505;
@@ -22,274 +25,346 @@
   gap: 10px;
 }
 
+/* ═══════════════════════════════════════════
+   TOP STRIP — 전체를 하나의 큰 박스로
+═══════════════════════════════════════════ */
 .cc-topStrip {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.7fr);
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: stretch;
+  min-width: 0;
+
+  /* ★ 하나의 큰 박스 */
+  background: rgba(28, 28, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+  padding: 16px;
 }
 
-.cc-topIntro,
-.cc-miniCard,
-.cc-board,
-.cc-chatPanel,
-.cc-promptCard {
-  background: rgba(31, 31, 31, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
-}
-
+/* intro — 배경/테두리 없음, 큰 박스 안에서 투명하게 */
 .cc-topIntro {
-  border-radius: 22px;
-  padding: 24px 26px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 12px 8px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 12px;
 }
 
-.cc-topEyebrow,
-.cc-heroEyebrow,
-.cc-chatLabel,
-.cc-miniLabel {
+.cc-topEyebrow {
   margin: 0;
-  color: rgba(255, 255, 255, 0.68);
-  font-size: 12px;
-  letter-spacing: -0.01em;
+  font-size: 14px;
+  letter-spacing: 0.01em;
 }
 
 .cc-topTitle {
-  margin: 16px 0 0;
-  font-size: clamp(1.7rem, 2.2vw, 2.55rem);
-  line-height: 1.28;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 600;
+  color: #f0f0f0;
+  letter-spacing: -0.02em;
 }
 
-.cc-topCards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  align-items: stretch;
-}
-
+/* mini stat card — 안에서 살짝 구분 */
 .cc-miniCard {
-  border-radius: 20px;
-  padding: 18px 18px 16px;
+  background: rgba(38, 38, 38, 0.7);
+  border-radius: 12px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 148px;
+  gap: 6px;
+  min-height: 110px;
 }
 
 .cc-miniLabel {
-  font-size: 12px;
+  font-size: 14px;
+  letter-spacing: -0.01em;
 }
 
 .cc-miniValue {
   display: block;
-  font-size: 14px;
-  line-height: 1.4;
-  font-weight: 800;
-  color: #f8f8f8;
-  letter-spacing: -0.03em;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: -0.025em;
+  margin-top: 2px;
 }
 
 .cc-miniMeta {
   margin-top: auto;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.52);
+  font-size: 11px;
+  text-align: right;
 }
 
+/* avatar */
 .cc-avatarWrap {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-width: 94px;
-}
-
-.cc-avatarBubble {
-  background: #dff53d;
-  color: #0e0e0e;
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 800;
+  padding: 0 8px;
 }
 
 .cc-avatarFace {
-  font-size: 2.2rem;
+  font-size: 3rem;
+  line-height: 1;
 }
 
-.cc-board {
-  border-radius: 24px;
-  padding: 24px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.05fr);
-  gap: 10px;
-}
-
-.cc-heroArea {
+/* ═══════════════════════════════════════════
+   HERO SECTION (initial state)
+═══════════════════════════════════════════ */
+.cc-heroSection {
+  background: rgba(22, 22, 22, 0.98);
+  border: none;
+  border-radius: 22px;
+  padding: 40px 32px 32px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 28px;
+  flex: 1;
 }
 
+/* hero copy */
 .cc-heroCopy {
-  padding: 16px 6px 8px;
   text-align: center;
 }
 
+.cc-heroEyebrow {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: -0.01em;
+}
+
 .cc-heroTitle {
-  margin: 8px 0 0;
-  font-size: clamp(1.9rem, 2.6vw, 3rem);
-  line-height: 1.35;
+  margin: 0;
+  font-size: clamp(1.6rem, 2.4vw, 2.6rem);
+  line-height: 1.3;
   font-weight: 800;
+  color: #f8f8f8;
   letter-spacing: -0.045em;
 }
 
+/* quick card grid — 3 × 2 */
 .cc-promptGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .cc-promptCard {
-  border: 0;
-  border-radius: 18px;
-  min-height: 82px;
+  background: rgba(36, 36, 36, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
   padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
   text-align: left;
+}
+
+.cc-promptCard:hover {
+  background: rgba(50, 50, 50, 0.98);
+}
+
+.cc-promptIcon {
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.cc-promptCardText {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  cursor: pointer;
+  gap: 3px;
 }
 
 .cc-promptTitle {
   font-size: 13px;
-  font-weight: 800;
-  color: #f7f7f7;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: #e8e8e8;
+  letter-spacing: -0.025em;
 }
 
-.cc-promptText {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.48);
+.cc-promptSub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.38);
   line-height: 1.4;
 }
 
-.cc-promptPills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  padding-top: 10px;
+/* hero input pill */
+.cc-heroInputArea {
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.cc-promptPill {
+.cc-heroForm {
+  width: 100%;
+}
+
+.cc-heroInput {
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(41, 41, 41, 0.9);
-  color: rgba(255, 255, 255, 0.8);
   border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 12px;
-  cursor: pointer;
+  background: rgba(16, 16, 16, 0.9);
+  color: #f0f0f0;
+  font-size: 14px;
+  padding: 14px 22px;
+  outline: none;
 }
 
+.cc-heroInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ═══════════════════════════════════════════
+  CHAT PANEL (chatted state)
+═══════════════════════════════════════════ */
 .cc-chatPanel {
-  border-radius: 24px;
-  padding: 20px;
+  background: rgba(22, 22, 22, 0.98);
+  border: none;
+  border-radius: 22px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 560px;
-}
-
-.cc-chatHeader {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: start;
-}
-
-.cc-chatTitle {
-  margin: 6px 0 0;
-  font-size: 1rem;
-  line-height: 1.4;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.cc-chatBadge {
-  border-radius: 999px;
-  padding: 8px 12px;
-  background: rgba(223, 245, 61, 0.12);
-  color: #dff53d;
-  border: 1px solid rgba(223, 245, 61, 0.14);
-  font-size: 12px;
-  white-space: nowrap;
+  flex: 1;
+  min-height: 500px;
 }
 
 .cc-chatMessages {
   flex: 1;
-  min-height: 320px;
+  min-height: 260px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow: auto;
-  padding-right: 2px;
+  overflow-y: auto;
 }
 
-.cc-chatBubble {
-  max-width: 88%;
-  border-radius: 18px;
-  padding: 14px 16px 12px;
+/* bubbles */
+.cc-bubble {
+  max-width: 60%;
+  border-radius: 16px;
+  padding: 12px 16px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: rgba(41, 41, 41, 0.95);
+  gap: 6px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.cc-chatBubble.is-user {
+.cc-bubble--asst {
+  background: rgba(38, 38, 38, 0.95);
+  margin-right: auto;
+}
+
+.cc-bubble--user {
+  background: rgba(45, 52, 16, 0.9);
+  border-color: rgba(223, 245, 61, 0.14);
   margin-left: auto;
-  background: rgba(223, 245, 61, 0.12);
-  border-color: rgba(223, 245, 61, 0.18);
 }
 
-.cc-chatRole,
-.cc-chatTime {
+.cc-bubbleRole {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.48);
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.cc-chatBubble p {
+.cc-bubbleTime {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.cc-bubble p {
   margin: 0;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
   letter-spacing: -0.02em;
+  color: #efefef;
 }
 
-.cc-chatBubble.is-user p {
-  color: #f8f8f8;
+/* insight card */
+.cc-insightGreeting {
+  white-space: pre-line;
+  color: #e0e0e0 !important;
 }
 
-.cc-chatForm {
+.cc-insightCard {
+  background: rgba(14, 14, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.cc-insightTitle {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #f8f8f8 !important;
+  letter-spacing: -0.03em;
+}
+
+.cc-insightSummary {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #e4e4e4 !important;
+}
+
+.cc-insightBullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cc-insightBullets li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.cc-insightBullets li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.cc-insightFooter {
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* chat form */
+.cc-chatForm {
+  display: flex;
 }
 
 .cc-chatInputWrap {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
-  border-radius: 18px;
-  background: rgba(20, 20, 20, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 10px 10px 10px 14px;
+  border-radius: 16px;
+  background: rgba(14, 14, 14, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 10px 10px 10px 16px;
 }
 
 .cc-chatInput {
@@ -297,73 +372,75 @@
   border: 0;
   outline: none;
   background: transparent;
-  color: #f6f6f6;
+  color: #f0f0f0;
   font-size: 14px;
   min-width: 0;
 }
 
 .cc-chatInput::placeholder {
-  color: rgba(255, 255, 255, 0.36);
+  color: rgba(255, 255, 255, 0.28);
 }
 
 .cc-sendButton {
   border: 0;
-  border-radius: 14px;
-  padding: 10px 16px;
+  border-radius: 10px;
+  padding: 9px 18px;
   background: #dff53d;
   color: #0c0c0c;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.cc-inputHint {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.42);
-  padding-left: 4px;
-}
-
-.cc-topStrip,
-.cc-board {
-  min-width: 0;
-}
-
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
 @media (max-width: 1280px) {
   .cc-shell {
     grid-template-columns: 180px minmax(0, 1fr);
     padding: 14px 18px 24px;
   }
 
-  .cc-topStrip,
-  .cc-board {
-    grid-template-columns: 1fr;
+  .cc-topStrip {
+    grid-template-columns: 1fr 1fr 1fr;
+    /* background/border/padding 유지 — 건드리지 않음 */
   }
 
-  .cc-topCards {
+  .cc-topIntro {
+    grid-column: 1 / -1;
+  }
+
+  .cc-avatarWrap {
+    display: none;
+  }
+}
+
+@media (max-width: 840px) {
+  .cc-topStrip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cc-promptGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 640px) {
   .cc-shell {
     grid-template-columns: 1fr;
-    padding: 12px;
+    padding: 10px;
   }
 
-  .cc-topCards,
+  .cc-topStrip {
+    grid-template-columns: 1fr;
+  }
+
   .cc-promptGrid {
     grid-template-columns: 1fr;
   }
 
-  .cc-board {
-    padding: 18px;
-  }
-
-  .cc-chatPanel {
-    min-height: 460px;
-  }
-
-  .cc-miniCard {
-    min-height: auto;
+  .cc-bubble {
+    max-width: 92%;
   }
 }
