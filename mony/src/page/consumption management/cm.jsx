@@ -94,7 +94,9 @@ export default function Cm() {
                   </div>
                   {metric.trend ? <span>{metric.trend}</span> : null}
                 </div>
-                <h3>{typeof metric.value === "number" ? <CountUp value={metric.value} suffix={metric.suffix} /> : metric.text}</h3>
+                <div className="cm-topMetricValue">
+                  <h3>{typeof metric.value === "number" ? <CountUp value={metric.value} suffix={metric.suffix} /> : metric.text}</h3>
+                </div>
               </motion.article>
             ))}
           </motion.section>

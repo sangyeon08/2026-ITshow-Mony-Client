@@ -31,6 +31,7 @@
 
 .cm-topMetrics {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .cm-topMetricCard,
@@ -42,8 +43,8 @@
 }
 
 .cm-topMetricCard {
-  min-height: 88px;
-  padding: 16px 18px;
+  min-height: 108px;
+  padding: 14px 18px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,24 +80,33 @@
 
 .cm-topMetricHead strong {
   display: block;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
   margin-top: 4px;
 }
 
 .cm-topMetricHead span {
-  color: #cfff47;
-  font-size: 12px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
   white-space: nowrap;
+}
+
+.cm-topMetricValue {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-height: 34px;
 }
 
 .cm-topMetricCard h3 {
   margin: 0;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1;
   font-weight: 800;
   color: #d7ff47;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
+  text-align: right;
 }
 
 .cm-overview {
@@ -268,7 +278,8 @@
 .cm-cardTitle {
   color: rgba(255, 255, 255, 0.96);
   font-size: 18px;
-  line-height: 1.2;
+  line-height: normal;
+  font-style: normal;
 }
 
 .cm-list,

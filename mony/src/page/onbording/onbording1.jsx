@@ -33,7 +33,7 @@ export default function OnBording1() {
         </div>
 
         <div className="join1-titleBlock">
-          <p className="join1-kicker">OOO과 함께할 첫 번째 단계</p>
+          <p className="join1-kicker">MONY와 함께할 첫 번째 단계</p>
           <h1 className="join1-title">회원님을 어떻게 불러 드릴까요?</h1>
         </div>
 
