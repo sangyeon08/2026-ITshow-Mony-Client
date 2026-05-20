@@ -5,16 +5,13 @@ import Check from "../../component/check";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
 
-const buildGoals = (userName) => [
-  { key: "impulse", title: "충동 구매 줄이기", desc: "필요한 것만 사고, 즉흥 구매는 줄일래요" },
-  { key: "fix", title: "소소한 지출 관리", desc: "배달 음식 등 작은 소비를 줄이고 싶어요" },
-  { key: "habit", title: "습관 개선하기", desc: "소비 습관을 천천히 바꿔보고 싶어요" },
-  { key: "plan", title: "계획적인 소비", desc: "소비 기준을 정해두고 쓰고 싶어요" },
-  { key: "track", title: "소비 점검하기", desc: "주로 어디에 소비하는지 확인하고 싶어요" },
-  { key: "safe", title: "천천히 소비하기", desc: "생각하면서 여유롭게 소비하고 싶어요" },
-  { key: "goal", title: "목적 있는 소비하기", desc: "나에게 의미 있는 소비만 하고 싶어요" },
-  { key: "low_fix", title: "고정 지출 줄여보기", desc: "매달 나가는 돈부터 정리해보고 싶어요" },
-  { key: "self", title: "직접 입력", desc: `${userName}님만의 소비 목표를 입력해 주세요` },
+const buildGoals = () => [
+  { key: "impulse", title: "충동구매 줄이기",    desc: "필요한 것만 사고, 즉흥 구매는 줄일래요" },
+  { key: "fix",     title: "소소한 지출 관리",   desc: "배달 음식 등 작은 소비를 줄이고 싶어요" },
+  { key: "balance", title: "균형 있는 소비",     desc: "소비와 저축의 균형을 맞추고 싶어요" },
+  { key: "plan",    title: "계획적인 소비",      desc: "소비 기준을 정해두고 쓰고 싶어요" },
+  { key: "saving",  title: "저축 습관 만들기",   desc: "꾸준한 저축으로 금융 습관을 만들고 싶어요" },
+  { key: "low_fix", title: "고정 지출 관리",     desc: "매달 나가는 돈부터 정리해보고 싶어요" },
 ];
 
 const CHIPS = {
@@ -47,7 +44,7 @@ export default function OnBording2() {
     typeof window !== "undefined" ? localStorage.getItem("joinName") : "";
   const userName = (routeName || storedName || "회원").trim();
 
-  const GOALS = useMemo(() => buildGoals(userName), [userName]);
+  const GOALS = useMemo(() => buildGoals(), []);
 
   const STORAGE_KEY = "onbording2Form";
 
@@ -128,7 +125,7 @@ export default function OnBording2() {
         <div className="join1-progressRow">
           <span className="join1-progressNow">02</span>
           <span className="join1-progressSlash">/</span>
-          <span className="join1-progressTotal">03</span>
+          <span className="join1-progressTotal">04</span>
         </div>
 
         <div className="join1-titleBlock">
