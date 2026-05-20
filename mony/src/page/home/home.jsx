@@ -232,6 +232,27 @@ export default function Home() {
   const benefitCardRef = useRef(null);
   const benefitCardInView = useInView(benefitCardRef, { once: true, amount: 0.4 });
 
+  const [savingsGoal, setSavingsGoal] = useState(() => {
+    const n = Number(localStorage.getItem("mony_savings_goal") ?? 0);
+    return n > 0 ? n : 100000;
+  });
+  const [savedAmount, setSavedAmount] = useState(() => {
+    const n = Number(localStorage.getItem("mony_saved_amount") ?? -1);
+    return n >= 0 ? n : 32000;
+  });
+  const [savingsToast, setSavingsToast] = useState(false);
+
+  const savingsProgress = Math.min(1, savedAmount / savingsGoal);
+  const savingsPct = Math.min(100, Math.round(savingsProgress * 100));
+
+  const handleQuickSave = () => {
+    const next = savedAmount + 5000;
+    setSavedAmount(next);
+    localStorage.setItem("mony_saved_amount", String(next));
+    setSavingsToast(true);
+    setTimeout(() => setSavingsToast(false), 2500);
+  };
+
   const handleTalkRefresh = () => {
     setActiveTalkGroupIndex((currentIndex) => (currentIndex + 1) % talkGroups.length);
   };
@@ -308,6 +329,65 @@ export default function Home() {
                 <p className="home-muted">하루 소비 목표 금액에 도달하지 않았어요</p>
               </div>
               <img className="home-profileImage" src={profile} alt="" aria-hidden="true" />
+            </motion.article>
+          </motion.section>
+
+          <motion.section
+            className="home-savingsSection"
+            variants={revealVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <motion.article className="home-savingsCard" {...cardMotion}>
+              <div className="home-savingsHeader">
+                <div className="home-savingsHeaderText">
+                  <p className="home-metricLabel">이번 달 저축 챌린지</p>
+                  <h3>저축 저금통</h3>
+                </div>
+                <span className="home-savingsPiggy" aria-hidden="true">🪙</span>
+              </div>
+
+              <div className="home-savingsStats">
+                <div className="home-savingsStat">
+                  <span>현재 적립</span>
+                  <strong className="is-lime">
+                    <CountUp value={savedAmount} suffix="원" />
+                  </strong>
+                </div>
+                <div className="home-savingsDivider" />
+                <div className="home-savingsStat">
+                  <span>이번 달 목표</span>
+                  <strong>{savingsGoal.toLocaleString()}원</strong>
+                </div>
+                <div className="home-savingsDivider" />
+                <div className="home-savingsStat">
+                  <span>달성률</span>
+                  <strong>{savingsPct}%</strong>
+                </div>
+              </div>
+
+              <div className="home-progress">
+                <ProgressFill className="home-progressBar" value={savingsProgress} />
+              </div>
+
+              <div className="home-savingsActions">
+                <button type="button" className="home-savingsBtn" onClick={handleQuickSave}>
+                  + 5,000원 적립하기
+                </button>
+                {savingsPct >= 50 && (
+                  <div className="home-savingsAchieve">
+                    <span aria-hidden="true">🏅</span>
+                    <span>50% 달성 리워드 배지 획득!</span>
+                  </div>
+                )}
+              </div>
+
+              {savingsToast && (
+                <div className="home-savingsToast" role="status" aria-live="polite">
+                  🪙 5,000원이 저금통에 적립됐어요!
+                </div>
+              )}
             </motion.article>
           </motion.section>
 
