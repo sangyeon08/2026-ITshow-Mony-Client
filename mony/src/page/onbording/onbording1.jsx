@@ -29,7 +29,7 @@ export default function OnBording1() {
         <div className="join1-progressRow">
           <span className="join1-progressNow">01</span>
           <span className="join1-progressSlash">/</span>
-          <span className="join1-progressTotal">03</span>
+          <span className="join1-progressTotal">04</span>
         </div>
 
         <div className="join1-titleBlock">
