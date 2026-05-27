@@ -1,4 +1,4 @@
-.cm-page {
+  .cm-page {
   min-height: 100vh;
   background: #070707;
   padding: 16px;
@@ -71,8 +71,7 @@
 .cm-summaryCell strong,
 .cm-calendarDay,
 .cm-calendarDate,
-.cm-logFilters span,
-.cm-logBubble small {
+.cm-logBubbleInfo small {
   margin: 0;
   color: rgba(255, 255, 255, 0.62);
   font-size: 12px;
@@ -158,21 +157,27 @@
 }
 
 .cm-cardHeaderLine {
-  margin: 20px 0 0 0;
+  margin: 20px 0 20px 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
+.cm-calendarCard .cm-cardHeaderLine > div,
+.cm-logCard .cm-cardHeaderLine > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 
 .cm-cardHeaderLine > span{
   margin-right: 32px;
 }
 
 .cm-cardTitle {
-  font-weight: 100;
-  padding: 25px;
+  font-weight: 300;
+  padding: 0;
   margin: 0;
   letter-spacing: -0.04em;
 }
@@ -561,6 +566,11 @@
   min-height: 260px;
 }
 
+.cm-logCard {
+  min-height: 240px;
+  padding: 34px 42px 36px;
+}
+
 .cm-historyCard {
   min-height: 380px;
   padding: 28px 34px 30px;
@@ -635,7 +645,8 @@
 }
 
 .cm-historyTop {
-  padding: 18px 22px;
+  margin-top: 40px;
+  padding: 24px 24px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
   display: grid;
@@ -665,7 +676,7 @@
   color: #fff;
   font-size: 15px;
   line-height: 1.15;
-  font-weight: 700;
+  font-weight: 600;
   word-break: keep-all;
 }
 
@@ -675,7 +686,7 @@
 }
 
 .cm-detailList {
-  margin-top: 20px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
 }
@@ -698,7 +709,7 @@
   color: rgba(255, 255, 255, 0.72);
   font-size: 12px;
   line-height: 1;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .cm-detailName,
@@ -706,7 +717,7 @@
   color: #fff;
   font-size: 12px;
   line-height: 1;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .cm-detailName {
@@ -761,10 +772,19 @@
 }
 
 .cm-cardMeta {
-  margin-top: 20px;
-  margin-left: 30px;
+  margin-top: 0;
+  margin-left: 0;
   font-weight: 400;
 }
+
+.cm-cardMeta1 {
+  margin-top: 0;
+  margin-left: 0;
+  font-weight: 400;
+  color: #fff;
+  }
+
+
 
 .cm-calendar {
   display: grid;
@@ -775,14 +795,16 @@
 
 .cm-calendarDay,
 .cm-calendarDate {
+  margin-top: 25px;
   justify-self: center;
   color: rgba(255, 255, 255, 0.88);
   font-size: 14px;
 }
 
 .cm-calendarDate {
-  width: 24px;
-  height: 24px;
+  margin-top: 5px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -791,7 +813,7 @@
 .cm-calendarDate.is-active {
   background: #d7ff47;
   color: #111;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .cm-rightStack {
@@ -800,83 +822,148 @@
   gap: 12px;
 }
 
+.cm-logCard .cm-cardHeaderLine {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cm-logCard .cm-cardHeaderLine > div {
+  gap: 0;
+}
+
+.cm-logCard .cm-cardHeaderLine > span {
+  margin-right: 0;
+}
+
+.cm-logCard .cm-cardMeta {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #f5f5f5;
+}
+
+.cm-logCard .cm-cardTitle {
+  display: none;
+}
+
 .cm-logFilters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 34px;
+  margin-top: 20px;
 }
 
-.cm-logFilters span {
-  padding-bottom: 3px;
-  border-bottom: 1px solid transparent;
+.cm-logFilters button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.cm-logFilters span.is-active {
+.cm-logFilters button.is-active {
   color: #fff;
-  border-bottom-color: #d7ff47;
 }
 
 .cm-logBubbles {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
+  margin-top: 38px;
+  margin-left: 10px;
+  margin-bottom: 30px;
 }
 
 .cm-logBubble {
+  position: relative;
   aspect-ratio: 1;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: 12px;
-  color: rgba(255, 255, 255, 0.94);
-  position: relative;
   overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  background-color: #111;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.cm-logBubble::after {
+.cm-logBubble::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.38);
+  transition: background 0.25s ease;
 }
 
-.cm-logBubble span,
-.cm-logBubble small {
+.cm-logBubbleDay {
   position: relative;
   z-index: 1;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.cm-logBubble span {
-  font-size: 18px;
-  font-weight: 800;
+.cm-logBubbleInfo {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 12px;
 }
 
-.cm-logBubble small {
-  display: block;
-  margin-top: 2px;
-  font-size: 11px;
+.cm-logBubbleInfo strong {
+  max-width: 78px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 700;
 }
 
-.cm-logBubble.is-one {
-  background: radial-gradient(circle at 35% 35%, #694a2a, #2f2417);
+.cm-logBubbleInfo small {
+  color: #fff;
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: 600;
 }
 
-.cm-logBubble.is-two {
-  background: radial-gradient(circle at 35% 35%, #7a5a28, #302313);
+.cm-logBubble:hover::before {
+  background: rgba(0, 0, 0, 0.58);
 }
 
-.cm-logBubble.is-three {
-  background: radial-gradient(circle at 35% 35%, #74502e, #2c1f17);
+.cm-logBubble:hover .cm-logBubbleDay {
+  opacity: 0;
+  transform: scale(0.92);
 }
 
-.cm-logBubble.is-four {
-  background: radial-gradient(circle at 35% 35%, #7b4d17, #302313);
-}
-
-.cm-logBubble.is-five {
-  background: radial-gradient(circle at 35% 35%, #8c3414, #31140d);
+.cm-logBubble:hover .cm-logBubbleInfo {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ── 카테고리 절약 힌트 ── */

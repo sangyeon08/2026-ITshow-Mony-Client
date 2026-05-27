@@ -96,11 +96,41 @@ const categoryItems = [
 ];
 
 const logBubbles = [
-  { day: "26", label: "식사/외식", tone: "one" },
-  { day: "27", label: "쇼핑", tone: "two" },
-  { day: "28", label: "여행", tone: "three" },
-  { day: "29", label: "취미", tone: "four" },
-  { day: "30", label: "기타", tone: "five" },
+  {
+    day: 26,
+    label: "백소정",
+    amount: "-20,200",
+    image: "/images/food-26.svg",
+    tone: "normal",
+  },
+  {
+    day: 27,
+    label: "일번지...",
+    amount: "-30,240",
+    image: "/images/food-27.svg",
+    tone: "normal",
+  },
+  {
+    day: 28,
+    label: "",
+    amount: "",
+    image: "/images/food-28.svg",
+    tone: "normal",
+  },
+  {
+    day: 29,
+    label: "업기떡...",
+    amount: "-14,300",
+    image: "/images/food-29.svg",
+    tone: "normal",
+  },
+  {
+    day: 30,
+    label: "분식집",
+    amount: "-9,130",
+    image: "/images/food-30.svg",
+    tone: "normal",
+  },
 ];
 
 export default function Cm() {
@@ -229,7 +259,7 @@ export default function Cm() {
                 >
                   <div className="cm-summaryCell">
                     <span>가장 많이 사용한 카드</span>
-                    <strong>김수한무의 카방카드</strong>
+                    <strong>김수한무의 카뱅 카드</strong>
                   </div>
                   <div className="cm-summaryCell">
                     <span>이 카드는</span>
@@ -361,7 +391,7 @@ export default function Cm() {
                 <div className="cm-historyTop">
                   <div>
                     <span>카카오뱅크</span>
-                    <strong>김수한무의 카방카드</strong>
+                    <strong>김수한무의 카뱅 카드</strong>
                   </div>
                   <div>
                     <span>3월 사용금액</span>
@@ -475,8 +505,7 @@ export default function Cm() {
                 >
                   <div className="cm-cardHeaderLine">
                     <div>
-                      <p className="cm-cardMeta">소비로그 · 2026년 3월</p>
-                      <h3 className="cm-cardTitle">식사/외식 중심 로그</h3>
+                      <p className="cm-cardMeta1">소비로그 · 2026년 3월</p>
                     </div>
                     <span aria-hidden="true" className="next">
                       <svg
@@ -497,25 +526,36 @@ export default function Cm() {
                   <div className="cm-logFilters">
                     {["식사/외식", "쇼핑", "여행", "취미", "장소", "기타"].map(
                       (item, index) => (
-                        <span
+                        <button
+                          type="button"
                           key={item}
                           className={index === 0 ? "is-active" : ""}
                         >
                           {item}
-                        </span>
+                        </button>
                       ),
                     )}
                   </div>
 
                   <div className="cm-logBubbles">
+                    {/* TODO: 오늘 날짜 기준으로 최근 날짜가 자동 생성되도록 수정 예정 */}
                     {logBubbles.map((item) => (
-                      <div
+                      <button
+                        type="button"
                         key={item.day}
-                        className={`cm-logBubble is-${item.tone}`}
+                        className="cm-logBubble"
+                        style={{ backgroundImage: `url(${item.image})` }}
+                        aria-label={`${item.day}일 소비 로그`}
                       >
-                        <span>{item.day}</span>
-                        <small>{item.label}</small>
-                      </div>
+                        <span className="cm-logBubbleDay">{item.day}</span>
+
+                        {(item.label || item.amount) && (
+                          <span className="cm-logBubbleInfo">
+                            <strong>{item.label}</strong>
+                            <small>{item.amount}</small>
+                          </span>
+                        )}
+                      </button>
                     ))}
                   </div>
                 </Motion.article>
