@@ -12,8 +12,8 @@ import {
 import "./cc.css";
 
 // ── .env 에서 API 키 로드 ──
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 // ── 시스템 프롬프트 ──
 const SYSTEM_PROMPT = `당신은 MONY 앱의 소비 코치입니다.
@@ -61,35 +61,46 @@ const formatTime = (date = new Date()) =>
 
 // ── Gemini API 호출 ──
 const callGemini = async (userText, history) => {
-  const contents = history.length === 0
-    ? [{ role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\n" + userText }] }]
-    : [...history, { role: "user", parts: [{ text: userText }] }];
-
-  const res = await fetch(GEMINI_URL, {
+  const contents =
+    history.length === 0 ? [ { role: "user", parts: [ { text: userText, }, ], } ]
+      : [ ...history, { role: "user", parts: [ { text: userText, }, ], }, ];
+  const res = await fetch("http://localhost:3001/api/groq", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contents,
+      system_prompt: SYSTEM_PROMPT,
+    }),
   });
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error?.message || `HTTP ${res.status}`);
+
+    throw new Error(
+      err.error || `HTTP ${res.status}`
+    );
   }
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "응답을 받지 못했어요.";
+
+  return (
+    data.choices?.[0]?.message?.content ||
+    "응답을 받지 못했어요."
+  );
 };
 
 export default function CC() {
-  const [message, setMessage]         = useState("");
-  const [messages, setMessages]       = useState([]);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [ccSaveToast, setCcSaveToast] = useState(null);
   const [inputFocused, setInputFocused] = useState(false);
-  const [isLoading, setIsLoading]     = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const geminiHistory = useRef([]);
-  const chatEndRef    = useRef(null);
-  const hasChatted    = messages.length > 0;
+  const chatEndRef = useRef(null);
+  const hasChatted = messages.length > 0;
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
