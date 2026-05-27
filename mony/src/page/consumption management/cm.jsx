@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
 import Coinimg from "../../assets/cm/coin.png";
+import FoodIcon from "../../assets/cm/food.svg";
+import ShoppingIcon from "../../assets/cm/shopping.svg";
+import TrafficIcon from "../../assets/cm/traffic.svg";
 
 import {
   CountUp,
@@ -51,6 +54,8 @@ const recentUsage = [
     date: "3/26",
     hint: "평소보다 1,200원 적게 썼어요",
     piggyAmount: 1200,
+    icon: FoodIcon,
+    color: "food",
   },
   {
     name: "백소정 관악점",
@@ -58,16 +63,36 @@ const recentUsage = [
     date: "3/26",
     hint: "절약 가능 3,000원",
     piggyAmount: 3000,
+    icon: FoodIcon,
+    color: "food",
   },
-  { name: "교보문고 광화문점", amount: "-35,400원", date: "3/24" },
+  { name: "교보문고 광화문점", amount: "-35,400원", date: "3/24", icon: ShoppingIcon, color: "shopping" },
   { name: "롯데마트(주)", amount: "-10,600원", date: "3/22" },
   { name: "에이치앤엠", amount: "-34,020원", date: "3/20" },
 ];
 
+const detailRows = [
+  { date: "3월 26일", name: "백소정 관악점", time: "12:09/국내", amount: "-14,600원" },
+  { date: "3월 26일", name: "GS25 녹번점", time: "09:05/국내", amount: "-5,600원" },
+  { date: "3월 24일", name: "Apple", time: "17:50/국내", amount: "-5,400원" },
+  { date: "3월 24일", name: "교보문고 광화문점", time: "11:45/국내", amount: "-35,400원" },
+  { date: "3월 22일", name: "롯데쇼핑(주)", time: "18:13/국내", amount: "-10,600원" },
+  { date: "3월 20일", name: "에이치앤엠", time: "16:03/국내", amount: "-34,020원" },
+];
+
+const categoryDetailRows = [
+  { date: "3월 26일", name: "백소정 관악점", time: "12:09/국내", amount: "-14,600원" },
+  { date: "3월 26일", name: "GS25 녹번점", time: "09:05/국내", amount: "-14,600원" },
+  { date: "3월 26일", name: "투썸플레이스", time: "11:05/국내", amount: "-17,700원" },
+  { date: "3월 26일", name: "GS25 녹번점", time: "16:38/국내", amount: "-9,600원" },
+  { date: "3월 19일", name: "컴포즈커피", time: "12:07/국내", amount: "-2,300원" },
+  { date: "3월 19일", name: "팻어케이크", time: "17:36/국내", amount: "-28,500원" },
+];
+
 const categoryItems = [
-  { name: "식/외식", value: 60, color: "lime", reducible: 18000 },
-  { name: "쇼핑", value: 30, color: "mint", reducible: 9000 },
-  { name: "교통", value: 12, color: "lavender" },
+  { name: "식사/외식", value: 60, color: "food", icon: FoodIcon },
+  { name: "쇼핑", value: 30, color: "shopping", icon: ShoppingIcon },
+  { name: "교통", value: 12, color: "traffic", icon: TrafficIcon },
 ];
 
 const logBubbles = [
@@ -79,8 +104,8 @@ const logBubbles = [
 ];
 
 export default function Cm() {
-  const [cmToast, setCmToast] = useState(null);
-  const [savedAmount, setSavedAmount] = useState(() => {
+  const [historyPage, setHistoryPage] = useState(0);
+  const [savedAmount] = useState(() => {
     const v = Number(localStorage.getItem("mony_saved_amount"));
     return v > 0 ? v : 326000;
   });
@@ -91,14 +116,9 @@ export default function Cm() {
     Math.round((savedAmount / savingsGoal) * 100),
   );
 
-  const handlePiggyBank = (item) => {
-    if (!item.piggyAmount) return;
-    const next = savedAmount + item.piggyAmount;
-    setSavedAmount(next);
-    localStorage.setItem("mony_saved_amount", String(next));
-    setCmToast(item.piggyAmount);
-    setTimeout(() => setCmToast(null), 2500);
-  };
+  const historyTitle = historyPage === 0 ? "최근 사용 내역" : "카테고리 소비";
+  const goToPrevHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
+  const goToNextHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
 
   return (
     <main className="cm-page">
@@ -108,7 +128,7 @@ export default function Cm() {
         <section className="cm-main">
           <HomeHeader />
           <div className="cm-section">
-            <motion.section
+            <Motion.section
               className="cm-topMetrics"
               variants={staggerContainerVariants}
               initial="hidden"
@@ -116,7 +136,7 @@ export default function Cm() {
               viewport={{ once: true, amount: 0.2 }}
             >
               {topMetrics.map((metric) => (
-                <motion.article
+                <Motion.article
                   key={metric.label}
                   className="cm-topMetricCard"
                   variants={staggerItemVariants}
@@ -138,18 +158,18 @@ export default function Cm() {
                       )}
                     </h3>
                   </div>
-                </motion.article>
+                </Motion.article>
               ))}
-            </motion.section>
+            </Motion.section>
 
-            <motion.section
+            <Motion.section
               className="cm-overview"
               variants={staggerContainerVariants}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.18 }}
             >
-              <motion.article
+              <Motion.article
                 className="cm-card cm-card--challenge"
                 variants={staggerItemVariants}
                 {...cardMotion}
@@ -199,10 +219,10 @@ export default function Cm() {
                   </strong>{" "}
                   남았어요
                 </p>
-              </motion.article>
+              </Motion.article>
 
               <div className="cm-overviewRight">
-                <motion.article
+                <Motion.article
                   className="cm-card cm-summaryStrip"
                   variants={staggerItemVariants}
                   {...cardMotion}
@@ -227,19 +247,22 @@ export default function Cm() {
                     <span>지난 달에 비해</span>
                     <strong>12% ↑</strong>
                   </div>
-                </motion.article>
+                </Motion.article>
 
                 <div className="cm-grid3">
-                  <motion.article
+                  <Motion.article
                     className="cm-card"
                     variants={staggerItemVariants}
                     {...cardMotion}
                   >
                     <h3 className="cm-cardTitle">최근 사용 내역</h3>
                     <div className="cm-list">
-                      {recentUsage.map((item) => (
+                      {recentUsage.slice(0, 3).map((item) => (
                         <div key={item.name} className="cm-listRow">
-                          <div>
+                          <span className={`cm-iconBox is-${item.color}`}>
+                            <img className="cm-listIcon" src={item.icon} alt="" aria-hidden="true" />
+                          </span>
+                          <div className="cm-listText">
                             <strong>{item.name}</strong>
                             <span>{item.amount}</span>
                           </div>
@@ -247,43 +270,39 @@ export default function Cm() {
                         </div>
                       ))}
                     </div>
-                  </motion.article>
+                  </Motion.article>
 
-                  <motion.article
+                  <Motion.article
                     className="cm-card"
                     variants={staggerItemVariants}
                     {...cardMotion}
                   >
                     <h3 className="cm-cardTitle">카테고리 소비</h3>
-                    <p className="cm-subtitle">소비 지출의 증감이 보이네요</p>
+                    <p className="cm-subtitle">쇼핑과 식사 지출의 증가가 보여요</p>
                     <div className="cm-categoryList">
                       {categoryItems.map((item) => (
                         <div key={item.name} className="cm-categoryItem">
                           <div className="cm-categoryTop">
-                            <span
-                              className={`cm-categoryIcon is-${item.color}`}
-                            />
-                            <strong>{item.name}</strong>
+                            <span className={`cm-iconBox is-${item.color}`}>
+                              <img className="cm-categoryIcon" src={item.icon} alt="" aria-hidden="true" />
+                            </span>
+                            <div className="cm-categoryInfo">
+                              <strong>{item.name}</strong>
+                              <div className="cm-categoryBar">
+                                <ProgressFill
+                                  value={item.value / 100}
+                                  className={`cm-categoryFill is-${item.color}`}
+                                />
+                              </div>
+                            </div>
                             <small>{item.value}%</small>
                           </div>
-                          <div className="cm-categoryBar">
-                            <ProgressFill
-                              value={item.value / 100}
-                              className={`cm-categoryFill is-${item.color}`}
-                            />
-                          </div>
-                          {item.reducible && (
-                            <p className="cm-categoryReducible">
-                              이번 달 줄일 수 있는 금액{" "}
-                              {item.reducible.toLocaleString()}원
-                            </p>
-                          )}
                         </div>
                       ))}
                     </div>
-                  </motion.article>
+                  </Motion.article>
 
-                  <motion.article
+                  <Motion.article
                     className="cm-card cm-scoreCard"
                     variants={staggerItemVariants}
                     {...cardMotion}
@@ -298,28 +317,45 @@ export default function Cm() {
                     </p>
                     <p className="cm-scoreTags">#일상소비 #삶의질중시</p>
                     <div className="cm-scoreCharacter" aria-hidden="true">
-                      ◎
+                      <img src={Coinimg} alt="" />
                     </div>
-                  </motion.article>
+                  </Motion.article>
                 </div>
               </div>
-            </motion.section>
+            </Motion.section>
 
-            <motion.section
+            <Motion.section
               className="cm-bottomGrid"
               variants={staggerContainerVariants}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.18 }}
             >
-              <motion.article
+              <Motion.article
                 className="cm-card cm-historyCard"
                 variants={staggerItemVariants}
                 {...cardMotion}
               >
                 <div className="cm-cardHeaderLine">
-                  <h3 className="cm-cardTitle">최근 사용 내역</h3>
-                  <span>1 / 2</span>
+                  <button
+                    type="button"
+                    className="cm-historyTitleBtn"
+                    onClick={goToNextHistory}
+                    aria-label={`${historyPage === 0 ? "카테고리 소비" : "최근 사용 내역"} 보기`}
+                  >
+                    <h3 className="cm-cardTitle">{historyTitle}</h3>
+                    <span aria-hidden="true" className="cm-inlineChevron">›</span>
+                  </button>
+
+                  <div className="cm-historyPager" aria-label="사용 내역 페이지">
+                    <button type="button" onClick={goToPrevHistory} aria-label="이전 페이지">
+                      ‹
+                    </button>
+                    <span>{historyPage + 1} / 2</span>
+                    <button type="button" onClick={goToNextHistory} aria-label="다음 페이지">
+                      ›
+                    </button>
+                  </div>
                 </div>
 
                 <div className="cm-historyTop">
@@ -335,56 +371,59 @@ export default function Cm() {
                     <span>국내 정상 (27건)</span>
                     <strong>326,000원</strong>
                   </div>
+                  <div>
+                    <span>국내 취소 (0)</span>
+                    <strong>0원</strong>
+                  </div>
                 </div>
 
-                <div className="cm-historyList">
-                  {recentUsage.map((item) =>
-                    item.hint ? (
-                      <div
-                        key={`${item.name}-history`}
-                        className="cm-historyRow cm-historyRow--rich"
-                      >
-                        <div className="cm-historyMain">
-                          <strong className="cm-historyName">
-                            {item.name}
-                          </strong>
-                          <strong>{item.amount}</strong>
+                {historyPage === 0 ? (
+                  <div className="cm-detailList">
+                    {detailRows.map((item, index) => {
+                      const showDate = index === 0 || detailRows[index - 1].date !== item.date;
+
+                      return (
+                        <div key={`${item.name}-${item.time}`} className="cm-detailRow">
+                          <span className="cm-detailDate">{showDate ? item.date : ""}</span>
+                          <strong className="cm-detailName">{item.name}</strong>
+                          <span className="cm-detailTime">{item.time}</span>
+                          <strong className="cm-detailAmount">{item.amount}</strong>
                         </div>
-                        <div className="cm-historyFooter">
-                          <span className="cm-historyHint">{item.hint}</span>
-                          <button
-                            type="button"
-                            className="cm-piggyBtn"
-                            onClick={() => handlePiggyBank(item)}
-                          >
-                            저금통에 넣기
-                          </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="cm-categoryDetail">
+                    <div className="cm-categoryLegend">
+                      {categoryItems.map((item) => (
+                        <div key={item.name} className="cm-categoryLegendItem">
+                          <span className={`cm-categoryLegendIcon is-${item.color}`}>
+                            <img src={item.icon} alt="" aria-hidden="true" />
+                          </span>
+                          <span>{item.name}</span>
                         </div>
-                      </div>
-                    ) : (
-                      <div
-                        key={`${item.name}-history`}
-                        className="cm-historyRow"
-                      >
-                        <span className="cm-historyName">{item.name}</span>
-                        <strong>{item.amount}</strong>
-                      </div>
-                    ),
-                  )}
-                </div>
-                {cmToast !== null && (
-                  <div
-                    className="cm-piggyToast"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    🪙 {cmToast.toLocaleString()}원이 저금통에 쌓였어요!
+                      ))}
+                    </div>
+                    <div className="cm-detailList cm-detailList--category">
+                      {categoryDetailRows.map((item, index) => {
+                        const showDate = index === 0 || categoryDetailRows[index - 1].date !== item.date;
+
+                        return (
+                          <div key={`${item.name}-${item.time}`} className="cm-detailRow">
+                            <span className="cm-detailDate">{showDate ? item.date : ""}</span>
+                            <strong className="cm-detailName">{item.name}</strong>
+                            <span className="cm-detailTime">{item.time}</span>
+                            <strong className="cm-detailAmount">{item.amount}</strong>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
-              </motion.article>
+              </Motion.article>
 
               <div className="cm-rightStack">
-                <motion.article
+                <Motion.article
                   className="cm-card cm-calendarCard"
                   variants={staggerItemVariants}
                   {...cardMotion}
@@ -427,9 +466,9 @@ export default function Cm() {
                       ),
                     )}
                   </div>
-                </motion.article>
+                </Motion.article>
 
-                <motion.article
+                <Motion.article
                   className="cm-card cm-logCard"
                   variants={staggerItemVariants}
                   {...cardMotion}
@@ -479,9 +518,9 @@ export default function Cm() {
                       </div>
                     ))}
                   </div>
-                </motion.article>
+                </Motion.article>
               </div>
-            </motion.section>
+            </Motion.section>
           </div>
         </section>
       </div>

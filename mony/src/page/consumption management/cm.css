@@ -43,6 +43,7 @@
 }
 
 .cm-topMetricCard {
+  font-weight: 500;
   min-height: 108px;
   padding: 14px 18px 16px;
   display: flex;
@@ -86,10 +87,11 @@
 }
 
 .cm-topMetricHead span {
-  color: #ffffff;
+  color: #B6B6B6;
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
+  margin-top: 30px;
 }
 
 .cm-topMetricValue {
@@ -103,7 +105,7 @@
   margin: 0;
   font-size: 26px;
   line-height: 1;
-  font-weight: 800;
+  font-weight: 700;
   color: #d7ff47;
   letter-spacing: -0.05em;
   text-align: right;
@@ -156,26 +158,27 @@
 }
 
 .cm-cardHeaderLine {
+  margin: 20px 0 0 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
 
-.cm-cardHeaderLine span{
-  margin-top: 48px;
+.cm-cardHeaderLine > span{
   margin-right: 32px;
 }
 
 .cm-cardTitle {
+  font-weight: 100;
   padding: 25px;
   margin: 0;
   letter-spacing: -0.04em;
 }
 
 .cm-challengeHead span,
-.cm-cardHeaderLine span {
+.cm-cardHeaderLine > span {
   color: rgba(255, 255, 255, 0.84);
   font-size: 24px;
   line-height: 1;
@@ -282,24 +285,55 @@
 }
 
 .cm-grid3 {
-  grid-template-columns: 1.15fr 1fr 0.92fr;
+  grid-template-columns: 1.08fr 1fr 1fr;
+  gap: 16px;
+}
+
+.cm-grid3 > .cm-card {
+  min-height: 250px;
+  border-radius: 18px;
+  padding: 24px;
+  background: #202020;
+  border-color: rgba(255, 255, 255, 0.02);
+  box-shadow: none;
+}
+
+.cm-grid3 > .cm-card > .cm-cardTitle {
+  font-weight: 400;
 }
 
 .cm-cardTitle {
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255, 255, 255, 0.98);
   font-size: 18px;
-  line-height: normal;
+  line-height: 1.15;
+  font-weight: 800;
   font-style: normal;
+  letter-spacing: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .cm-list,
 .cm-historyList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.cm-listRow,
+.cm-list {
+  margin-top: 12px;
+}
+
+.cm-listRow {
+  min-height: 58px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #292929;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .cm-historyRow {
   padding: 13px 14px;
   border-radius: 16px;
@@ -310,33 +344,90 @@
   gap: 12px;
 }
 
-.cm-listRow div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.cm-iconBox,
+.cm-categoryLegendIcon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
 }
 
-.cm-listRow strong,
+.cm-iconBox.is-food,
+.cm-categoryLegendIcon.is-food {
+  background: var(--foundation-orange-light-hover, #FFECE4);
+}
+
+.cm-iconBox.is-shopping,
+.cm-iconBox.is-traffic,
+.cm-categoryLegendIcon.is-shopping,
+.cm-categoryLegendIcon.is-traffic {
+  background: var(--foundation-green-light-hover, #F8FFE4);
+}
+
+.cm-listIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.cm-listText {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cm-listRow strong {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
 .cm-historyRow strong {
   color: rgba(255, 255, 255, 0.96);
   font-size: 13px;
 }
 
-.cm-listRow span,
+.cm-listRow span {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.cm-listRow small {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .cm-historyRow span {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.62);
 }
 
 .cm-subtitle {
-  margin-top: 6px;
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.98);
+  font-size: 14px;
+  line-height: 1.42;
+  font-weight: 500;
 }
 
 .cm-categoryList {
-  margin-top: 14px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .cm-categoryItem {
@@ -347,43 +438,49 @@
 
 .cm-categoryTop {
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr) auto;
-  gap: 8px;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 12px;
   align-items: center;
 }
 
 .cm-categoryTop strong {
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
 }
 
 .cm-categoryTop small {
-  color: rgba(255, 255, 255, 0.7);
+  align-self: start;
+  padding-top: 2px;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
 }
 
 .cm-categoryIcon {
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
+  width: 24px;
+  height: 24px;
   display: block;
 }
 
-.cm-categoryIcon.is-lime {
-  background: #f1ff70;
+.cm-categoryInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.cm-categoryIcon.is-mint {
-  background: #dff0c6;
-}
-
-.cm-categoryIcon.is-lavender {
-  background: #d8c9ff;
+.cm-categoryInfo strong {
+  font-weight: 600;
+  font-size: 12px;
 }
 
 .cm-categoryBar {
-  height: 7px;
+  height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #4a4a4a;
   overflow: hidden;
 }
 
@@ -395,30 +492,35 @@
   transform-origin: 0% 50%;
 }
 
-.cm-categoryFill.is-lime {
-  background: linear-gradient(90deg, #f1ff70, #d8ff47);
+.cm-categoryFill.is-food {
+  background: #f8e8df;
 }
 
-.cm-categoryFill.is-mint {
-  background: linear-gradient(90deg, #dff0c6, #b6d889);
+.cm-categoryFill.is-shopping {
+  background: #edfbdc;
 }
 
-.cm-categoryFill.is-lavender {
-  background: linear-gradient(90deg, #d8c9ff, #baa3ff);
+.cm-categoryFill.is-traffic {
+  background: #eadcff;
 }
 
 .cm-scoreCard {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 248px;
+  align-items: center;
+  min-height: 250px;
+}
+
+.cm-scoreCard .cm-cardTitle {
+  align-self: flex-start;
 }
 
 .cm-scoreCopy {
-  margin: 14px 0 0;
+  margin: 34px 0 0;
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   line-height: 1.55;
+  font-weight: 400;
   text-align: center;
 }
 
@@ -427,25 +529,30 @@
 }
 
 .cm-scoreTags {
+  margin-top: 12px;
   text-align: center;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.48);
 }
 
 .cm-scoreCharacter {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  margin: 8px auto 0;
-  background: linear-gradient(180deg, #ffd76f, #f7b44f);
-  color: #251c02;
-  font-size: 28px;
-  font-weight: 800;
+  width: 76px;
+  height: 76px;
+  margin: 20px auto 0;
+}
+
+.cm-scoreCharacter img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .cm-bottomGrid {
   margin-bottom: 30px;
-  grid-template-columns: 1.08fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .cm-historyCard,
@@ -454,19 +561,92 @@
   min-height: 260px;
 }
 
+.cm-historyCard {
+  min-height: 380px;
+  padding: 28px 34px 30px;
+  overflow: hidden;
+}
+
+.cm-historyCard .cm-cardHeaderLine {
+  margin: 0 0 22px;
+}
+
+.cm-historyTitleBtn,
+.cm-historyPager,
+.cm-historyPager button {
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.cm-historyTitleBtn {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cm-historyTitleBtn .cm-cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cm-inlineChevron {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 30px;
+  line-height: 0.75;
+  font-weight: 200;
+}
+
+.cm-historyPager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.cm-historyPager span {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.cm-historyPager button {
+  width: 18px;
+  height: 22px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 30px;
+  line-height: 0.65;
+  font-weight: 200;
+  cursor: pointer;
+}
+
+.cm-historyPager button:hover,
+.cm-historyTitleBtn:hover .cm-inlineChevron {
+  color: #fff;
+}
+
 .cm-historyTop {
-  padding: 16px;
+  padding: 18px 22px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.45fr 1.05fr 1.05fr 0.8fr;
   gap: 12px;
 }
 
 .cm-historyTop div {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .cm-historyTop strong,
@@ -474,22 +654,116 @@
   color: rgba(255, 255, 255, 0.88);
 }
 
+.cm-historyTop span {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.1;
+  word-break: keep-all;
+}
+
 .cm-historyTop strong {
-  font-size: 14px;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.15;
+  font-weight: 700;
+  word-break: keep-all;
 }
 
-.cm-historyList {
-  margin-top: 14px;
+.cm-historyTop div:first-child strong {
+  font-size: 15px;
+  white-space: nowrap;
 }
 
-.cm-cardHeaderLine {
-  margin-bottom: 14px;
+.cm-detailList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-detailRow {
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: 72px minmax(94px, 1fr) 82px 86px;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.cm-detailRow:last-child {
+  border-bottom: 0;
+}
+
+.cm-detailDate,
+.cm-detailTime {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.cm-detailName,
+.cm-detailAmount {
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.cm-detailName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-detailAmount {
+  justify-self: end;
+}
+
+.cm-categoryDetail {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 20px;
+}
+
+.cm-categoryLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.cm-categoryLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cm-categoryLegendItem img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.cm-categoryLegendItem span {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.cm-detailList--category {
+  margin-top: 0;
+}
+
+.cm-detailList--category .cm-detailRow {
+  grid-template-columns: 64px minmax(86px, 1fr) 74px 84px;
 }
 
 .cm-cardMeta {
   margin-top: 20px;
   margin-left: 30px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .cm-calendar {
