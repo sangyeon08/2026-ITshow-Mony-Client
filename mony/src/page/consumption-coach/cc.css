@@ -5,7 +5,7 @@
   min-height: 100vh;
   background: #050505;
   color: #f5f5f5;
-  padding: 16px;           /* ← 추가 */
+  padding: 16px;
   box-sizing: border-box;
 }
 
@@ -26,7 +26,7 @@
 }
 
 /* ═══════════════════════════════════════════
-   TOP STRIP — 전체를 하나의 큰 박스로
+   TOP STRIP
 ═══════════════════════════════════════════ */
 .cc-topStrip {
   display: grid;
@@ -34,15 +34,12 @@
   gap: 10px;
   align-items: stretch;
   min-width: 0;
-
-  /* ★ 하나의 큰 박스 */
   background: rgba(28, 28, 28, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 18px;
   padding: 16px;
 }
 
-/* intro — 배경/테두리 없음, 큰 박스 안에서 투명하게 */
 .cc-topIntro {
   background: transparent;
   border: none;
@@ -57,6 +54,7 @@
   margin: 0;
   font-size: 14px;
   letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .cc-topTitle {
@@ -68,7 +66,6 @@
   letter-spacing: -0.02em;
 }
 
-/* mini stat card — 안에서 살짝 구분 */
 .cc-miniCard {
   background: rgba(38, 38, 38, 0.7);
   border-radius: 12px;
@@ -82,6 +79,7 @@
 .cc-miniLabel {
   font-size: 14px;
   letter-spacing: -0.01em;
+  color: #f0f0f0;
 }
 
 .cc-miniValue {
@@ -97,9 +95,9 @@
   margin-top: auto;
   font-size: 11px;
   text-align: right;
+  color: rgba(255, 255, 255, 0.35);
 }
 
-/* avatar */
 .cc-avatarWrap {
   display: flex;
   align-items: center;
@@ -107,17 +105,17 @@
   padding: 0 8px;
 }
 
-.cc-avatarFace {
-  font-size: 3rem;
-  line-height: 1;
+.cc-avatarImg {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
 }
 
 /* ═══════════════════════════════════════════
-   HERO SECTION (initial state)
+   HERO SECTION (채팅 전)
 ═══════════════════════════════════════════ */
 .cc-heroSection {
   background: rgba(22, 22, 22, 0.98);
-  border: none;
   border-radius: 22px;
   padding: 40px 32px 32px;
   display: flex;
@@ -126,7 +124,6 @@
   flex: 1;
 }
 
-/* hero copy */
 .cc-heroCopy {
   text-align: center;
 }
@@ -147,7 +144,6 @@
   letter-spacing: -0.045em;
 }
 
-/* quick card grid — 3 × 2 */
 .cc-promptGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -167,6 +163,7 @@
   gap: 10px;
   cursor: pointer;
   text-align: left;
+  transition: background 140ms;
 }
 
 .cc-promptCard:hover {
@@ -199,7 +196,6 @@
   line-height: 1.4;
 }
 
-/* hero input pill */
 .cc-heroInputArea {
   max-width: 680px;
   margin: 0 auto;
@@ -220,18 +216,27 @@
   font-size: 14px;
   padding: 14px 22px;
   outline: none;
+  transition: border-color 150ms;
+}
+
+.cc-heroInput:focus {
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .cc-heroInput::placeholder {
   color: rgba(255, 255, 255, 0.3);
 }
 
+.cc-heroInput:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* ═══════════════════════════════════════════
-  CHAT PANEL (chatted state)
+   CHAT PANEL (채팅 후)
 ═══════════════════════════════════════════ */
 .cc-chatPanel {
   background: rgba(22, 22, 22, 0.98);
-  border: none;
   border-radius: 22px;
   padding: 24px;
   display: flex;
@@ -250,36 +255,15 @@
   overflow-y: auto;
 }
 
-/* bubbles */
+/* ── 말풍선 공통 ── */
 .cc-bubble {
   max-width: 60%;
   border-radius: 16px;
   padding: 12px 16px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cc-bubble--asst {
-  background: rgba(38, 38, 38, 0.95);
-  margin-right: auto;
-}
-
-.cc-bubble--user {
-  background: rgba(45, 52, 16, 0.9);
-  border-color: rgba(223, 245, 61, 0.14);
-  margin-left: auto;
-}
-
-.cc-bubbleRole {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.cc-bubbleTime {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
 }
 
 .cc-bubble p {
@@ -290,7 +274,111 @@
   color: #efefef;
 }
 
-/* insight card */
+/* ── AI 말풍선 ── */
+.cc-bubble--asst {
+  background: rgba(38, 38, 38, 0.95);
+  margin-right: auto;
+}
+
+/* ── 사용자 말풍선 ── */
+.cc-bubble--user {
+  background: rgba(45, 52, 16, 0.9);
+  border-color: rgba(223, 245, 61, 0.14);
+  margin-left: auto;
+  max-width: fit-content;
+  padding: 8px 14px;
+}
+
+.cc-bubble--user p {
+  font-size: 13px;
+}
+
+/* ── 말풍선 라벨 ── */
+.cc-bubbleDiamond {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.cc-bubbleQueryLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9b8fd4;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+.cc-bubbleThinkLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9b8fd4;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+.cc-bubbleInsightLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7F77DD;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+.cc-bubbleTime {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── 로딩 말풍선 ── */
+.cc-thinkingBox {
+  background: rgba(127, 119, 221, 0.07);
+  border: 1px solid rgba(127, 119, 221, 0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.cc-thinkingText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.cc-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #9b8fd4;
+  margin-left: 3px;
+  opacity: 0;
+  animation: ccDotBlink 1.4s infinite;
+}
+.cc-dot:nth-child(2) { animation-delay: 0.2s; }
+.cc-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes ccDotBlink {
+  0%, 80%, 100% { opacity: 0; transform: translateY(0); }
+  40%            { opacity: 1; transform: translateY(-2px); }
+}
+
+/* ── 에러 말풍선 ── */
+.cc-errorText {
+  color: #e05a5a !important;
+  font-size: 13px;
+}
+
+/* ── 인사이트 카드 (구 하드코딩 응답용, 레거시 유지) ── */
 .cc-insightGreeting {
   white-space: pre-line;
   color: #e0e0e0 !important;
@@ -351,7 +439,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* chat form */
+/* ── 채팅 입력창 ── */
 .cc-chatForm {
   display: flex;
 }
@@ -365,6 +453,12 @@
   background: rgba(14, 14, 14, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 10px 10px 10px 16px;
+  transition: background 150ms, border-color 150ms;
+}
+
+.cc-chatInputWrap--active {
+  background: rgba(30, 30, 30, 0.99);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .cc-chatInput {
@@ -381,19 +475,50 @@
   color: rgba(255, 255, 255, 0.28);
 }
 
+.cc-chatInput:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── 전송 버튼 ── */
 .cc-sendButton {
   border: 0;
   border-radius: 10px;
-  padding: 9px 18px;
-  background: #dff53d;
-  color: #0c0c0c;
-  font-size: 13px;
-  font-weight: 800;
+  padding: 7px 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 150ms;
   cursor: pointer;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
-/* ── 저축 추천 카드 (라임 틴트) ── */
+.cc-sendButton:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cc-sendButton--loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cc-sendSpinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: ccSpin 0.7s linear infinite;
+}
+
+@keyframes ccSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════
+   저축 카드 & 버튼
+═══════════════════════════════════════════ */
 .cc-promptCard--savings {
   border-color: rgba(215, 255, 71, 0.12);
   background: rgba(215, 255, 71, 0.04);
@@ -411,7 +536,6 @@
   color: rgba(215, 255, 71, 0.9);
 }
 
-/* ── 코치 채팅 내 저금통 버튼 ── */
 .cc-piggyInlineBtn {
   align-self: flex-start;
   padding: 7px 14px;
@@ -435,7 +559,9 @@
   transform: translateY(1px);
 }
 
-/* ── 저금통 적립 토스트 ── */
+/* ═══════════════════════════════════════════
+   토스트
+═══════════════════════════════════════════ */
 .cc-saveToast {
   position: fixed;
   bottom: 28px;
@@ -469,7 +595,6 @@
 
   .cc-topStrip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    /* background/border/padding 유지 — 건드리지 않음 */
   }
 
   .cc-topIntro {
