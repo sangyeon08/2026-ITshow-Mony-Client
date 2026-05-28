@@ -28,14 +28,34 @@ const monthlyCategories = [
 ];
 
 const milestoneItems = [
-  { title: "충동 구매 줄이기", progress: 0.23, period: "3월~", desc: "필요한 것만 사고 충동 구매는 줄일래요" },
-  { title: "천천히 소비하기", progress: 0.48, period: "2월~", desc: "생각하면서 여유롭게 소비하고 싶어요" },
+  {
+    title: "충동 구매 줄이기",
+    progress: 0.23,
+    period: "3월~",
+    desc: "필요한 것만 사고 충동 구매는 줄일래요",
+  },
+  {
+    title: "천천히 소비하기",
+    progress: 0.48,
+    period: "2월~",
+    desc: "생각하면서 여유롭게 소비하고 싶어요",
+  },
 ];
 
 const challengeCards = [
   { title: "열심히 묵돈 만들기", amount: 15000, goal: 100000, progress: 0.45 },
-  { title: "태국 여행 자금 만들기", amount: 300000, goal: 1500000, progress: 0.08 },
-  { title: "건강관리 비용 모으기", amount: 20000, goal: 200000, progress: 0.12 },
+  {
+    title: "태국 여행 자금 만들기",
+    amount: 300000,
+    goal: 1500000,
+    progress: 0.08,
+  },
+  {
+    title: "건강관리 비용 모으기",
+    amount: 20000,
+    goal: 200000,
+    progress: 0.12,
+  },
 ];
 
 // 이번 달 저축 목표
@@ -79,7 +99,7 @@ export default function Bg() {
     setToastMsg(
       reached
         ? `🎉 이번 달 저축 목표 달성! 훌륭해요!`
-        : `🪙 ${num.toLocaleString()}원 저축 완료!`
+        : `🪙 ${num.toLocaleString()}원 저축 완료!`,
     );
     setTimeout(() => setToastMsg(null), 3000);
   };
@@ -107,29 +127,33 @@ export default function Bg() {
               viewport={{ once: true, amount: 0.2 }}
             >
               {/* ── 월간 예산 ── */}
-              <motion.article className="bg-card bg-card--budget" variants={staggerItemVariants} {...cardMotion}>
+              <motion.article
+                className="bg-card bg-card--budget"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
                 <div className="bg-cardHead">
                   <h3>월간 예산</h3>
                   <span aria-hidden="true">›</span>
                 </div>
-
-                <div className="bg-budgetSummary">
-                  {goalStats.map((item) => (
-                    <div key={item.label} className="bg-budgetStat">
-                      <span>{item.label}</span>
-                      <strong>
-                        <CountUp value={item.value} suffix={item.suffix} />
-                        {item.extra ? <small>{item.extra}</small> : null}
-                      </strong>
-                    </div>
-                  ))}
+                <div className="bg-budgetPanel2">
+                  <div className="bg-budgetSummary">
+                    {goalStats.map((item) => (
+                      <div key={item.label} className="bg-budgetStat">
+                        <span>{item.label}</span>
+                        <strong>
+                          <CountUp value={item.value} suffix={item.suffix} />
+                          {item.extra ? <small>{item.extra}</small> : null}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="bg-budgetPanels">
                   <div className="bg-budgetPanel">
                     <div className="bg-budgetPanelHead">
                       <strong>카테고리 예산</strong>
-                      <span>식비 250,000 / 180,000</span>
                     </div>
                     <div className="bg-budgetRows">
                       {monthlyCategories.map((item) => (
@@ -137,7 +161,8 @@ export default function Bg() {
                           <div>
                             <strong>{item.name}</strong>
                             <span>
-                              <CountUp value={item.used} suffix="원" /> / <CountUp value={item.budget} suffix="원" />
+                              <CountUp value={item.used} suffix="원" /> /{" "}
+                              <CountUp value={item.budget} suffix="원" />
                             </span>
                           </div>
                           <small>{item.note}</small>
@@ -151,30 +176,14 @@ export default function Bg() {
                   </div>
 
                   <div className="bg-budgetPanel bg-budgetPanel--progress">
-                    <div className="bg-budgetPanelHead">
-                      <strong>시간 진행률</strong>
-                      <span>소비 진행률</span>
-                    </div>
                     <div className="bg-progressHero">
                       <div className="bg-progressPercent">
+                        <p>시간 진행률</p>
                         <strong>50%</strong>
-                        <p>시간 대비 소비 78%</p>
                       </div>
-                      <div className="bg-progressStack">
-                        <div className="bg-progressLine">
-                          <span>시간</span>
-                          <div className="bg-progressTrack">
-                            <ProgressFill className="bg-progressFill is-orange" value={0.5} />
-                          </div>
-                          <strong>50%</strong>
-                        </div>
-                        <div className="bg-progressLine">
-                          <span>소비</span>
-                          <div className="bg-progressTrack">
-                            <ProgressFill className="bg-progressFill is-lime" value={0.78} />
-                          </div>
-                          <strong>78%</strong>
-                        </div>
+                      <div className="bg-progressPercent">
+                        <p>소비 진행률</p>
+                        <strong>78%</strong>
                       </div>
                     </div>
                     {/* 캐릭터 이미지 */}
@@ -186,40 +195,39 @@ export default function Bg() {
               </motion.article>
 
               {/* ── 이번달 예산목표 ── */}
-              <motion.article className="bg-card bg-card--goal" variants={staggerItemVariants} {...cardMotion}>
-                <h3>이번달의 예산목표</h3>
+              <motion.article
+                className="bg-card bg-card--goal"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
+                <h3 className="test11">이번달의 예산목표</h3>
 
-                <div className="bg-goalHero">
-                  <div className="bg-goalAvatar">
-                    <img src={bgCh2} alt="프로필" />
-                  </div>
-                  <div className="bg-goalHeroText">
-                    <div className="bg-goalTag">진행중인 목표 1</div>
-                    <p>필요한 것만 사고 충동 구매는 줄일래요</p>
-                    <strong>충동 구매 줄이기</strong>
-                    <div className="bg-goalMeta">
-                      <span>진행률</span>
-                      <strong>23%</strong>
-                      <span>기간</span>
-                      <strong>3월~</strong>
+                {/* 이미지 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */}
+                <div className="bg-goalLayout">
+                  <div className="bg-goalAvatarWrap">
+                    <div className="bg-goalAvatar">
+                      <img src={bgCh2} alt="프로필" />
                     </div>
+                    <span className="bg-goalName">김수한무</span>
                   </div>
-                </div>
 
-                <div className="bg-goalList">
-                  {milestoneItems.map((item, index) => (
-                    <div key={item.title} className="bg-goalCard">
-                      <span className="bg-goalTag">진행중인 목표 {index + 1}</span>
-                      <p>{item.desc}</p>
-                      <strong>{item.title}</strong>
-                      <div className="bg-goalMeta">
-                        <span>진행률</span>
-                        <strong>{Math.round(item.progress * 100)}%</strong>
-                        <span>기간</span>
-                        <strong>{item.period}</strong>
+                  <div className="bg-goalCardList">
+                    {milestoneItems.map((item, index) => (
+                      <div key={item.title} className="bg-goalCard">
+                        <span className="bg-goalTag">
+                          진행중인 목표 {index + 1}
+                        </span>
+                        <p>{item.desc}</p>
+                        <strong>{item.title}</strong>
+                        <div className="bg-goalMeta">
+                          <span>진행률</span>
+                          <strong>{Math.round(item.progress * 100)}%</strong>
+                          <span>기간</span>
+                          <strong>{item.period}</strong>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </motion.article>
             </motion.div>
@@ -232,7 +240,11 @@ export default function Bg() {
               viewport={{ once: true, amount: 0.18 }}
             >
               {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
-              <motion.article className="bg-card bg-card--guide" variants={staggerItemVariants} {...cardMotion}>
+              <motion.article
+                className="bg-card bg-card--guide"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
                 <div className="bg-cardHead">
                   <h3>예산 가이드</h3>
                   <span aria-hidden="true">›</span>
@@ -260,7 +272,9 @@ export default function Bg() {
                 <div className="bg-savingsGoal">
                   <div className="bg-savingsGoalHeader">
                     <div>
-                      <span className="bg-savingsGoalLabel">이번 달 저축 목표</span>
+                      <span className="bg-savingsGoalLabel">
+                        이번 달 저축 목표
+                      </span>
                       <strong className="bg-savingsGoalTitle">
                         <CountUp value={savingsAmount} suffix="원" />
                         <em> / {SAVINGS_GOAL.toLocaleString()}원</em>
@@ -286,7 +300,9 @@ export default function Bg() {
                           <div
                             key={m.label}
                             className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
-                            style={{ left: `${(m.value / SAVINGS_GOAL) * 100}%` }}
+                            style={{
+                              left: `${(m.value / SAVINGS_GOAL) * 100}%`,
+                            }}
                           >
                             <span>{m.label}</span>
                           </div>
@@ -296,7 +312,9 @@ export default function Bg() {
                   </div>
 
                   {isGoalReached ? (
-                    <div className="bg-savingsComplete">🎉 이번 달 저축 목표 달성!</div>
+                    <div className="bg-savingsComplete">
+                      🎉 이번 달 저축 목표 달성!
+                    </div>
                   ) : (
                     <button
                       className="bg-savingsBtn"
@@ -309,7 +327,11 @@ export default function Bg() {
               </motion.article>
 
               {/* ── 버킷리스트 챌린지 ── */}
-              <motion.article className="bg-card bg-card--challenge" variants={staggerItemVariants} {...cardMotion}>
+              <motion.article
+                className="bg-card bg-card--challenge"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
                 <div className="bg-cardHead">
                   <h3>버킷리스트 챌린지</h3>
                   <span aria-hidden="true">›</span>
@@ -324,7 +346,10 @@ export default function Bg() {
                         <CountUp value={item.amount} suffix="원" />
                       </div>
                       <div className="bg-challengeBar">
-                        <ProgressFill className="bg-progressFill is-lime" value={item.progress} />
+                        <ProgressFill
+                          className="bg-progressFill is-lime"
+                          value={item.progress}
+                        />
                       </div>
                     </div>
                   ))}
@@ -354,11 +379,20 @@ export default function Bg() {
               onClick={(e) => e.stopPropagation()}
             >
               <h4>이번 달 저축 적립</h4>
-              <p>목표까지 <strong style={{ color: "#d7ff47" }}>{(SAVINGS_GOAL - savingsAmount).toLocaleString()}원</strong> 남았어요</p>
+              <p>
+                목표까지{" "}
+                <strong style={{ color: "#d7ff47" }}>
+                  {(SAVINGS_GOAL - savingsAmount).toLocaleString()}원
+                </strong>{" "}
+                남았어요
+              </p>
 
               <div className="bg-modalQuick">
                 {[5000, 10000, 30000, 50000].map((amt) => (
-                  <button key={amt} onClick={() => setDepositInput(String(amt))}>
+                  <button
+                    key={amt}
+                    onClick={() => setDepositInput(String(amt))}
+                  >
                     {amt.toLocaleString()}원
                   </button>
                 ))}

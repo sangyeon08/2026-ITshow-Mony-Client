@@ -81,57 +81,112 @@
 
 /* ── 월간 예산 ── */
 .bg-card--budget {
+  border-radius: 18px;
+  border: 1px solid #222;
+  background: #1b1b1b;
   min-height: 388px;
 }
-
+.bg-budgetPanel2 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  margin-bottom: 4px;
+  border-radius: 20px;
+  background: #222;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
+}
+/* 상단 4개 스탯 */
 .bg-budgetSummary {
-  padding: 14px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 0 18px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 0;
 }
 
 .bg-budgetStat {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  padding: 25px 16px 0 25px;
+}
+
+.bg-budgetStat:first-child .bg-budgetStat__label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .bg-budgetStat span {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  font-weight: 500;
 }
 
+.bg-budgetStat:first-child span {
+  color: #FFF;
+  font-weight: 700;
+}
+
+.bg-budgetStat:nth-child(2) {
+  transform: translateX(-30px);
+}
+.bg-budgetStat:nth-child(2) strong {
+  gap: 4px;
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+  gap: 4px;
+}
+
+.bg-budgetStat:nth-child(2) span {
+  white-space: nowrap;
+}
 .bg-budgetStat strong {
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.bg-budgetStat:first-child span {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
 }
 
 .bg-budgetStat small {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
-  margin-left: 4px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 1px;
+}
+.bg-budgetStat strong span{
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 4px;
 }
 
+/* 하단 패널 2개 */
 .bg-budgetPanels {
-  margin-top: 12px;
+  margin-top: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .bg-budgetPanel {
-  min-height: 236px;
-  border-radius: 18px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  min-height: 220px;
+  border-radius: 16px;
+  padding: 18px;
+  background: #222;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   position: relative;
 }
 
@@ -140,119 +195,114 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 2px;
 }
 
 .bg-budgetPanelHead strong {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.02em;
 }
 
 .bg-budgetPanelHead span {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
 }
 
 .bg-budgetRows {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .bg-budgetRow {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .bg-budgetRow div {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
 }
 
 .bg-budgetRow strong {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  min-width: 30px;
 }
 
-.bg-budgetRow span,
+.bg-budgetRow span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+}
+
 .bg-budgetRow small {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  padding-left: 44px;
 }
 
 .bg-budgetHint {
   margin: auto 0 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  color: rgba(255, 255, 255, 0.68);
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.55);
   font-size: 12px;
 }
 
 .bg-budgetHint strong {
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 700;
 }
 
+/* 오른쪽 패널 — 퍼센트 큰 숫자 */
 .bg-budgetPanel--progress {
-  justify-content: space-between;
+  justify-content: flex-start;
   overflow: hidden;
 }
 
 .bg-progressHero {
   display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
 }
 
 .bg-progressPercent {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-
-.bg-progressPercent strong {
-  font-size: 38px;
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #fff;
+  gap: 2px;
 }
 
 .bg-progressPercent p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.bg-progressPercent strong {
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: #fff;
 }
 
 .bg-progressStack {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: none;
 }
 
-.bg-progressLine {
-  display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) 36px;
-  gap: 10px;
-  align-items: center;
-}
-
-.bg-progressLine span,
-.bg-progressLine strong {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-}
-
+.bg-progressLine,
 .bg-progressTrack {
-  height: 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+  display: none;
 }
 
 .bg-progressFill {
@@ -276,8 +326,8 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -289,16 +339,28 @@
   object-fit: contain;
 }
 
-/* ── 예산목표 ── */
+/* ────────────────────────────────────────
+   ── 이번달의 예산목표 (이미지 기준 수정) ──
+   ──────────────────────────────────────── */
 .bg-card--goal {
   min-height: 388px;
 }
 
-.bg-goalHero {
+/* 전체 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */
+.bg-goalLayout {
   margin-top: 18px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 18px;
+}
+
+/* 좌측: 아바타 + 이름 */
+.bg-goalAvatarWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .bg-goalAvatar {
@@ -316,9 +378,23 @@
   object-fit: cover;
 }
 
-.bg-goalHeroText,
-.bg-goalCard {
+.bg-goalName {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* 우측: 카드 세로 스택 */
+.bg-goalCardList {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bg-goalCard {
   padding: 16px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
@@ -327,14 +403,12 @@
   gap: 8px;
 }
 
-.bg-goalHeroText p,
 .bg-goalCard p {
   color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
   margin: 0;
 }
 
-.bg-goalHeroText strong,
 .bg-goalCard strong {
   color: #d7ff47;
   font-size: 16px;
@@ -360,17 +434,6 @@
 .bg-goalMeta strong {
   color: rgba(255, 255, 255, 0.96);
   font-size: 14px;
-}
-
-.bg-goalList {
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.bg-goalCard {
-  min-height: 144px;
 }
 
 /* ── 예산 가이드 ── */
@@ -736,18 +799,23 @@
   white-space: nowrap;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
-
+.test11{
+  color: white;
+}
 /* ── RESPONSIVE ── */
 @media (max-width: 1200px) {
   .bg-shell { grid-template-columns: 1fr; }
-  .bg-gridTop, .bg-gridBottom, .bg-budgetPanels, .bg-goalList { grid-template-columns: 1fr; }
+  .bg-gridTop, .bg-gridBottom, .bg-budgetPanels { grid-template-columns: 1fr; }
   .bg-budgetSummary, .bg-challengeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bg-guideGrid { grid-template-columns: 1fr; }
+  .bg-goalLayout { align-items: flex-start; }
 }
 
 @media (max-width: 640px) {
   .bg-page { padding: 12px; }
-  .bg-budgetSummary, .bg-goalList, .bg-challengeGrid { grid-template-columns: 1fr; }
+  .bg-budgetSummary, .bg-challengeGrid { grid-template-columns: 1fr; }
   .bg-progressHero { flex-direction: column; }
   .bg-modalQuick { grid-template-columns: repeat(2, 1fr); }
+  .bg-goalLayout { flex-direction: column; align-items: center; }
+  .bg-goalCardList { width: 100%; }
 }
