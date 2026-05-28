@@ -46,6 +46,24 @@
   gap: 12px;
 }
 
+.ca-cardHead {
+  min-height: 34px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.ca-travelHead {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ca-travelHead h3{
+  margin-top: 20px;
+}
+
 .ca-toolbar {
   padding: 2px 4px 16px;
   color: rgba(255, 255, 255, 0.92);
@@ -86,22 +104,32 @@
 .ca-tripCard p,
 .ca-tripCard small,
 .ca-weekScale span,
-.ca-weekBarWrap span {
+.ca-weekDay {
   margin: 0;
   color: rgba(255, 255, 255, 0.64);
   font-size: 12px;
   line-height: 1.35;
 }
 
+.ca-cardHead p,
+.ca-cardHead strong,
+.ca-cardHead h3 {
+  margin: 0;
+}
+
 .ca-cardHead strong,
 .ca-cardHead h3 {
   color: rgba(255, 255, 255, 0.96);
   font-size: 17px;
+  line-height: 1.18;
   letter-spacing: -0.03em;
 }
 
 .ca-cardHead span {
+  flex-shrink: 0;
+  align-self: center;
   color: rgba(255, 255, 255, 0.82);
+  line-height: 1;
 }
 
 .ca-card--weekly {
@@ -109,7 +137,7 @@
 }
 
 .ca-progressPair {
-  margin-top: 14px;
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -166,66 +194,210 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 6px;
+  text-align: left;
+}
+
+.ca-miniCard--steady {
+  width: 170px;
+  grid-row: span 2;
+  min-height: 192px;
+  justify-content: flex-start;
 }
 
 .ca-miniCard span,
 .ca-miniCard small {
+  width: 100%;
+  align-self: stretch;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   color: rgba(255, 255, 255, 0.52);
   font-size: 11px;
+  font-weight: 400;
 }
 
 .ca-miniCard strong {
+  font-weight: 500;
+  width: 100%;
+  align-self: stretch;
+  text-align: left;
+  margin: 5px 0 0;
+  padding: 0;
+  box-sizing: border-box;
   color: rgba(255, 255, 255, 0.9);
   font-size: 12px;
 }
 
+.march-div{
+  margin-top: 90px;
+}
+
+.march{
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.march-description{
+  font-weight: 400;
+  font-size: 12px;
+}
 .ca-card--chart {
   min-height: 360px;
+  padding: 30px 34px 28px;
 }
 
 .ca-weekChart {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  position: relative;
+  height: 274px;
+  margin-top: 12px;
+  padding: 34px 0 34px 32px;
 }
 
 .ca-weekScale {
+  position: absolute;
+  inset: 0 auto 34px 0;
+  width: 28px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   color: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+.ca-weekGrid {
+  position: absolute;
+  inset: 18px 0 54px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.ca-weekGrid span {
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.075);
 }
 
 .ca-weekBars {
-  height: 220px;
+  position: relative;
+  z-index: 1;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: end;
-  gap: 12px;
+  gap: 18px;
 }
 
 .ca-weekBarWrap {
+  position: relative;
+  height: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-.ca-weekBarWrap span {
+.ca-weekDay {
   color: rgba(255, 255, 255, 0.7);
 }
 
 .ca-weekBar {
-  width: 100%;
-  max-width: 28px;
-  border-radius: 8px 8px 0 0;
-  background: #bababa;
-  transform-origin: 50% 100%;
+  width: 40px;
+  min-height: 42px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 3px;
+  transform-origin: bottom;
+  will-change: transform, opacity;
 }
 
-.ca-weekBar.is-active {
-  background: #d7ff47;
+.ca-weekBlock {
+  flex: 1 1 0;
+  min-height: 10px;
+  border-radius: 3px;
+  background: #b8b8b8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ca-weekBlock.is-light {
+  background: #dcff8d;
+}
+
+.ca-weekBlock.is-accent {
+  background: #c9ff3d;
+}
+
+.ca-weekBar.is-active .ca-weekBlock.is-light {
+  background: #dcff8d;
+}
+
+.ca-weekBar.is-active .ca-weekBlock.is-accent {
+  background: #c9ff3d;
+}
+
+.ca-weekTooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 54px;
+  z-index: 3;
+  min-width: 128px;
+  padding: 12px 14px;
+  border-radius: 4px;
+  background: #3a3a3a;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 8px);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+  pointer-events: none;
+}
+
+.ca-weekTooltip strong {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ca-weekTooltip span {
+  display: grid;
+  grid-template-columns: 8px 1fr auto;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.ca-weekTooltip i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c9ff3d;
+}
+
+.ca-weekTooltip b {
+  margin-left: 12px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.ca-weekBarWrap:hover .ca-weekTooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
 }
 
 .ca-middleGrid {
@@ -237,8 +409,25 @@
   min-height: 340px;
 }
 
+.ca-card--travel .ca-cardHead {
+  padding-top: 7px;
+}
+
+.ca-card--travel .ca-cardHead > div {
+  gap: 2px;
+}
+
+.ca-card--travel .ca-cardHead h3,
+.ca-card--travel .ca-cardHead strong {
+  line-height: 1.12;
+}
+
+.ca-card--travel .ca-cardHead strong {
+  font-size: 15px;
+}
+
 .ca-fixedSummary {
-  margin-top: 14px;
+  margin-top: 12px;
   padding: 16px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
@@ -284,17 +473,18 @@
 }
 
 .ca-fixedCardTop {
+  margin-top: 10px;
   align-items: flex-start;
 }
 
 .ca-fixedCardTop strong {
-  font-size: 14px;
+  font-size: 10px;
 }
 
 .ca-fixedCardTop span {
   color: #ffffff;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .ca-fixedCardFoot {
@@ -308,7 +498,7 @@
 }
 
 .ca-tripCards {
-  margin-top: 14px;
+  margin-top:20px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
@@ -347,24 +537,17 @@
 .ca-tripThumbs {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
 .ca-tripThumb {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: rgba(255, 255, 255, 0.98);
-  font-size: 22px;
-  font-weight: 800;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-
-.ca-tripThumb span {
-  position: relative;
-  z-index: 1;
+  width: auto;
+  max-width: 100%;
+  height: 174px;
+  display: block;
+  justify-self: center;
+  object-fit: contain;
 }
 
 /* ── 저축 인사이트 (상단 분석 카드 내) ── */
@@ -462,7 +645,7 @@
 .ca-card--savings {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
 
 .ca-savingsCoin {
