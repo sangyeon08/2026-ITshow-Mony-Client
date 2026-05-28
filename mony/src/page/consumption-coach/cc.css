@@ -31,71 +31,81 @@
 .cc-topStrip {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr auto;
-  gap: 10px;
-  align-items: stretch;
+  gap: 12px;
+  align-items: center;
   min-width: 0;
   background: rgba(28, 28, 28, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 18px;
-  padding: 16px;
+  padding: 20px 24px;
 }
 
 .cc-topIntro {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 12px 8px;
+  padding: 0 8px;
+  margin-right: 50px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .cc-topEyebrow {
   margin: 0;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 15px;
+  font-weight: 450;
+  color: rgba(255, 255, 255, 0.822);
 }
 
 .cc-topTitle {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  font-weight: 600;
-  color: #f0f0f0;
-  letter-spacing: -0.02em;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  font-weight: 410;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.822);
 }
 
+/* ── 미니카드 ── */
 .cc-miniCard {
-  background: rgba(38, 38, 38, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
-  padding: 16px 18px;
+  padding: 17px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-height: 110px;
+  justify-content: space-between;
+  gap: 0;
+  min-height: 100px;
+  box-sizing: border-box;
 }
 
 .cc-miniLabel {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
-  letter-spacing: -0.01em;
-  color: #f0f0f0;
+  font-weight: 500;
+  line-height: 1;
+  color: #ffffff;
 }
 
 .cc-miniValue {
   display: block;
-  font-size: 12px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: -0.025em;
-  margin-top: 2px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 6px;
 }
 
 .cc-miniMeta {
-  margin-top: auto;
-  font-size: 11px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
   text-align: right;
-  color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  margin-top: auto;
+  padding-top: 10px;
 }
 
 .cc-avatarWrap {
@@ -106,8 +116,8 @@
 }
 
 .cc-avatarImg {
-  width: 72px;
-  height: 72px;
+  width: 82px;
+  height: 82px;
   object-fit: contain;
 }
 
@@ -115,13 +125,22 @@
    HERO SECTION (채팅 전)
 ═══════════════════════════════════════════ */
 .cc-heroSection {
-  background: rgba(22, 22, 22, 0.98);
+  /* background: rgba(22, 22, 22, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 22px;
   padding: 40px 32px 32px;
   display: flex;
-  flex-direction: column;
-  gap: 28px;
+  flex-direction: column; */
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* 모든 자식 요소를 가로 중앙으로! */
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  min-height: 500px;      /* 채팅창과 높이 밸런스를 맞춤 */
+  gap: 28px;
+  padding: 40px 32px;
 }
 
 .cc-heroCopy {
@@ -196,6 +215,7 @@
   line-height: 1.4;
 }
 
+/* ── 히어로 입력창 ── */
 .cc-heroInputArea {
   max-width: 680px;
   margin: 0 auto;
@@ -206,21 +226,30 @@
   width: 100%;
 }
 
-.cc-heroInput {
-  width: 100%;
-  box-sizing: border-box;
+.cc-heroInputWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   background: rgba(16, 16, 16, 0.9);
-  color: #f0f0f0;
-  font-size: 14px;
-  padding: 14px 22px;
-  outline: none;
-  transition: border-color 150ms;
+  padding: 4px 4px 4px 22px;
+  transition: border-color 150ms, background 150ms;
 }
 
-.cc-heroInput:focus {
+.cc-heroInputWrap--active {
   border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(24, 24, 24, 0.98);
+}
+
+.cc-heroInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f0f0f0;
+  font-size: 14px;
+  padding: 10px 0;
 }
 
 .cc-heroInput::placeholder {
@@ -232,42 +261,76 @@
   cursor: not-allowed;
 }
 
+.cc-heroSendBtn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #dff53d;
+  color: #0c0c0c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 150ms, transform 100ms;
+}
+
+.cc-heroSendBtn:hover { background: #c8e030; }
+.cc-heroSendBtn:active { transform: scale(0.94); }
+.cc-heroSendBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
 /* ═══════════════════════════════════════════
    CHAT PANEL (채팅 후)
 ═══════════════════════════════════════════ */
 .cc-chatPanel {
   background: rgba(22, 22, 22, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 22px;
-  padding: 24px;
+  padding: 20px 40px;
+
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  flex: 1;
-  min-height: 500px;
+  /* [추가] 화면 높이에 맞춰 고정 (수치는 상황에 따라 조절) */
+  height: 600px; 
+  overflow: hidden;
 }
 
 .cc-chatMessages {
   flex: 1;
-  min-height: 260px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
+  /* padding: 8px 0; */
+  padding-right: 10px;
+  justify-content: flex-start;
+}
+
+.cc-chatMessages::-webkit-scrollbar {
+  width: 6px;
+}
+.cc-chatMessages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.cc-chatMessages > :first-child {
+  margin-top: auto !important;
 }
 
 /* ── 말풍선 공통 ── */
 .cc-bubble {
-  max-width: 60%;
+  max-width: 85%;
   border-radius: 16px;
-  padding: 12px 16px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  flex-shrink: 0;
 }
 
 .cc-bubble p {
   margin: 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   line-height: 1.65;
   letter-spacing: -0.02em;
@@ -276,79 +339,42 @@
 
 /* ── AI 말풍선 ── */
 .cc-bubble--asst {
-  background: rgba(38, 38, 38, 0.95);
+  background: transparent;
+  border: none;
+  padding: 4px 0;
   margin-right: auto;
+  margin-left: 230px; /* [추가] 0에서 15~20px 정도로! */
+  align-self: flex-start;
+  width: 40%;
 }
 
 /* ── 사용자 말풍선 ── */
 .cc-bubble--user {
-  background: rgba(45, 52, 16, 0.9);
-  border-color: rgba(223, 245, 61, 0.14);
-  margin-left: auto;
+  background: rgba(96, 96, 96, 0.3);
+  border: none;
   max-width: fit-content;
-  padding: 8px 14px;
+  padding: 10px 16px;
+  margin-left: auto;
+  margin-right: 230px;
+  align-self: flex-end;
 }
 
 .cc-bubble--user p {
   font-size: 13px;
+  color: #ffffff;
 }
 
-/* ── 말풍선 라벨 ── */
-.cc-bubbleDiamond {
-  font-size: 9px;
-  opacity: 0.7;
-}
-
-.cc-bubbleQueryLabel {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #9b8fd4;
-  letter-spacing: 0.02em;
-  margin-bottom: 2px;
-}
-
-.cc-bubbleThinkLabel {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #9b8fd4;
-  letter-spacing: 0.02em;
-  margin-bottom: 2px;
-}
-
-.cc-bubbleInsightLabel {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #7F77DD;
-  letter-spacing: 0.02em;
-  margin-bottom: 2px;
-}
-
-.cc-bubbleTime {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* ── 로딩 말풍선 ── */
+/* ── 로딩 ── */
 .cc-thinkingBox {
-  background: rgba(127, 119, 221, 0.07);
-  border: 1px solid rgba(127, 119, 221, 0.15);
-  border-radius: 10px;
-  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .cc-thinkingText {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
-  font-style: italic;
+  font-style: normal;
   display: flex;
   align-items: center;
   gap: 1px;
@@ -359,10 +385,10 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #9b8fd4;
   margin-left: 3px;
   opacity: 0;
   animation: ccDotBlink 1.4s infinite;
+  background: currentColor;
 }
 .cc-dot:nth-child(2) { animation-delay: 0.2s; }
 .cc-dot:nth-child(3) { animation-delay: 0.4s; }
@@ -372,93 +398,37 @@
   40%            { opacity: 1; transform: translateY(-2px); }
 }
 
-/* ── 에러 말풍선 ── */
+/* ── 에러 ── */
 .cc-errorText {
   color: #e05a5a !important;
   font-size: 13px;
 }
 
-/* ── 인사이트 카드 (구 하드코딩 응답용, 레거시 유지) ── */
-.cc-insightGreeting {
-  white-space: pre-line;
-  color: #e0e0e0 !important;
-}
-
-.cc-insightCard {
-  background: rgba(14, 14, 14, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  margin-top: 4px;
-}
-
-.cc-insightTitle {
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  color: #f8f8f8 !important;
-  letter-spacing: -0.03em;
-}
-
-.cc-insightSummary {
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: #e4e4e4 !important;
-}
-
-.cc-insightBullets {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.cc-insightBullets li {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  padding-left: 14px;
-  position: relative;
-  line-height: 1.5;
-}
-
-.cc-insightBullets li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: rgba(255, 255, 255, 0.32);
-}
-
-.cc-insightFooter {
-  font-size: 12px !important;
-  color: rgba(255, 255, 255, 0.48) !important;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* ── 채팅 입력창 ── */
+/* ── 채팅 입력창 (히어로와 동일한 스타일, 너비만 680px 제한) ── */
 .cc-chatForm {
+  flex-shrink: 0;
   display: flex;
+  justify-content: center;
+  padding-top: 15px;
+  margin-left: -25px;
 }
 
 .cc-chatInputWrap {
-  flex: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-radius: 16px;
-  background: rgba(14, 14, 14, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 10px 10px 10px 16px;
-  transition: background 150ms, border-color 150ms;
+  gap: 8px;
+  width: 100%;
+  max-width: 680px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(16, 16, 16, 0.9);
+  padding: 4px 4px 4px 22px;
+  transition: border-color 150ms, background 150ms;
 }
 
 .cc-chatInputWrap--active {
-  background: rgba(30, 30, 30, 0.99);
   border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(24, 24, 24, 0.98);
 }
 
 .cc-chatInput {
@@ -468,11 +438,13 @@
   background: transparent;
   color: #f0f0f0;
   font-size: 14px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   min-width: 0;
+  padding: 10px 0;
 }
 
 .cc-chatInput::placeholder {
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .cc-chatInput:disabled {
@@ -482,25 +454,28 @@
 
 /* ── 전송 버튼 ── */
 .cc-sendButton {
-  border: 0;
-  border-radius: 10px;
-  padding: 7px 10px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.35);
-  transition: color 150ms;
-  cursor: pointer;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 150ms, transform 100ms;
 }
 
-.cc-sendButton:hover {
-  color: rgba(255, 255, 255, 0.75);
+.cc-sendButton--active {
+  background: #dff53d;
+  color: #0c0c0c;
 }
 
-.cc-sendButton--loading {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.cc-sendButton--active:hover { background: #c8e030; }
+.cc-sendButton:active { transform: scale(0.94); }
+.cc-sendButton--loading { opacity: 0.5; cursor: not-allowed; }
 
 .cc-sendSpinner {
   display: inline-block;
@@ -547,7 +522,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 140ms, border-color 140ms;
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .cc-piggyInlineBtn:hover {
@@ -555,9 +530,7 @@
   border-color: rgba(215, 255, 71, 0.44);
 }
 
-.cc-piggyInlineBtn:active {
-  transform: translateY(1px);
-}
+.cc-piggyInlineBtn:active { transform: translateY(1px); }
 
 /* ═══════════════════════════════════════════
    토스트
@@ -589,42 +562,16 @@
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 1200px) {
-  .cc-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .cc-topStrip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .cc-topIntro {
-    grid-column: 1 / -1;
-  }
-
-  .cc-promptGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .cc-avatarWrap {
-    display: none;
-  }
+  .cc-shell { grid-template-columns: 1fr; }
+  .cc-topStrip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cc-topIntro { grid-column: 1 / -1; }
+  .cc-promptGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cc-avatarWrap { display: none; }
 }
 
 @media (max-width: 640px) {
-  .cc-shell {
-    grid-template-columns: 1fr;
-    padding: 10px;
-  }
-
-  .cc-topStrip {
-    grid-template-columns: 1fr;
-  }
-
-  .cc-promptGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .cc-bubble {
-    max-width: 92%;
-  }
+  .cc-shell { grid-template-columns: 1fr; padding: 10px; }
+  .cc-topStrip { grid-template-columns: 1fr; }
+  .cc-promptGrid { grid-template-columns: 1fr; }
+  .cc-bubble { max-width: 92%; }
 }

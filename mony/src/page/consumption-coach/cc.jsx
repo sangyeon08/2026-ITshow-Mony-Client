@@ -13,7 +13,7 @@ import "./cc.css";
 
 // ── .env 에서 API 키 로드 ──
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_URL = "http://localhost:3001/api/groq";
 
 // ── 시스템 프롬프트 ──
 const SYSTEM_PROMPT = `당신은 MONY 앱의 소비 코치입니다.
@@ -32,63 +32,77 @@ const SYSTEM_PROMPT = `당신은 MONY 앱의 소비 코치입니다.
 1. 2~4문장으로 간결하게 답변하세요.
 2. 친근하고 따뜻한 말투를 사용하세요.
 3. 구체적인 수치를 언급하세요.
-4. 한국어로만 답변하세요.`;
+4. 한국어로만 답변하세요.
+5. 마크다운 기호(**, ##, - 등)는 절대 사용하지 마세요. 일반 텍스트로만 답변하세요.`;
 
 const quickCards = [
-  { title: "이번 달 소비 분석",              text: "이번 달 내 소비 패턴과 지출 흐름을 분석해줘" },
-  { title: "지출 줄이는 방법",               text: "지출을 줄일 수 있는 절약 방식을 추천해줘" },
-  { title: "예산 맞추기",                    text: "남은 예산을 어떻게 활용하면 좋을지 알려줘" },
-  { title: "나의 소비 습관",                 text: "내 소비 성향과 습관을 분석해줘" },
-  { title: "카드 사용 분석",                 text: "카드 지출 패턴을 분석해줘" },
-  { title: "저축 챌린지 조언",               text: "저축 목표를 달성할 수 있는 방법을 알려줘" },
-  { title: "저금통 현황 확인",               text: "현재 저금통 현황을 알려줘" },
-  { title: "직접 물어보기",                  text: "" },
-  { title: "저금통 얼마나 찼어?",            text: "저금통 달성률을 알려줘",           savings: true },
-  { title: "오늘 아낀 돈 넣기",              text: "오늘 절약한 금액을 저금통에 적립하고 싶어", savings: true },
-  { title: "이번 달 저축 가능 금액 보기",    text: "이번 달 저축 가능한 금액이 얼마야?", savings: true },
-  { title: "목표 달성하려면 얼마나 아껴야 해?", text: "목표 달성을 위해 하루에 얼마나 아껴야 해?", savings: true },
+  { title: "이번 달 소비 분석", text: "지출 패턴,소비 흐름" },
+  { title: "지출 줄이는 방법", text: "절약 방식 추천" },
+  { title: "예산 맞추기", text: "남은 금액 활용" },
+  { title: "나의 소비 습관", text: "소비 성향 분석" },
+  { title: "카드 사용 분석", text: "카드 지출" },
+  { title: "저축 챌린지 조언", text: "저축 목표를 달성" },
+  { title: "저금통 현황 확인", text: "현재 저금통 현황" },
+  { title: "직접 물어보기", text: "궁금한 점을 질문하기" },
+  { title: "저금통 얼마나 찼어?", text: "저금통 달성률", savings: true },
+  {
+    title: "오늘 아낀 돈 넣기",
+    text: "오늘 절약한 금액을 저금통에 적립",
+    savings: true,
+  },
+  {
+    title: "이번 달 저축 가능 금액 보기",
+    text: "저축 가능 금액",
+    savings: true,
+  },
+  {
+    title: "목표 달성하려면 얼마나 아껴야 해?",
+    text: "목표 달성 소비?",
+    savings: true,
+  },
 ];
 
 const miniCards = [
-  { label: "소비 흐름",     value: "3월은 지출이 증가하는 추세에요", meta: "12% 증가" },
-  { label: "주의 필요",     value: "쇼핑 지출이 증가하고 있어요",     meta: "시간 대비 빠른 지출 속도" },
-  { label: "지출 패턴 안정", value: "교통비 지출이 안정적이에요",     meta: "3주간 유지되는 교통비 지출" },
+  {
+    label: "소비 흐름",
+    value: "3월은 지출이 증가하는 추세에요",
+    meta: "12% 증가",
+  },
+  {
+    label: "주의 필요",
+    value: "쇼핑 지출이 증가하고 있어요",
+    meta: "시간 대비 빠른 지출 속도",
+  },
+  {
+    label: "지출 패턴 안정",
+    value: "교통비 지출이 안정적이에요",
+    meta: "3주간 유지되는 교통비 지출",
+  },
 ];
 
-// ── 중복 키 제거된 formatTime ──
 const formatTime = (date = new Date()) =>
   date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
 
-// ── Gemini API 호출 ──
-const callGemini = async (userText, history) => {
+// ── Groq API 호출 ──
+const callGroq = async (userText, history) => {
   const contents =
-    history.length === 0 ? [ { role: "user", parts: [ { text: userText, }, ], } ]
-      : [ ...history, { role: "user", parts: [ { text: userText, }, ], }, ];
-  const res = await fetch("http://localhost:3001/api/groq", {
+    history.length === 0
+      ? [{ role: "user", parts: [{ text: userText }] }]
+      : [...history, { role: "user", parts: [{ text: userText }] }];
+
+  const res = await fetch(GROQ_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contents,
-      system_prompt: SYSTEM_PROMPT,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents, system_prompt: SYSTEM_PROMPT }),
   });
 
   if (!res.ok) {
     const err = await res.json();
-
-    throw new Error(
-      err.error || `HTTP ${res.status}`
-    );
+    throw new Error(err.error || `HTTP ${res.status}`);
   }
 
   const data = await res.json();
-
-  return (
-    data.choices?.[0]?.message?.content ||
-    "응답을 받지 못했어요."
-  );
+  return data.choices?.[0]?.message?.content || "응답을 받지 못했어요.";
 };
 
 export default function CC() {
@@ -98,7 +112,7 @@ export default function CC() {
   const [inputFocused, setInputFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const geminiHistory = useRef([]);
+  const groqHistory = useRef([]);
   const chatEndRef = useRef(null);
   const hasChatted = messages.length > 0;
 
@@ -123,17 +137,22 @@ export default function CC() {
     setMessages((prev) => [
       ...prev,
       { id: `user-${Date.now()}`, role: "user", text: content, time: now },
-      { id: loadingId, role: "assistant", reply: { type: "loading" }, time: now },
+      {
+        id: loadingId,
+        role: "assistant",
+        reply: { type: "loading" },
+        time: now,
+      },
     ]);
     setMessage("");
     setIsLoading(true);
 
     try {
-      const replyText = await callGemini(content, geminiHistory.current);
+      const replyText = await callGroq(content, groqHistory.current);
 
-      geminiHistory.current = [
-        ...geminiHistory.current,
-        { role: "user",  parts: [{ text: content }] },
+      groqHistory.current = [
+        ...groqHistory.current,
+        { role: "user", parts: [{ text: content }] },
         { role: "model", parts: [{ text: replyText }] },
       ];
 
@@ -141,16 +160,22 @@ export default function CC() {
         prev.map((m) =>
           m.id === loadingId
             ? { ...m, reply: { type: "text", text: replyText } }
-            : m
-        )
+            : m,
+        ),
       );
     } catch (e) {
       setMessages((prev) =>
         prev.map((m) =>
           m.id === loadingId
-            ? { ...m, reply: { type: "error", text: `오류가 발생했어요: ${e.message}` } }
-            : m
-        )
+            ? {
+                ...m,
+                reply: {
+                  type: "error",
+                  text: `오류가 발생했어요: ${e.message}`,
+                },
+              }
+            : m,
+        ),
       );
     } finally {
       setIsLoading(false);
@@ -169,190 +194,236 @@ export default function CC() {
 
         <main className="cc-main">
           <HomeHeader />
-
-          {/* ── TOP STRIP ── */}
-          <Reveal as="section" className="cc-topStrip" amount={0.2}>
-            <div className="cc-topIntro">
-              <p className="cc-topEyebrow">오늘의 코칭</p>
-              <h2 className="cc-topTitle">
-                최근 식비 지출이 증가하고 있어요.
-                <br />
-                이번 주는 외식 횟수를 줄여보는 건 어떨까요?
-              </h2>
-            </div>
-
-            {miniCards.map((card) => (
-              <motion.article key={card.label} className="cc-miniCard" {...cardMotion}>
-                <span className="cc-miniLabel">{card.label}</span>
-                <strong className="cc-miniValue">{card.value}</strong>
-                <span className="cc-miniMeta">{card.meta}</span>
-              </motion.article>
-            ))}
-
-            {/* ── 곰인형 → char.svg 로 교체 ── */}
-            <div className="cc-avatarWrap" aria-hidden="true">
-              <img src={charSvg} alt="" className="cc-avatarImg" />
-            </div>
-          </Reveal>
-
-          {/* ── MAIN BODY ── */}
-          {!hasChatted ? (
-            <motion.section
-              className="cc-heroSection"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              animate="show"
-            >
-              <motion.div className="cc-heroCopy" variants={staggerItemVariants}>
-                <p className="cc-heroEyebrow">김수한무님의 소비 관리에 있어서</p>
-                <h2 className="cc-heroTitle">
-                  MONY의 소비코치가
+            {/* ── TOP STRIP ── */}
+            <Reveal as="section" className="cc-topStrip" amount={0.2}>
+              <div className="cc-topIntro">
+                <p className="cc-topEyebrow">오늘의 코칭</p>
+                <h2 className="cc-topTitle">
+                  최근 식비 지출이 증가하고 있어요.
                   <br />
-                  더 나은 선택으로 도와드릴게요
+                  이번 주는 외식 횟수를 줄여보는 건 어떨까요?
                 </h2>
-              </motion.div>
-
-              <motion.div className="cc-promptGrid" variants={staggerContainerVariants}>
-                {quickCards.map((card) => (
-                  <motion.button
-                    key={card.title}
-                    type="button"
-                    className={`cc-promptCard${card.savings ? " cc-promptCard--savings" : ""}`}
-                    onClick={() => card.text ? sendMessage(card.text) : null}
-                    variants={staggerItemVariants}
-                    {...cardMotion}
-                  >
-                    <span className="cc-promptIcon">
-                      {card.savings ? (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Z"/>
-                          <path d="M12 6v6l4 2"/>
-                        </svg>
-                      ) : (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                        </svg>
-                      )}
-                    </span>
-                    <div className="cc-promptCardText">
-                      <span className="cc-promptTitle">{card.title}</span>
-                      <span className="cc-promptSub">
-                        {card.text || "궁금한 점을 질문하기"}
-                      </span>
-                    </div>
-                  </motion.button>
-                ))}
-              </motion.div>
-
-              <div className="cc-heroInputArea">
-                <form className="cc-heroForm" onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onFocus={() => setInputFocused(true)}
-                    onBlur={() => setInputFocused(false)}
-                    placeholder="무엇이든 물어보세요"
-                    className="cc-heroInput"
-                    disabled={isLoading}
-                  />
-                </form>
               </div>
-            </motion.section>
-          ) : (
-            <motion.section
-              className="cc-chatPanel"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28 }}
-            >
-              <div className="cc-chatMessages" role="log" aria-live="polite">
-                {messages.map((item) =>
-                  item.role === "user" ? (
-                    /* ── 사용자 말풍선 ── */
-                    <div key={item.id} className="cc-bubble cc-bubble--user">
-                      <span className="cc-bubbleQueryLabel">
-                        <span className="cc-bubbleDiamond">❖</span>
-                        소비코치_userchat_Query
-                      </span>
-                      <p>{item.text}</p>
-                      <span className="cc-bubbleTime">{item.time}</span>
-                    </div>
 
-                  ) : item.reply?.type === "loading" ? (
-                    /* ── 로딩 말풍선 ── */
-                    <div key={item.id} className="cc-bubble cc-bubble--asst">
-                      <span className="cc-bubbleThinkLabel">
-                        <span className="cc-bubbleDiamond">❖</span>
-                        소비코치_aichat_Thinking
+              {miniCards.map((card) => (
+                <motion.article
+                  key={card.label}
+                  className="cc-miniCard"
+                  {...cardMotion}
+                >
+                  <span className="cc-miniLabel">{card.label}</span>
+                  <strong className="cc-miniValue">{card.value}</strong>
+                  <span className="cc-miniMeta">{card.meta}</span>
+                </motion.article>
+              ))}
+
+              <div className="cc-avatarWrap" aria-hidden="true">
+                <img src={charSvg} alt="" className="cc-avatarImg" />
+              </div>
+            </Reveal>
+
+            {/* ── MAIN BODY ── */}
+            {!hasChatted ? (
+              <motion.section
+                className="cc-heroSection"
+                variants={staggerContainerVariants}
+                initial="hidden"
+                animate="show"
+              >
+                <motion.div
+                  className="cc-heroCopy"
+                  variants={staggerItemVariants}
+                >
+                  <p className="cc-heroEyebrow">
+                    김수한무님의 소비 관리에 있어서
+                  </p>
+                  <h2 className="cc-heroTitle">
+                    MONY의 소비코치가
+                    <br />더 나은 선택으로 도와드릴게요
+                  </h2>
+                </motion.div>
+
+                <motion.div
+                  className="cc-promptGrid"
+                  variants={staggerContainerVariants}
+                >
+                  {quickCards.map((card) => (
+                    <motion.button
+                      key={card.title}
+                      type="button"
+                      className={`cc-promptCard${card.savings ? " cc-promptCard--savings" : ""}`}
+                      onClick={() =>
+                        card.text ? sendMessage(card.text) : null
+                      }
+                      variants={staggerItemVariants}
+                      {...cardMotion}
+                    >
+                      <span className="cc-promptIcon">
+                        {card.savings ? (
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Z" />
+                            <path d="M12 6v6l4 2" />
+                          </svg>
+                        ) : (
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                          </svg>
+                        )}
                       </span>
-                      <div className="cc-thinkingBox">
-                        <span className="cc-thinkingText">
-                          패턴을 정리하고 있어요
-                          <span className="cc-dot" />
-                          <span className="cc-dot" />
-                          <span className="cc-dot" />
+                      <div className="cc-promptCardText">
+                        <span className="cc-promptTitle">{card.title}</span>
+                        <span className="cc-promptSub">
+                          {card.text || "궁금한 점을 질문하기"}
                         </span>
                       </div>
-                      <span className="cc-bubbleTime">{item.time}</span>
-                    </div>
+                    </motion.button>
+                  ))}
+                </motion.div>
 
-                  ) : item.reply?.type === "error" ? (
-                    /* ── 에러 말풍선 ── */
-                    <div key={item.id} className="cc-bubble cc-bubble--asst cc-bubble--error">
-                      <span className="cc-bubbleInsightLabel">
-                        <span className="cc-bubbleDiamond">❖</span>
-                        소비카드_핵심인사이트
-                      </span>
-                      <p className="cc-errorText">{item.reply.text}</p>
-                      <span className="cc-bubbleTime">{item.time}</span>
+                <div className="cc-heroInputArea">
+                  <form className="cc-heroForm" onSubmit={handleSubmit}>
+                    <div
+                      className={`cc-heroInputWrap${inputFocused || message ? " cc-heroInputWrap--active" : ""}`}
+                    >
+                      <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onFocus={() => setInputFocused(true)}
+                        onBlur={() => setInputFocused(false)}
+                        placeholder="무엇이든 물어보세요"
+                        className="cc-heroInput"
+                        disabled={isLoading}
+                      />
+                      {(inputFocused || message) && (
+                        <button
+                          type="submit"
+                          className="cc-heroSendBtn"
+                          disabled={isLoading || !message.trim()}
+                        >
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M22 2 11 13" />
+                            <path d="M22 2 15 22 11 13 2 9l20-7z" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
-
-                  ) : (
-                    /* ── AI 응답 말풍선 ── */
-                    <div key={item.id} className="cc-bubble cc-bubble--asst">
-                      <span className="cc-bubbleInsightLabel">
-                        <span className="cc-bubbleDiamond">❖</span>
-                        소비카드_핵심인사이트
-                      </span>
-                      <p>{item.reply?.text}</p>
-                      <span className="cc-bubbleTime">{item.time}</span>
-                    </div>
-                  )
-                )}
-                <div ref={chatEndRef} />
-              </div>
-
-              <form className="cc-chatForm" onSubmit={handleSubmit}>
-                <div className={`cc-chatInputWrap${inputFocused ? " cc-chatInputWrap--active" : ""}`}>
-                  <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onFocus={() => setInputFocused(true)}
-                    onBlur={() => setInputFocused(false)}
-                    placeholder={isLoading ? "답변을 기다리는 중..." : "무엇이든 물어보세요"}
-                    className="cc-chatInput"
-                    disabled={isLoading}
-                  />
-                  <button
-                    type="submit"
-                    className={`cc-sendButton${isLoading ? " cc-sendButton--loading" : ""}`}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <span className="cc-sendSpinner" />
-                    ) : (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/>
-                      </svg>
-                    )}
-                  </button>
+                  </form>
                 </div>
-              </form>
-            </motion.section>
-          )}
+              </motion.section>
+            ) : (
+              <motion.section
+                className="cc-chatPanel"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.28 }}
+              >
+                <div className="cc-chatMessages" role="log" aria-live="polite">
+                  {messages.map((item) =>
+                    item.role === "user" ? (
+                      <div key={item.id} className="cc-bubble cc-bubble--user">
+                        <p>{item.text}</p>
+                      </div>
+                    ) : item.reply?.type === "loading" ? (
+                      <div key={item.id} className="cc-bubble cc-bubble--asst">
+                        <div className="cc-thinkingBox">
+                          <span className="cc-thinkingText">
+                            패턴을 정리하고 있어요...
+                            <span className="cc-dot" />
+                            <span className="cc-dot" />
+                            <span className="cc-dot" />
+                          </span>
+                        </div>
+                      </div>
+                    ) : item.reply?.type === "error" ? (
+                      <div
+                        key={item.id}
+                        className="cc-bubble cc-bubble--asst cc-bubble--error"
+                      >
+                        <p className="cc-errorText">{item.reply.text}</p>
+                      </div>
+                    ) : (
+                      <div key={item.id} className="cc-bubble cc-bubble--asst">
+                        <p>{item.reply?.text}</p>
+                      </div>
+                    ),
+                  )}
+                  <div ref={chatEndRef} />
+                </div>
+
+                <form className="cc-chatForm" onSubmit={handleSubmit}>
+                  <div
+                    className={`cc-chatInputWrap${inputFocused ? " cc-chatInputWrap--active" : ""}`}
+                  >
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onFocus={() => setInputFocused(true)}
+                      onBlur={() => setInputFocused(false)}
+                      placeholder={
+                        isLoading
+                          ? "답변을 기다리는 중..."
+                          : "무엇이든 물어보세요"
+                      }
+                      className="cc-chatInput"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="submit"
+                      className={`cc-sendButton${isLoading ? " cc-sendButton--loading" : ""}${message.trim() ? " cc-sendButton--active" : ""}`}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <span className="cc-sendSpinner" />
+                      ) : (
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M22 2 11 13" />
+                          <path d="M22 2 15 22 11 13 2 9l20-7z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </motion.section>
+            )}
         </main>
       </div>
 
