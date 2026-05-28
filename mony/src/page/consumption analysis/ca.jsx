@@ -2,6 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import BusanImg from "../../assets/ca/busan.png";
+import JapanImg from "../../assets/ca/japan.png";
+import JejuImg from "../../assets/ca/jeju.png";
 import {
   CountUp,
   ProgressFill,
@@ -13,13 +16,69 @@ import {
 import "./ca.css";
 
 const weekBars = [
-  { day: "일", value: 42, active: false },
-  { day: "월", value: 78, active: true },
-  { day: "화", value: 84, active: false },
-  { day: "수", value: 90, active: false },
-  { day: "목", value: 72, active: false },
-  { day: "금", value: 55, active: false },
-  { day: "토", value: 64, active: false },
+  {
+    day: "일",
+    value: 42,
+    blocks: ["base", "base", "base"],
+    period: "3/16(일) - 3/22(토)",
+    amount: "₩22,000",
+    change: "-8%",
+    active: false,
+  },
+  {
+    day: "월",
+    value: 72,
+    blocks: ["light", "accent", "accent", "light"],
+    period: "3/23(월) - 3/30(일)",
+    amount: "₩28,000",
+    change: "+12%",
+    active: true,
+  },
+  {
+    day: "화",
+    value: 64,
+    blocks: ["base", "base", "base", "base"],
+    period: "3/24(화) - 3/31(화)",
+    amount: "₩34,000",
+    change: "+10%",
+    active: false,
+  },
+  {
+    day: "수",
+    value: 76,
+    blocks: ["base", "base", "base", "base", "base"],
+    period: "3/25(수) - 4/1(수)",
+    amount: "₩36,000",
+    change: "+14%",
+    active: false,
+  },
+  {
+    day: "목",
+    value: 64,
+    blocks: ["base", "base", "base", "base"],
+    period: "3/26(목) - 4/2(목)",
+    amount: "₩31,000",
+    change: "+6%",
+    active: false,
+  },
+  {
+    day: "금",
+    value: 38,
+    blocks: ["base", "base", "base"],
+    period: "3/27(금) - 4/3(금)",
+    amount: "₩18,000",
+    change: "-3%",
+    active: false,
+  },
+  {
+    day: "토",
+    value: 48,
+    blocks: ["base", "base", "base"],
+    period: "3/28(토) - 4/4(토)",
+    amount: "₩24,000",
+    change: "+2%",
+    active: false,
+  },
 ];
 
 const fixedItems = [
@@ -40,7 +99,11 @@ const savingsOpportunities = [
   { place: "제주도 여행", date: "2023. 4. 7 - 4. 13.",   hint: "숙박비 절약으로 9,000원 남았어요.", piggyAmount: 9000 },
 ];
 
-const tripThumbs = ["#d7b36f", "#c88f5e", "#8cb4d7", "#dfc07a", "#a97343", "#d1d4db"];
+const tripThumbs = [
+  { name: "부산 여행", image: BusanImg },
+  { name: "일본 나고야", image: JapanImg },
+  { name: "제주도 여행", image: JejuImg },
+];
 
 const SAVEABLE_AMOUNT = 72000;
 
@@ -70,7 +133,6 @@ export default function Ca() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="ca-toolbar">
-              <span>소비 패턴에서 찾은 저축 기회</span>
               <span>카카오뱅크, 김수한무의 카방카드</span>
               <span aria-hidden="true">⌄</span>
             </div>
@@ -132,10 +194,13 @@ export default function Ca() {
                     <strong>₩428,000</strong>
                     <small>지난달 누적 ₩380,000</small>
                   </div>
-                  <div className="ca-miniCard">
-                    <span>안정적인 적정 소비</span>
-                    <strong>3월,</strong>
-                    <strong>소비 패턴의 균형이 유지가 적절해요</strong>
+                  <div className="ca-miniCard ca-miniCard--steady">
+                    <span className="ca-miniCard__label">안정적인 적정 소비</span>
+                    <div className="march-div">
+                      <strong className="march">3월,</strong>
+                      <br />
+                      <strong className="march-description">소비 패턴의 균형의 <br /> 유지가 적절해요</strong>
+                    </div>
                   </div>
                   <div className="ca-miniCard">
                     <span>3월의 지출</span>
@@ -163,115 +228,54 @@ export default function Ca() {
                 </div>
 
                 <div className="ca-weekChart">
-                  <div className="ca-weekScale">
+                  <div className="ca-weekScale" aria-hidden="true">
                     <span>31</span>
-                    <span />
-                    <span />
                     <span>1</span>
                   </div>
+                  <div className="ca-weekGrid" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                   <div className="ca-weekBars">
-                    {weekBars.map((bar) => (
+                    {weekBars.map((bar, index) => (
                       <div key={bar.day} className="ca-weekBarWrap">
                         <motion.div
                           className={`ca-weekBar ${bar.active ? "is-active" : ""}`}
                           initial={{ scaleY: 0.35, opacity: 0.5 }}
                           whileInView={{ scaleY: 1, opacity: 1 }}
                           viewport={{ once: true, amount: 0.3 }}
-                          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                          transition={{ duration: 0.9, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                           style={{ height: `${bar.value}%` }}
-                        />
-                        <span>{bar.day}</span>
+                        >
+                          {bar.blocks.map((block, blockIndex) => (
+                            <span
+                              key={`${bar.day}-${blockIndex}`}
+                              className={`ca-weekBlock is-${block}`}
+                            />
+                          ))}
+                        </motion.div>
+                        <div className="ca-weekTooltip" role="tooltip">
+                          <strong>{bar.period}</strong>
+                          <span>
+                            <i aria-hidden="true" />
+                            총 지출
+                            <b>{bar.amount}</b>
+                          </span>
+                          <span>
+                            <i aria-hidden="true" />
+                            주별대비
+                            <b>{bar.change}</b>
+                          </span>
+                        </div>
+                        <span className="ca-weekDay">{bar.day}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </motion.article>
             </motion.div>
-          </motion.section>
-
-          <motion.section
-            className="ca-middleGrid"
-            variants={staggerContainerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.18 }}
-          >
-            <motion.article className="ca-card ca-card--fixed" variants={staggerItemVariants} {...cardMotion}>
-              <div className="ca-cardHead">
-                <h3>소비 구조 분석</h3>
-                <span aria-hidden="true">›</span>
-              </div>
-
-              <div className="ca-fixedSummary">
-                {fixedItems.map((item) => (
-                  <div key={item.title} className="ca-fixedRow">
-                    <div>
-                      <strong>{item.title}</strong>
-                      <span>
-                        <CountUp value={item.value} suffix={item.suffix} />
-                      </span>
-                    </div>
-                    <small>{item.meta}</small>
-                  </div>
-                ))}
-              </div>
-
-              <p className="ca-fixedConvert">
-                이번 달 조절 가능한 소비 중 <strong>42,000원</strong>을 저축으로 전환할 수 있어요.
-              </p>
-
-              <div className="ca-fixedGrid">
-                {monthlyItems.map((item) => (
-                  <div key={item.title} className="ca-fixedCard">
-                    <div className="ca-fixedCardTop">
-                      <strong>{item.title}</strong>
-                      <span>
-                        <CountUp value={item.value} suffix="원" />
-                      </span>
-                    </div>
-                    <div className="ca-fixedCardFoot">
-                      <small>{item.count}</small>
-                      <span>고정카드/계좌</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.article>
-
-            <motion.article className="ca-card ca-card--travel" variants={staggerItemVariants} {...cardMotion}>
-              <div className="ca-cardHead">
-                <div>
-                  <h3>소비 기록에서 찾은 저축 기회</h3>
-                  <strong>지출 기록 · 여행 / 기타</strong>
-                </div>
-                <span aria-hidden="true">›</span>
-              </div>
-
-              <div className="ca-tripCards">
-                {savingsOpportunities.map((trip) => (
-                  <div key={trip.place} className="ca-tripCard ca-tripCard--savings">
-                    <span className="ca-tripMeta">{trip.date}</span>
-                    <h4>{trip.place}</h4>
-                    <p className="ca-tripSavingsHint">{trip.hint}</p>
-                    <button
-                      type="button"
-                      className="ca-tripPiggyBtn"
-                      onClick={() => handleCaSave(trip.piggyAmount)}
-                    >
-                      저금통에 넣기
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="ca-tripThumbs">
-                {tripThumbs.map((color, index) => (
-                  <div key={`${color}-${index}`} className="ca-tripThumb" style={{ background: color }}>
-                    <span>{26 + index}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.article>
           </motion.section>
 
           <motion.section
@@ -326,6 +330,94 @@ export default function Ca() {
                     72,000원 저금통에 적립하기
                   </button>
                 </div>
+              </div>
+            </motion.article>
+          </motion.section>
+
+          <motion.section
+            className="ca-middleGrid"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.18 }}
+          >
+            <motion.article className="ca-card ca-card--fixed" variants={staggerItemVariants} {...cardMotion}>
+              <div className="ca-cardHead">
+                <h3>소비 구조 분석</h3>
+                <span aria-hidden="true">›</span>
+              </div>
+              <p className="ca-fixedConvert">
+                이번 달 조절 가능한 소비 중 <strong>42,000원</strong>을 저축으로 전환할 수 있어요.
+              </p>
+              <div className="ca-fixedSummary">
+                {fixedItems.map((item) => (
+                  <div key={item.title} className="ca-fixedRow">
+                    <div>
+                      <strong>{item.title}</strong>
+                      <span>
+                        <CountUp value={item.value} suffix={item.suffix} />
+                      </span>
+                    </div>
+                    <small>{item.meta}</small>
+                  </div>
+                ))}
+              </div>
+
+              
+
+              <div className="ca-fixedGrid">
+                {monthlyItems.map((item) => (
+                  <div key={item.title} className="ca-fixedCard">
+                    <div className="ca-fixedCardTop">
+                      <strong>{item.title}</strong>
+                      <span>
+                        <CountUp value={item.value} suffix="원" />
+                      </span>
+                    </div>
+                    <div className="ca-fixedCardFoot">
+                      <small>{item.count}</small>
+                      <span>고정카드/계좌</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.article>
+
+            <motion.article className="ca-card ca-card--travel" variants={staggerItemVariants} {...cardMotion}>
+              <div className="ca-cardHead">
+                <div className="ca-travelHead">
+                  <h3>소비 기록에서 찾은 저축 기회</h3>
+                  <strong>지출 기록 · 여행 / 기타</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+
+              <div className="ca-tripCards">
+                {savingsOpportunities.map((trip) => (
+                  <div key={trip.place} className="ca-tripCard ca-tripCard--savings">
+                    <span className="ca-tripMeta">{trip.date}</span>
+                    <h4>{trip.place}</h4>
+                    <p className="ca-tripSavingsHint">{trip.hint}</p>
+                    <button
+                      type="button"
+                      className="ca-tripPiggyBtn"
+                      onClick={() => handleCaSave(trip.piggyAmount)}
+                    >
+                      저금통에 넣기
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="ca-tripThumbs">
+                {tripThumbs.map((thumb) => (
+                  <img
+                    key={thumb.name}
+                    className="ca-tripThumb"
+                    src={thumb.image}
+                    alt={thumb.name}
+                  />
+                ))}
               </div>
             </motion.article>
           </motion.section>
