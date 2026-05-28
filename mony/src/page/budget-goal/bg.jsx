@@ -422,7 +422,7 @@ export default function Bg() {
         )}
       </AnimatePresence>
 
-      {/* 토스트 */}
+      {/* 토스트 d*/}
       <AnimatePresence>
         {toastMsg && (
           <motion.div

@@ -800,7 +800,8 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 .test11{
-  color: white;
+  color: white;  
+  /* 하얀색으로  */
 }
 /* ── RESPONSIVE ── */
 @media (max-width: 1200px) {
