@@ -68,35 +68,18 @@
   margin-bottom: 14px;
 }
 
-.bg-cardHead h3,
-.bg-budgetPanelHead strong,
-.bg-budgetStat span,
-.bg-budgetStat strong,
-.bg-budgetRow strong,
-.bg-goalTag,
-.bg-goalHeroText p,
-.bg-goalHeroText strong,
-.bg-goalMeta span,
-.bg-goalMeta strong,
-.bg-guideSummary strong,
-.bg-guidePlan strong,
-.bg-guidePlan p,
-.bg-challengeCard strong,
-.bg-challengeCard span,
-.bg-challengeAmount {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.92);
-}
-
 .bg-cardHead h3 {
+  margin: 0;
   font-size: 17px;
   letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-cardHead span {
   color: rgba(255, 255, 255, 0.82);
 }
 
+/* ── 월간 예산 ── */
 .bg-card--budget {
   min-height: 388px;
 }
@@ -125,6 +108,7 @@
   font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-budgetStat small {
@@ -148,6 +132,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  position: relative;
 }
 
 .bg-budgetPanelHead {
@@ -159,6 +144,7 @@
 
 .bg-budgetPanelHead strong {
   font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-budgetPanelHead span {
@@ -187,6 +173,7 @@
 
 .bg-budgetRow strong {
   font-size: 13px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-budgetRow span,
@@ -211,6 +198,7 @@
 
 .bg-budgetPanel--progress {
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .bg-progressHero {
@@ -283,6 +271,25 @@
   background: linear-gradient(90deg, #d7ff47, #b9e72d);
 }
 
+/* 캐릭터 이미지 */
+.bg-progressCharacter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.bg-progressCharacter img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ── 예산목표 ── */
 .bg-card--goal {
   min-height: 388px;
 }
@@ -298,11 +305,15 @@
   width: 84px;
   height: 84px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #ffd74d;
-  font-size: 42px;
+  overflow: hidden;
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.bg-goalAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .bg-goalHeroText,
@@ -320,6 +331,7 @@
 .bg-goalCard p {
   color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
+  margin: 0;
 }
 
 .bg-goalHeroText strong,
@@ -361,6 +373,7 @@
   min-height: 144px;
 }
 
+/* ── 예산 가이드 ── */
 .bg-gridBottom .bg-card {
   min-height: 240px;
 }
@@ -390,6 +403,7 @@
   font-size: 16px;
   line-height: 1.35;
   letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-guideSummary p,
@@ -412,17 +426,162 @@
 
 .bg-guidePlan strong {
   font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.bg-challengeGrid {
+/* ── 이번 달 저축 목표 ── */
+.bg-savingsGoal {
   margin-top: 14px;
+  border-radius: 18px;
+  background: rgba(215, 255, 71, 0.04);
+  border: 1px solid rgba(215, 255, 71, 0.12);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bg-savingsGoalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bg-savingsGoalLabel {
+  display: block;
+  font-size: 11px;
+  color: rgba(215, 255, 71, 0.6);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.bg-savingsGoalTitle {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+
+.bg-savingsGoalTitle em {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.bg-savingsGoalPct {
+  font-size: 28px;
+  font-weight: 800;
+  color: #d7ff47;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* 마일스톤 트랙 */
+.bg-savingsTrackWrap {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.bg-savingsTrack {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+}
+
+.bg-savingsMilestones {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  pointer-events: none;
+}
+
+.bg-savingsDot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bg-savingsDot::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.bg-savingsDot.is-reached::before {
+  background: #d7ff47;
+  border-color: #d7ff47;
+  box-shadow: 0 0 8px rgba(215, 255, 71, 0.7);
+}
+
+.bg-savingsDot span {
+  position: absolute;
+  top: 14px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  transition: color 0.4s ease;
+  font-weight: 500;
+}
+
+.bg-savingsDot.is-reached span {
+  color: rgba(215, 255, 71, 0.7);
+}
+
+.bg-savingsComplete {
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(215, 255, 71, 0.1);
+  border: 1px solid rgba(215, 255, 71, 0.2);
+  color: #d7ff47;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.bg-savingsBtn {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #d7ff47;
+  color: #0c0c0c;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 140ms, transform 100ms;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bg-savingsBtn:hover { background: #c8e030; }
+.bg-savingsBtn:active { transform: scale(0.98); }
+
+/* ── 버킷리스트 챌린지 ── */
+.bg-challengeGrid {
+  margin-top: 4px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
 .bg-challengeCard {
-  min-height: 152px;
+  min-height: 140px;
   padding: 16px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
@@ -432,7 +591,9 @@
 }
 
 .bg-challengeCard strong {
-  font-size: 15px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.3;
 }
 
 .bg-challengeCard span {
@@ -444,6 +605,7 @@
   margin-top: auto;
   font-size: 16px;
   font-weight: 800;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .bg-challengeBar {
@@ -453,40 +615,139 @@
   overflow: hidden;
 }
 
+/* ── 모달 ── */
+.bg-modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.bg-modal {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 28px;
+  width: min(440px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bg-modal h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+
+.bg-modal p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.bg-modalQuick {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.bg-modalQuick button {
+  padding: 9px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bg-modalQuick button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bg-modalInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bg-modalInput input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bg-modalInput input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+.bg-modalInput span {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+.bg-modalConfirm {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #d7ff47;
+  color: #0c0c0c;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 140ms;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bg-modalConfirm:hover { background: #c8e030; }
+.bg-modalConfirm:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── 토스트 ── */
+.bg-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: rgba(22, 22, 22, 0.97);
+  border: 1px solid rgba(215, 255, 71, 0.3);
+  color: #d7ff47;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 200;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 1200px) {
-  .bg-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .bg-gridTop,
-  .bg-gridBottom,
-  .bg-budgetPanels,
-  .bg-goalList {
-    grid-template-columns: 1fr;
-  }
-
-  .bg-budgetSummary,
-  .bg-challengeGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .bg-shell { grid-template-columns: 1fr; }
+  .bg-gridTop, .bg-gridBottom, .bg-budgetPanels, .bg-goalList { grid-template-columns: 1fr; }
+  .bg-budgetSummary, .bg-challengeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bg-guideGrid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
-  .bg-page {
-    padding: 12px;
-  }
-
-  .bg-budgetSummary,
-  .bg-goalList,
-  .bg-challengeGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .bg-guideGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .bg-progressHero {
-    flex-direction: column;
-  }
+  .bg-page { padding: 12px; }
+  .bg-budgetSummary, .bg-goalList, .bg-challengeGrid { grid-template-columns: 1fr; }
+  .bg-progressHero { flex-direction: column; }
+  .bg-modalQuick { grid-template-columns: repeat(2, 1fr); }
 }

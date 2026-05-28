@@ -356,7 +356,7 @@ export default function CC() {
                       <div key={item.id} className="cc-bubble cc-bubble--asst">
                         <div className="cc-thinkingBox">
                           <span className="cc-thinkingText">
-                            패턴을 정리하고 있어요...
+                            패턴을 정리하고 있어요
                             <span className="cc-dot" />
                             <span className="cc-dot" />
                             <span className="cc-dot" />
