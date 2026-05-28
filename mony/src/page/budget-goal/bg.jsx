@@ -129,7 +129,6 @@ export default function Bg() {
                   <div className="bg-budgetPanel">
                     <div className="bg-budgetPanelHead">
                       <strong>카테고리 예산</strong>
-                      <span>식비 250,000 / 180,000</span>
                     </div>
                     <div className="bg-budgetRows">
                       {monthlyCategories.map((item) => (
