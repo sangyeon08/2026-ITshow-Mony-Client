@@ -266,7 +266,7 @@ export default function Bg() {
                     </div>
                     <p className="bg-budgetHint">
                       <strong>소비 지출의 35% 증가</strong>
-                      외식 소비 증가
+                      <strong>외식 소비 증가</strong>
                     </p>
                   </div>
 
