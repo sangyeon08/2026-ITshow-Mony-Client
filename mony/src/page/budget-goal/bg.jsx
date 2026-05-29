@@ -217,13 +217,25 @@ export default function Bg() {
                         <span className="bg-goalTag">
                           진행중인 목표 {index + 1}
                         </span>
-                        <p>{item.desc}</p>
-                        <strong>{item.title}</strong>
-                        <div className="bg-goalMeta">
-                          <span>진행률</span>
-                          <strong>{Math.round(item.progress * 100)}%</strong>
-                          <span>기간</span>
-                          <strong>{item.period}</strong>
+                        <div className="bg-goalRow">
+                          <div className="bg-goalLeft">
+                            <p>{item.desc}</p>
+                            <strong className="bg-goalTitle">
+                              {item.title}
+                            </strong>
+                          </div>
+                          <div className="bg-goalRight">
+                            <div className="bg-goalMeta">
+                              <span>진행률</span>
+                              <span>기간</span>
+                            </div>
+                            <div className="bg-goalMetaValues">
+                              <strong>
+                                {Math.round(item.progress * 100)}%
+                              </strong>
+                              <strong>{item.period}</strong>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}

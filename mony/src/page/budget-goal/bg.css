@@ -344,14 +344,19 @@
    ──────────────────────────────────────── */
 .bg-card--goal {
   min-height: 388px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  /* 추가 */
 }
 
 /* 전체 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */
 .bg-goalLayout {
   margin-top: 18px;
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;  /*위치를 어떻게 설정할 것인지?*/
   gap: 18px;
+  flex: 1;
 }
 
 /* 좌측: 아바타 + 이름 */
@@ -369,7 +374,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.06);
+  background: #FFDE5C;
 }
 
 .bg-goalAvatar img {
@@ -391,16 +396,16 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .bg-goalCard {
-  padding: 16px;
+  padding: 20px 20px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .bg-goalCard p {
@@ -417,18 +422,43 @@
 .bg-goalTag {
   color: rgba(255, 255, 255, 0.48);
   font-size: 12px;
+  padding-left: 16px;
+}
+
+.bg-goalDescRow {
+  display: flex;
+  /* align-items: center;
+  justify-content: space-between;
+  gap: 12px; */
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bg-goalDescRow p {
+  margin: 0;
+  flex: 1;
+}
+
+.bg-goalMeta span:first-child,
+.bg-goalMetaValues strong:first-child {
+  min-width: 35px;  /* 진행률 칸 너비 */
 }
 
 .bg-goalMeta {
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  gap: 8px 12px;
-  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
 }
 
 .bg-goalMeta span {
   color: rgba(255, 255, 255, 0.52);
   font-size: 12px;
+}
+
+.bg-goalTitleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .bg-goalMeta strong {
@@ -443,7 +473,7 @@
 
 .bg-guideGrid {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
@@ -471,7 +501,7 @@
 
 .bg-guideSummary p,
 .bg-guidePlan p {
-  margin: 6px 0 0;
+  margin: 2px 0 0;
   color: rgba(255, 255, 255, 0.68);
   font-size: 12px;
 }
@@ -479,6 +509,8 @@
 .bg-guideAmount {
   color: #fff;
   font-size: 22px;
+  text-align: right;
+  align-self: flex-end;
 }
 
 .bg-guidePlan {
@@ -518,7 +550,51 @@
   letter-spacing: 0.04em;
   margin-bottom: 4px;
 }
+.bg-goalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.bg-goalLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
+}
+.bg-goalLeft p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+.bg-goalRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-right: 70px;
+}
+.bg-goalTitle {
+  color: #d7ff47;
+  font-size: 16px;
+  font-weight: 700;
+}
+.bg-goalMetaValues {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+.bg-goalMetaValues strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: left;
+}
 .bg-savingsGoalTitle {
   font-size: 17px;
   font-weight: 800;
