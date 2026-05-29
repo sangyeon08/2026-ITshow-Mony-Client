@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
 import Banner from "../../component/banner";
@@ -16,7 +17,7 @@ import Apartment from "../../assets/home/apartement.svg";
 import Database from "../../assets/home/database.svg";
 import Policy from "../../assets/home/policy.svg";
 import Refresh from "../../assets/home/formkit_refresh.svg";
-
+import coinRun from "../../assets/home/coin_run.png";
 import MonyImg from "../../assets/home/mony.svg";
 
 import "./home.css";
@@ -225,12 +226,24 @@ function getTodayLabel(date = new Date()) {
   return `오늘 · ${month}월 ${day}일 (${weekday})`;
 }
 
+function getBucketGoal() {
+  try {
+    const raw = localStorage.getItem("bucketGoal");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function Home() {
+  const navigate = useNavigate();
   const [activeTalkGroupIndex, setActiveTalkGroupIndex] = useState(0);
   const [activeTalkItem, setActiveTalkItem] = useState(null);
   const activeTalkGroup = talkGroups[activeTalkGroupIndex];
   const benefitCardRef = useRef(null);
   const benefitCardInView = useInView(benefitCardRef, { once: true, amount: 0.4 });
+  const savingsProgressRef = useRef(null);
+  const savingsProgressInView = useInView(savingsProgressRef, { once: true, amount: 0.6 });
 
   const [savingsGoal, setSavingsGoal] = useState(() => {
     const n = Number(localStorage.getItem("mony_savings_goal") ?? 0);
@@ -241,9 +254,17 @@ export default function Home() {
     return n >= 0 ? n : 32000;
   });
   const [savingsToast, setSavingsToast] = useState(false);
+  const [bucketGoal, setBucketGoal] = useState(null);
 
   const savingsProgress = Math.min(1, savedAmount / savingsGoal);
   const savingsPct = Math.min(100, Math.round(savingsProgress * 100));
+  const bucketTargetAmount = Number(bucketGoal?.targetAmount ?? 0);
+  const bucketCurrentSaved = Number(bucketGoal?.currentSaved ?? 0);
+  const bucketProgressPercent = bucketTargetAmount
+    ? Math.min((bucketCurrentSaved / bucketTargetAmount) * 100, 100)
+    : 0;
+  const bucketProgress = bucketProgressPercent / 100;
+  const bucketProgressPct = Math.round(bucketProgressPercent);
 
   const handleQuickSave = () => {
     const next = savedAmount + 5000;
@@ -264,6 +285,10 @@ export default function Home() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    setBucketGoal(getBucketGoal());
   }, []);
 
   return (
@@ -366,9 +391,17 @@ export default function Home() {
                   <strong>{savingsPct}%</strong>
                 </div>
               </div>
-
-              <div className="home-progress">
-                <ProgressFill className="home-progressBar" value={savingsProgress} />
+              <div
+                ref={savingsProgressRef}
+                className={`home-savingsProgressTrack ${
+                  savingsProgressInView ? "is-running" : ""
+                }`}
+                style={{ "--savings-progress": savingsProgress }}
+              >
+                <img className="coin-run" src={coinRun} alt="" aria-hidden="true" />
+                <div className="home-progress">
+                  <ProgressFill className="home-progressBar" value={savingsProgress} />
+                </div>
               </div>
 
               <div className="home-savingsActions">
@@ -408,36 +441,64 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.18 }}
           >
-            <motion.article className="home-panelCard" variants={staggerItemVariants} {...cardMotion}>
-              <p className="home-panelMeta">{currentMonthLabel}</p>
-              <h3 className="home-panelTitle">{todayLabel}</h3>
+            <motion.article className="home-panelCard home-bucketCard" variants={staggerItemVariants} {...cardMotion}>
+              {bucketGoal ? (
+                <>
+                  <p className="home-panelMeta">나의 버킷리스트 목표</p>
+                  <h3 className="home-panelTitle home-bucketTitle">{bucketGoal.bucketList}</h3>
 
-              <div className="home-calendar">
-                <div className="home-calendarHead">
-                  {weekDays.map((day) => (
-                    <span key={day}>{day}</span>
-                  ))}
-                </div>
-                <div className="home-calendarDates">
-                  {weekDates.map((date, index) => (
-                    <span key={date} className={index === 3 ? "is-active" : ""}>
-                      {date}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="home-historyList">
-                {recentItems.map((item) => (
-                  <div key={item.title} className={`home-historyRow is-${item.color}`}>
-                    <span className="home-historyLabel">
-                      {item.label}
-                      <small>{item.time}</small>
-                    </span>
-                    <span className="home-historyTitle">{item.title}</span>
+                  <div className="home-bucketStats">
+                    <div>
+                      <span>목표 금액</span>
+                      <strong>{bucketTargetAmount.toLocaleString()}원</strong>
+                    </div>
+                    <div>
+                      <span>월 저축</span>
+                      <strong>{Number(bucketGoal.monthlySaving ?? 0).toLocaleString()}원</strong>
+                    </div>
+                    <div>
+                      <span>예상 기간</span>
+                      <strong>{bucketGoal.estimatedPeriod}</strong>
+                    </div>
+                    <div>
+                      <span>현재 저축액</span>
+                      <strong>{bucketCurrentSaved.toLocaleString()}원</strong>
+                    </div>
                   </div>
-                ))}
-              </div>
+
+                  <div className="home-bucketProgress">
+                    <div className="home-bucketProgressHead">
+                      <span>목표 달성률</span>
+                      <strong>{bucketProgressPct}%</strong>
+                    </div>
+                    <div className="home-progress">
+                      <ProgressFill className="home-progressBar" value={bucketProgress} />
+                    </div>
+                  </div>
+
+                  <div className="home-bucketSteps">
+                    <p>AI 저축 플랜 3단계</p>
+                    {bucketGoal.steps?.slice(0, 3).map((step, index) => (
+                      <div key={`${step.title}-${index}`} className="home-bucketStep">
+                        <span>{step.step ?? index + 1}단계</span>
+                        <strong>{step.title}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="home-bucketEmpty">
+                  <p className="home-panelMeta">나의 버킷리스트 목표</p>
+                  <h3 className="home-panelTitle">아직 설정된 버킷리스트 목표가 없어요</h3>
+                  <button
+                    type="button"
+                    className="home-bucketSetupBtn"
+                    onClick={() => navigate("/onbording2")}
+                  >
+                    목표 설정하러 가기
+                  </button>
+                </div>
+              )}
             </motion.article>
 
             <motion.article className="home-panelCard" variants={staggerItemVariants} {...cardMotion}>

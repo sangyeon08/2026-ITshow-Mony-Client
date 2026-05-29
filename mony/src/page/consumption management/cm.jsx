@@ -95,46 +95,56 @@ const categoryItems = [
   { name: "교통", value: 12, color: "traffic", icon: TrafficIcon },
 ];
 
-const logBubbles = [
-  {
-    day: 26,
-    label: "백소정",
-    amount: "-20,200",
-    image: "/images/food-26.svg",
-    tone: "normal",
-  },
-  {
-    day: 27,
-    label: "일번지...",
-    amount: "-30,240",
-    image: "/images/food-27.svg",
-    tone: "normal",
-  },
-  {
-    day: 28,
-    label: "",
-    amount: "",
-    image: "/images/food-28.svg",
-    tone: "normal",
-  },
-  {
-    day: 29,
-    label: "업기떡...",
-    amount: "-14,300",
-    image: "/images/food-29.svg",
-    tone: "normal",
-  },
-  {
-    day: 30,
-    label: "분식집",
-    amount: "-9,130",
-    image: "/images/food-30.svg",
-    tone: "normal",
-  },
-];
+const logCategories = ["식사/외식", "쇼핑", "여행", "취미", "장소", "기타"];
+
+const logBubbleMap = {
+  "식사/외식": [
+    { day: 26, label: "백소정", amount: "-20,200", image: "/images/food-26.svg", tone: "normal" },
+    { day: 27, label: "일번지...", amount: "-30,240", image: "/images/food-27.svg", tone: "normal" },
+    { day: 28, label: "", amount: "", image: "/images/food-28.svg", tone: "normal" },
+    { day: 29, label: "업기떡...", amount: "-14,300", image: "/images/food-29.svg", tone: "normal" },
+    { day: 30, label: "분식집", amount: "-9,130", image: "/images/food-30.svg", tone: "normal" },
+  ],
+  쇼핑: [
+    { day: 26, label: "무신사", amount: "-48,900", image: "/images/food-27.svg", tone: "normal" },
+    { day: 27, label: "올리브영", amount: "-18,400", image: "/images/food-28.svg", tone: "normal" },
+    { day: 28, label: "교보문고", amount: "-35,400", image: "/images/food-29.svg", tone: "normal" },
+    { day: 29, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
+    { day: 30, label: "H&M", amount: "-34,020", image: "/images/food-26.svg", tone: "normal" },
+  ],
+  여행: [
+    { day: 26, label: "KTX", amount: "-59,800", image: "/images/food-28.svg", tone: "normal" },
+    { day: 27, label: "숙소예약", amount: "-82,000", image: "/images/food-29.svg", tone: "normal" },
+    { day: 28, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
+    { day: 29, label: "공항버스", amount: "-17,000", image: "/images/food-26.svg", tone: "normal" },
+    { day: 30, label: "기념품", amount: "-22,500", image: "/images/food-27.svg", tone: "normal" },
+  ],
+  취미: [
+    { day: 26, label: "필라테스", amount: "-45,000", image: "/images/food-29.svg", tone: "normal" },
+    { day: 27, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
+    { day: 28, label: "영화관", amount: "-15,000", image: "/images/food-26.svg", tone: "normal" },
+    { day: 29, label: "클래스", amount: "-28,000", image: "/images/food-27.svg", tone: "normal" },
+    { day: 30, label: "문구점", amount: "-8,400", image: "/images/food-28.svg", tone: "normal" },
+  ],
+  장소: [
+    { day: 26, label: "GS25", amount: "-5,600", image: "/images/food-30.svg", tone: "normal" },
+    { day: 27, label: "스타필드", amount: "-12,300", image: "/images/food-26.svg", tone: "normal" },
+    { day: 28, label: "홍대입구", amount: "-9,900", image: "/images/food-27.svg", tone: "normal" },
+    { day: 29, label: "", amount: "", image: "/images/food-28.svg", tone: "normal" },
+    { day: 30, label: "성수동", amount: "-16,800", image: "/images/food-29.svg", tone: "normal" },
+  ],
+  기타: [
+    { day: 26, label: "구독", amount: "-9,900", image: "/images/food-26.svg", tone: "normal" },
+    { day: 27, label: "통신비", amount: "-31,000", image: "/images/food-30.svg", tone: "normal" },
+    { day: 28, label: "", amount: "", image: "/images/food-29.svg", tone: "normal" },
+    { day: 29, label: "세탁", amount: "-6,500", image: "/images/food-28.svg", tone: "normal" },
+    { day: 30, label: "생활용품", amount: "-13,200", image: "/images/food-27.svg", tone: "normal" },
+  ],
+};
 
 export default function Cm() {
   const [historyPage, setHistoryPage] = useState(0);
+  const [activeLogCategory, setActiveLogCategory] = useState("식사/외식");
   const [savedAmount] = useState(() => {
     const v = Number(localStorage.getItem("mony_saved_amount"));
     return v > 0 ? v : 326000;
@@ -149,6 +159,7 @@ export default function Cm() {
   const historyTitle = historyPage === 0 ? "최근 사용 내역" : "카테고리 소비";
   const goToPrevHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
   const goToNextHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
+  const activeLogBubbles = logBubbleMap[activeLogCategory] ?? logBubbleMap["식사/외식"];
 
   return (
     <main className="cm-page">
@@ -524,12 +535,14 @@ export default function Cm() {
                   </div>
 
                   <div className="cm-logFilters">
-                    {["식사/외식", "쇼핑", "여행", "취미", "장소", "기타"].map(
-                      (item, index) => (
+                    {logCategories.map(
+                      (item) => (
                         <button
                           type="button"
                           key={item}
-                          className={index === 0 ? "is-active" : ""}
+                          className={activeLogCategory === item ? "is-active" : ""}
+                          aria-pressed={activeLogCategory === item}
+                          onClick={() => setActiveLogCategory(item)}
                         >
                           {item}
                         </button>
@@ -539,10 +552,10 @@ export default function Cm() {
 
                   <div className="cm-logBubbles">
                     {/* TODO: 오늘 날짜 기준으로 최근 날짜가 자동 생성되도록 수정 예정 */}
-                    {logBubbles.map((item) => (
+                    {activeLogBubbles.map((item) => (
                       <button
                         type="button"
-                        key={item.day}
+                        key={`${activeLogCategory}-${item.day}`}
                         className="cm-logBubble"
                         style={{ backgroundImage: `url(${item.image})` }}
                         aria-label={`${item.day}일 소비 로그`}

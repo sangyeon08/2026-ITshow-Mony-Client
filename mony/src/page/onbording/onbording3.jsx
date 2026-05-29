@@ -41,7 +41,7 @@ export default function OnBording3() {
     localStorage.setItem("mony_savings_goal",   String(goalAmount));
     localStorage.setItem("mony_saved_amount",    "0");
     localStorage.setItem("mony_savings_method",  savingsMethod);
-    navigate("/onbording4", { state: { name: userName } });
+    navigate("/home", { state: { name: userName } });
   }
 
   return (
@@ -54,7 +54,7 @@ export default function OnBording3() {
         <div className="join1-progressRow">
           <span className="join1-progressNow">03</span>
           <span className="join1-progressSlash">/</span>
-          <span className="join1-progressTotal">04</span>
+          <span className="join1-progressTotal">03</span>
         </div>
 
         <div className="join1-titleBlock">

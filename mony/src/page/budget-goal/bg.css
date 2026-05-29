@@ -636,21 +636,95 @@
 .bg-savingsBtn:active { transform: scale(0.98); }
 
 /* ── 버킷리스트 챌린지 ── */
+.bg-card--challenge {
+  overflow: hidden;
+}
+
+.bg-challengeSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.bg-challengeSummary div {
+  border-radius: 16px;
+  padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.bg-challengeSummary span {
+  display: block;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.bg-challengeSummary strong {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.bg-challengeTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bg-challengeTabs button {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bg-challengeTabs button.is-active {
+  border-color: rgba(215, 255, 71, 0.55);
+  background: rgba(215, 255, 71, 0.14);
+  color: #d7ff47;
+}
+
 .bg-challengeGrid {
   margin-top: 4px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .bg-challengeCard {
-  min-height: 140px;
-  padding: 16px;
+  position: relative;
+  min-height: 172px;
+  padding: 18px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.bg-challengeCard.is-progress {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(215, 255, 71, 0.12), transparent 34%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.bg-challengeCard.is-completed {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(255, 214, 123, 0.42), transparent 34%),
+    linear-gradient(135deg, rgba(255, 236, 198, 0.16), rgba(215, 255, 71, 0.08)),
+    #242018;
+  border-color: rgba(255, 214, 123, 0.28);
 }
 
 .bg-challengeCard strong {
@@ -665,10 +739,16 @@
 }
 
 .bg-challengeAmount {
-  margin-top: auto;
+  margin-top: 6px;
   font-size: 16px;
   font-weight: 800;
   color: rgba(255, 255, 255, 0.92);
+}
+
+.bg-challengeAmount small {
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .bg-challengeBar {
@@ -676,6 +756,80 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
+}
+
+.bg-challengeRemain {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.bg-challengePct {
+  color: rgba(215, 255, 71, 0.82) !important;
+  font-weight: 700;
+}
+
+.bg-challengeBadge {
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffd97a !important;
+  font-weight: 800;
+}
+
+.bg-challengeCard.is-completed > strong {
+  padding-right: 90px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.bg-challengeCard.is-completed p {
+  margin: 0;
+  max-width: 28ch;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bg-challengeStamp {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  border: 3px solid rgba(255, 94, 65, 0.9);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #ff735f;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-align: center;
+  background: rgba(255, 244, 225, 0.1);
+  box-shadow: 0 8px 18px rgba(255, 94, 65, 0.12);
+}
+
+.bg-challengeCompleteMeta {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 10px;
+  align-items: baseline;
+}
+
+.bg-challengeCompleteMeta span {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 11px;
+}
+
+.bg-challengeCompleteMeta strong {
+  color: #fff4cf;
+  font-size: 13px;
+  text-align: right;
 }
 
 /* ── 모달 ── */
@@ -806,14 +960,15 @@
 @media (max-width: 1200px) {
   .bg-shell { grid-template-columns: 1fr; }
   .bg-gridTop, .bg-gridBottom, .bg-budgetPanels { grid-template-columns: 1fr; }
-  .bg-budgetSummary, .bg-challengeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bg-budgetSummary, .bg-challengeGrid, .bg-challengeSummary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bg-guideGrid { grid-template-columns: 1fr; }
   .bg-goalLayout { align-items: flex-start; }
 }
 
 @media (max-width: 640px) {
   .bg-page { padding: 12px; }
-  .bg-budgetSummary, .bg-challengeGrid { grid-template-columns: 1fr; }
+  .bg-budgetSummary, .bg-challengeGrid, .bg-challengeSummary { grid-template-columns: 1fr; }
+  .bg-challengeTabs { flex-wrap: wrap; }
   .bg-progressHero { flex-direction: column; }
   .bg-modalQuick { grid-template-columns: repeat(2, 1fr); }
   .bg-goalLayout { flex-direction: column; align-items: center; }
