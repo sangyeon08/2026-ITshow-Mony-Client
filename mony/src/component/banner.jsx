@@ -1,5 +1,6 @@
 import { AnimatePresence, motion as Motion } from "framer-motion";
 import { useState } from "react";
+import {useNavigate} from "react-router-dom";
 import { cardMotion, buttonMotion, staggerContainerVariants, staggerItemVariants } from "./homeMotion.jsx";
 import bannerBg from "../assets/home/banner_bg.png";
 import bannerBg2 from "../assets/home/banner_bg2.png";
@@ -112,23 +113,23 @@ const highlightCards = [
 
 const slideVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 54 : -54,
+    x: direction > 0 ? "100%" : "-100%",
     opacity: 0,
   }),
   center: {
     x: 0,
     opacity: 1,
     transition: {
-      duration: 0.52,
+      duration: 0.62,
       ease: [0.22, 1, 0.36, 1],
     },
   },
   exit: (direction) => ({
-    x: direction > 0 ? -54 : 54,
+    x: direction > 0 ? "-100%" : "100%",
     opacity: 0,
     transition: {
-      duration: 0.36,
-      ease: [0.4, 0, 0.2, 1],
+      duration: 0.48,
+      ease: [0.22, 1, 0.36, 1],
     },
   }),
 };
@@ -155,7 +156,7 @@ function NextArrowIcon() {
   );
 }
 
-function FirstBanner({ direction }) {
+function FirstBanner({ direction, onGoConsumptionManagement }) {
   return (
     <Motion.div
       key="weekly-insight"
@@ -177,7 +178,12 @@ function FirstBanner({ direction }) {
         <p className="home-heroDesc">
           MONY와 함께한 4월의 1주차의 소비 기록으로 인사이트를 보여드려요
         </p>
-        <Motion.button className="home-heroButton" type="button" {...buttonMotion}>
+        <Motion.button
+          className="home-heroButton"
+          type="button"
+          onClick={onGoConsumptionManagement}
+          {...buttonMotion}
+        >
           소비관리 더보기
           <span aria-hidden="true">↗</span>
         </Motion.button>
@@ -217,7 +223,7 @@ function FirstBanner({ direction }) {
   );
 }
 
-function BucketListBanner({ direction }) {
+function BucketListBanner({ direction, onGoBudgetGoal }) {
   return (
     <Motion.div
       key="bucket-list"
@@ -242,7 +248,12 @@ function BucketListBanner({ direction }) {
         <p className="home-heroDesc">
           지속가능성과 성장을 고려하는 절약은 의미있는 경험으로 쌓여, 노력의 양분이 될거예요.
         </p>
-        <Motion.button className="home-heroButton" type="button" {...buttonMotion}>
+        <Motion.button
+          className="home-heroButton"
+          type="button"
+          onClick={onGoBudgetGoal}
+          {...buttonMotion}
+        >
           예산목표 더보기
           <span aria-hidden="true">↗</span>
         </Motion.button>
@@ -294,15 +305,16 @@ function FriendsBanner({ direction }) {
 }
 
 export default function Banner() {
+  const navigate = useNavigate();
   const [activeBanner, setActiveBanner] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
   const bannerCount = 3;
   const showPrevious = () => {
-    setSlideDirection(-1);
+    setSlideDirection(1);
     setActiveBanner((current) => (current - 1 + bannerCount) % bannerCount);
   };
   const showNext = () => {
-    setSlideDirection(1);
+    setSlideDirection(-1);
     setActiveBanner((current) => (current + 1) % bannerCount);
   };
 
@@ -322,8 +334,18 @@ export default function Banner() {
       </button>
 
       <AnimatePresence mode="wait" initial={false} custom={slideDirection}>
-        {activeBanner === 0 ? <FirstBanner direction={slideDirection} /> : null}
-        {activeBanner === 1 ? <BucketListBanner direction={slideDirection} /> : null}
+        {activeBanner === 0 ? (
+          <FirstBanner
+            direction={slideDirection}
+            onGoConsumptionManagement={() => navigate("/consumption-management")}
+          />
+        ) : null}
+        {activeBanner === 1 ? (
+          <BucketListBanner
+            direction={slideDirection}
+            onGoBudgetGoal={() => navigate("/budget-goal")}
+          />
+        ) : null}
         {activeBanner === 2 ? <FriendsBanner direction={slideDirection} /> : null}
       </AnimatePresence>
     </Motion.section>

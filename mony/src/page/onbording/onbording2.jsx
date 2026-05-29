@@ -14,25 +14,151 @@ const buildGoals = () => [
   { key: "low_fix", title: "고정 지출 관리",     desc: "매달 나가는 돈부터 정리해보고 싶어요" },
 ];
 
-const CHIPS = {
-  pay: ["월급", "용돈", "알바 수입"],
-  term: ["일주일", "한달", "3일 · 7일"],
-  salary: ["월급 전", "월급 전 · 후", "월급 직후", "월초 · 월말"],
-  category: [
-    "식비",
-    "카페·간식",
-    "의식·생활",
-    "교통",
-    "통신·구독",
-    "주거·공과금",
-    "의류·미용",
-    "의료·건강",
-    "문화·여가",
-    "선물·경조",
-    "교육·자기계발",
-    "여행·숙박",
-    "쇼핑",
-  ],
+const GROQ_URL = "http://localhost:3001/api/groq";
+
+const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
+사용자의 버킷리스트를 이루기 위한 사회 초년생 기준의 돈 모으기 계획을 만들어줘.
+반드시 아래 JSON 형식으로만 응답해.
+설명 문장이나 마크다운 없이 JSON만 반환해.
+
+{
+  "targetAmount": 숫자,
+  "monthlySaving": 숫자,
+  "estimatedPeriod": "문자열",
+  "currentSaved": 숫자,
+  "steps": [
+    {
+      "step": 1,
+      "title": "문자열",
+      "description": "문자열"
+    },
+    {
+      "step": 2,
+      "title": "문자열",
+      "description": "문자열"
+    },
+    {
+      "step": 3,
+      "title": "문자열",
+      "description": "문자열"
+    }
+  ]
+}
+
+기준:
+- 사용자는 사회 초년생입니다.
+- 평균 월급은 약 240만 원 ~ 300만 원으로 가정하세요.
+- 월 저축 금액은 너무 과하지 않게 약 30만 원 ~ 100만 원 범위에서 현실적으로 잡으세요.
+- 버킷리스트에 맞는 목표 금액, 월 저축 금액, 예상 기간을 AI가 자연스럽게 추정해서 포함하세요.
+- currentSaved는 0 또는 현실적인 초기 저축액 숫자로 작성하세요.
+- 예: 집 사기라면 초기 자금 약 3,000만 원 ~ 5,000만 원, 월 50만 원 ~ 100만 원, 약 3년 ~ 5년처럼 작성하세요.
+
+규칙:
+1. 한국어로만 답변하세요.
+2. 버킷리스트 준비 과정이 아니라 저축 방법, 소비 줄이기, 목표 금액 달성 계획 중심으로 작성하세요.
+3. 정확히 3단계만 작성하세요.
+4. 각 단계는 짧은 제목과 1~2문장 설명으로 작성하세요.
+5. 반드시 JSON 객체만 응답하세요. 다른 말은 하지 마세요.
+6. 각 description에는 목표 금액, 월 저축 금액, 예상 기간 중 적어도 하나 이상의 구체적인 금액 또는 기간 정보를 포함하세요.
+7. targetAmount와 monthlySaving은 숫자 타입 원 단위로 작성하세요.
+8. 금액은 사회 초년생 기준으로 현실적인 범위에서 임의로 추정하세요.`;
+
+const DEFAULT_TARGET_AMOUNT = 3000000;
+const DEFAULT_MONTHLY_SAVING = 300000;
+const DEFAULT_PERIOD = "약 10개월";
+
+const fallbackSavingsPlan = [
+  {
+    title: "1단계: 목표 금액 정하기",
+    description: "버킷리스트 달성을 위한 목표 금액을 약 300만 원으로 정하고 필요한 금액을 먼저 확인해요.",
+  },
+  {
+    title: "2단계: 월 저축 금액 정하기",
+    description: "사회 초년생 기준으로 매월 약 30만 원씩 월급일에 먼저 저축하는 계획을 세워요.",
+  },
+  {
+    title: "3단계: 저축 기간과 소비 관리하기",
+    description: "약 10개월 동안 외식비와 쇼핑비를 월 5만 원씩 줄여 목표 금액에 가까워져요.",
+  },
+];
+
+const fallbackBucketGoal = {
+  targetAmount: DEFAULT_TARGET_AMOUNT,
+  monthlySaving: DEFAULT_MONTHLY_SAVING,
+  estimatedPeriod: DEFAULT_PERIOD,
+  currentSaved: 0,
+  steps: fallbackSavingsPlan.map((step, index) => ({
+    step: index + 1,
+    title: step.title.replace(/^\d+단계:\s*/, ""),
+    description: step.description,
+  })),
+};
+
+const hasConcreteMoneyInfo = (text) =>
+  /(만\s*원|원|개월|년|월\s*\d|매월|월별|기간|저축)/.test(text);
+
+const parseSavingsPlan = (text) => {
+  try {
+    const jsonText = text.match(/\{[\s\S]*\}/)?.[0] ?? text.match(/\[[\s\S]*\]/)?.[0] ?? text;
+    const parsed = JSON.parse(jsonText);
+    const parsedSteps = Array.isArray(parsed) ? parsed : parsed.steps;
+    if (!Array.isArray(parsedSteps)) return fallbackBucketGoal;
+    const steps = parsedSteps
+      .slice(0, 3)
+      .map((item, index) => ({
+        step: Number(item.step) || index + 1,
+        title: String(item.title || `${index + 1}단계`).replace(/^\d+단계:\s*/, "").trim(),
+        description: String(item.description || "").trim(),
+      }))
+      .filter(
+        (item) =>
+          item.title && item.description && hasConcreteMoneyInfo(item.description)
+      );
+    if (steps.length !== 3) return fallbackBucketGoal;
+
+    return {
+      targetAmount: Number(parsed.targetAmount) || DEFAULT_TARGET_AMOUNT,
+      monthlySaving: Number(parsed.monthlySaving) || DEFAULT_MONTHLY_SAVING,
+      estimatedPeriod: String(parsed.estimatedPeriod || DEFAULT_PERIOD).trim(),
+      currentSaved: Number(parsed.currentSaved) || 0,
+      steps,
+    };
+  } catch {
+    return fallbackBucketGoal;
+  }
+};
+
+const generateSavingsPlan = async (bucketList) => {
+  const res = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system_prompt: SAVINGS_PLAN_PROMPT,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `버킷리스트: ${bucketList}
+사회 초년생 기준으로 현실적인 목표 금액, 월 저축 금액, 예상 기간을 추정해서 이 목표를 이루기 위한 돈 모으기 3단계 저축 계획을 만들어줘.
+각 단계 설명에는 구체적인 금액 또는 기간 정보를 반드시 넣어줘.
+응답은 JSON 객체만 반환해줘.`,
+            },
+          ],
+        },
+      ],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "저축 계획을 생성하지 못했어요.");
+  }
+
+  const data = await res.json();
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error("AI 응답을 받지 못했어요.");
+  return parseSavingsPlan(content);
 };
 
 export default function OnBording2() {
@@ -62,50 +188,40 @@ export default function OnBording2() {
     if (Array.isArray(v)) return v;
     return v ? [v] : [];
   });
-  const [payType, setPayType] = useState(initial.payType ?? null);
-  const [term, setTerm] = useState(initial.term ?? null);
-  const [salary, setSalary] = useState(initial.salary ?? null);
-  const [selectedCats, setSelectedCats] = useState(
-    Array.isArray(initial.selectedCats) ? initial.selectedCats : []
+  const [bucketList, setBucketList] = useState(initial.bucketList ?? "");
+  const [savingsPlan, setSavingsPlan] = useState(
+    Array.isArray(initial.savingsPlan) ? initial.savingsPlan : []
   );
-  const [amount, setAmount] = useState(() => {
-    const n = Number(initial.amount ?? 0);
-    return n > 0 ? n.toLocaleString() : "";
-  });
-
-  const amountNumber = useMemo(() => {
-    const n = Number(String(amount).replace(/[^0-9]/g, ""));
-    return Number.isFinite(n) ? n : 0;
-  }, [amount]);
+  const [generatedPlan, setGeneratedPlan] = useState(initial.generatedPlan ?? null);
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [planError, setPlanError] = useState("");
 
   // ✅ 페이지 이동해도 값 유지
   useEffect(() => {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({
-          selectedGoals,
-          payType,
-          term,
-          salary,
-          selectedCats,
-          amount: amountNumber,
-        })
+          JSON.stringify({
+            selectedGoals,
+            bucketList,
+            savingsPlan,
+            generatedPlan,
+          })
       );
     } catch {
       // ignore
     }
-  }, [selectedGoals, payType, term, salary, selectedCats, amountNumber]);
+  }, [selectedGoals, bucketList, savingsPlan, generatedPlan]);
 
   const isValid = useMemo(() => {
-    return selectedGoals.length > 0 && amountNumber > 0;
-  }, [selectedGoals, amountNumber]);
-
-  const toggleCat = (c) => {
-    setSelectedCats((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
+    return (
+      selectedGoals.length > 0 &&
+      bucketList.trim().length > 0 &&
+      savingsPlan.length === 3 &&
+      generatedPlan?.steps?.length === 3
     );
-  };
+  }, [selectedGoals, bucketList, savingsPlan, generatedPlan]);
+
   const toggleGoal = (key) => {
     setSelectedGoals((prev) => {
       const on = prev.includes(key);
@@ -113,6 +229,37 @@ export default function OnBording2() {
       if (prev.length >= 2) return prev; // max 2
       return [...prev, key];
     });
+  };
+
+  const handleGeneratePlan = async () => {
+    const bucket = bucketList.trim();
+    if (!bucket || isGeneratingPlan) return;
+    setPlanError("");
+    setSavingsPlan([]);
+    setGeneratedPlan(null);
+    setIsGeneratingPlan(true);
+
+    try {
+      const goal = await generateSavingsPlan(bucket);
+      const goalData = {
+        bucketList: bucket,
+        targetAmount: goal.targetAmount,
+        monthlySaving: goal.monthlySaving,
+        estimatedPeriod: goal.estimatedPeriod,
+        currentSaved: Number(goal.currentSaved) || 0,
+        steps: goal.steps,
+      };
+
+      setGeneratedPlan(goalData);
+      setSavingsPlan(goal.steps);
+    } catch (error) {
+      setPlanError(
+        error?.message ||
+          "잠시 후 다시 시도해 주세요. 저축 계획을 불러오지 못했어요."
+      );
+    } finally {
+      setIsGeneratingPlan(false);
+    }
   };
 
   return (
@@ -125,7 +272,7 @@ export default function OnBording2() {
         <div className="join1-progressRow">
           <span className="join1-progressNow">02</span>
           <span className="join1-progressSlash">/</span>
-          <span className="join1-progressTotal">04</span>
+          <span className="join1-progressTotal">03</span>
         </div>
 
         <div className="join1-titleBlock">
@@ -152,102 +299,45 @@ export default function OnBording2() {
         </div>
 
         <div className="join2-block">
-          <p className="join2-subtitle">소비 목표의 필요한 기준을 선택해 주세요</p>
-          <p className="join2-subhelp">선택 값은 이후 추천 및 분석에 반영될 수 있어요</p>
-
-          <div className="field">
-            <div className="fieldLabel">월 별</div>
-            <div className="chipRow">
-              {CHIPS.pay.map((x) => (
-                <button
-                  key={x}
-                  type="button"
-                  className={`chip ${payType === x ? "is-on" : ""}`}
-                  onClick={() => setPayType(x)}
-                >
-                  {x}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="fieldLabel">단기 기간</div>
-            <div className="chipRow">
-              {CHIPS.term.map((x) => (
-                <button
-                  key={x}
-                  type="button"
-                  className={`chip ${term === x ? "is-on" : ""}`}
-                  onClick={() => setTerm(x)}
-                >
-                  {x}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="fieldLabel">급여</div>
-            <div className="chipRow">
-              {CHIPS.salary.map((x) => (
-                <button
-                  key={x}
-                  type="button"
-                  className={`chip ${salary === x ? "is-on" : ""}`}
-                  onClick={() => setSalary(x)}
-                >
-                  {x}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="fieldLabel">소비 목표와 관련된 카테고리를 선택해 주세요</div>
-            <p className="join2-subhelp">최대 5개까지 선택할 수 있어요</p>
-            <div className="chipRow chipWrap">
-              {CHIPS.category.map((x) => {
-                const on = selectedCats.includes(x);
-                const disabled = !on && selectedCats.length >= 5;
-                return (
-                  <button
-                    key={x}
-                    type="button"
-                    className={`chip ${on ? "is-on" : ""} ${disabled ? "is-disabled" : ""}`}
-                    onClick={() => {
-                      if (disabled) return;
-                      toggleCat(x);
-                    }}
-                    disabled={disabled}
-                  >
-                    {x}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="join2-block">
-          <p className="join2-subtitle">{userName} 님의 소비 목표를 위한 금액을 입력해 주세요</p>
+          <p className="join2-subtitle">이루고 싶은 버킷리스트를 알려주세요</p>
+          <p className="join2-subhelp">MONY가 목표 달성을 위한 돈 모으기 3단계를 만들어드릴게요</p>
           <input
             className="join2-amount"
-            inputMode="numeric"
-            placeholder="예) 100,000"
-            value={amount}
+            placeholder="이루고 싶은 버킷리스트를 입력하세요"
+            value={bucketList}
             onChange={(e) => {
-              const digits = e.target.value.replace(/[^0-9]/g, "");
-              if (digits === "") return setAmount("");
-              const n = Number(digits);
-              setAmount(Number.isFinite(n) ? n.toLocaleString() : "");
+              setBucketList(e.target.value);
+              setSavingsPlan([]);
+              setGeneratedPlan(null);
+              setPlanError("");
             }}
           />
-          <p className="join2-footnote">위 항목은 선택 항목이에요</p>
-          <ul className="join2-footnoteList">
-            <li>생활비·지출·예산 등의 편한 기준으로 적어도 괜찮아요</li>
-            <li>최소/최대 금액 작성에는 제한이 없어요</li>
-          </ul>
+          <button
+            type="button"
+            className="join2-aiButton"
+            disabled={!bucketList.trim() || isGeneratingPlan}
+            onClick={handleGeneratePlan}
+          >
+            저축 계획 생성하기
+          </button>
+
+          {isGeneratingPlan && (
+            <p className="join2-loading">저축 계획을 생성하는 중...</p>
+          )}
+
+          {planError && <p className="join2-error">{planError}</p>}
+
+          {savingsPlan.length > 0 && (
+            <div className="join2-planList" aria-label="AI가 생성한 저축 계획">
+              {savingsPlan.map((step, index) => (
+                <div key={`${step.title}-${index}`} className="join2-planCard">
+                  <span>{index + 1}단계</span>
+                  <strong>{step.title.replace(/^\d+단계:\s*/, "")}</strong>
+                  <p>{step.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button
@@ -256,15 +346,22 @@ export default function OnBording2() {
           className={`join1-button ${isValid ? "is-enabled" : "is-disabled"}`}
           onClick={() => {
             if (!isValid) return;
+            const goalData = {
+              bucketList,
+              targetAmount: generatedPlan.targetAmount,
+              monthlySaving: generatedPlan.monthlySaving,
+              estimatedPeriod: generatedPlan.estimatedPeriod,
+              currentSaved: generatedPlan.currentSaved || 0,
+              steps: generatedPlan.steps,
+            };
+
+            localStorage.setItem("bucketGoal", JSON.stringify(goalData));
             navigate("/onbording3", {
               state: {
                 name: userName,
                 selectedGoals,
-                payType,
-                term,
-                salary,
-                selectedCats,
-                amount: amountNumber,
+                bucketList,
+                savingsPlan,
               },
             });
           }}
