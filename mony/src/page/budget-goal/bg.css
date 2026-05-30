@@ -79,6 +79,10 @@
   color: rgba(255, 255, 255, 0.82);
 }
 
+.bg-budgetStat:first-child{
+  margin-top: -4.5px;
+}
+
 /* ── 월간 예산 ── */
 .bg-card--budget {
   border-radius: 18px;
@@ -88,7 +92,7 @@
 }
 .bg-budgetPanel2 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  margin-bottom: 4px;
+  margin-bottom: 12px;
   border-radius: 20px;
   background: #222;
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -874,22 +878,22 @@
 
 .bg-challengeStamp {
   position: absolute;
-  top: 12px;
-  right: 10px;
-  z-index: 2;
-  width: 76px;
-  height: 76px;
-  border: 3px solid rgba(255, 94, 65, 0.9);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  z-index: 1;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #ff735f;
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-align: center;
-  background: rgba(255, 244, 225, 0.1);
-  box-shadow: 0 8px 18px rgba(255, 94, 65, 0.12);
+  overflow: hidden;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.bg-challengeStamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .bg-challengeCompleteMeta {
