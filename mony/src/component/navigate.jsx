@@ -5,7 +5,7 @@ export default function Navigate() {
   const navigate = useNavigate();
 
   const handleGoFirst = () => {
-    navigate("/onbording1");
+    navigate("/onboarding1");
   };
 
   const handleGoBack = () => {

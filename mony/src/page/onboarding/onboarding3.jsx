@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./onbording3.css";
+import "./onboarding3.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
 
@@ -15,7 +15,7 @@ const SAVINGS_METHODS = [
   { key: "direct", label: "직접 저축하기",    desc: "원하는 금액을 직접 적립" },
 ];
 
-export default function OnBording3() {
+export default function Onboarding3() {
   const navigate = useNavigate();
   const location = useLocation();
 

@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./page/./home/home";
-import OnBording from "./page/onbording/onbording1";
-import OnBording2 from "./page/onbording/onbording2";
-import OnBording3 from "./page/onbording/onbording3";
+import Onboarding1 from "./page/onboarding/onboarding1";
+import Onboarding2 from "./page/onboarding/onboarding2";
+import Onboarding3 from "./page/onboarding/onboarding3";
 import Cm from "./page/consumption management/cm";
 import Ca from "./page/consumption analysis/ca";
 import Bg from "./page/budget-goal/bg";
@@ -14,9 +14,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/onbording1" element={<OnBording />} />
-        <Route path="/onbording2" element={<OnBording2 />} />
-        <Route path="/onbording3" element={<OnBording3 />} />
+        <Route path="/onboarding1" element={<Onboarding1 />} />
+        <Route path="/onboarding2" element={<Onboarding2 />} />
+        <Route path="/onboarding3" element={<Onboarding3 />} />
         <Route path="/consumption-management" element={<Cm />} />
         <Route path="/consumption-analysis" element={<Ca />} />
         <Route path="/budget-goal" element={<Bg />} />

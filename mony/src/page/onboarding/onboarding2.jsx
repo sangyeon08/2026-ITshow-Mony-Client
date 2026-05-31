@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./onbording2.css";
+import "./onboarding2.css";
 import Check from "../../component/check";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
@@ -161,7 +161,7 @@ const generateSavingsPlan = async (bucketList) => {
   return parseSavingsPlan(content);
 };
 
-export default function OnBording2() {
+export default function Onboarding2() {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -172,7 +172,7 @@ export default function OnBording2() {
 
   const GOALS = useMemo(() => buildGoals(), []);
 
-  const STORAGE_KEY = "onbording2Form";
+  const STORAGE_KEY = "onboarding2Form";
 
   const initial = useMemo(() => {
     try {
@@ -201,12 +201,12 @@ export default function OnBording2() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-          JSON.stringify({
-            selectedGoals,
-            bucketList,
-            savingsPlan,
-            generatedPlan,
-          })
+        JSON.stringify({
+          selectedGoals,
+          bucketList,
+          savingsPlan,
+          generatedPlan,
+        })
       );
     } catch {
       // ignore
@@ -356,7 +356,7 @@ export default function OnBording2() {
             };
 
             localStorage.setItem("bucketGoal", JSON.stringify(goalData));
-            navigate("/onbording3", {
+            navigate("/onboarding3", {
               state: {
                 name: userName,
                 selectedGoals,

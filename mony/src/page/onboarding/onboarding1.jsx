@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./onbording1.css";
+import "./onboarding1.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
 
-export default function OnBording1() {
+export default function Onboarding1() {
   const navigate = useNavigate();
   const [name, setName] = useState(() => localStorage.getItem("joinName") ?? "");
 
@@ -63,7 +63,7 @@ export default function OnBording1() {
               if (!isValid) return;
               const trimmed = name.trim();
               localStorage.setItem("joinName", trimmed);
-              navigate("/onbording2", { state: { name: trimmed } });
+              navigate("/onboarding2", { state: { name: trimmed } });
             }}
           >
             확인

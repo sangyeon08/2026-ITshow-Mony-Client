@@ -493,7 +493,7 @@ export default function Home() {
                   <button
                     type="button"
                     className="home-bucketSetupBtn"
-                    onClick={() => navigate("/onbording2")}
+                    onClick={() => navigate("/onboarding2")}
                   >
                     목표 설정하러 가기
                   </button>
