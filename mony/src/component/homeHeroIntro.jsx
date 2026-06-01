@@ -70,7 +70,7 @@ function HeroText({ index, eyebrow, title, description, buttonLabel, onButtonCli
   );
 }
 
-function DefaultLayout({ onButtonClick }) {
+function DefaultLayout({ onButtonClick, name }) {
   return (
     <motion.div
       className="hero-banner-layout is-default"
@@ -83,7 +83,7 @@ function DefaultLayout({ onButtonClick }) {
     >
       <HeroText
         index="01"
-        eyebrow="김수한무님의 버킷리스트 챌린지"
+        eyebrow={`${name}님의 버킷리스트 챌린지`}
         title={"이번 주의 소비를 한 번\n살펴볼까요?"}
         description="MONY와 함께한 4월의 1주차의 소비 기록으로 인사이트를 보여드려요"
         buttonLabel="소비관리 더보기"
@@ -111,7 +111,7 @@ function DefaultLayout({ onButtonClick }) {
   );
 }
 
-function HoverLayout({ onButtonClick }) {
+function HoverLayout({ onButtonClick, name }) {
   return (
     <motion.div
       className="hero-banner-layout is-hover"
@@ -124,7 +124,7 @@ function HoverLayout({ onButtonClick }) {
     >
       <HeroText
         index="02"
-        eyebrow="김수한무님의 버킷리스트 챌린지"
+        eyebrow={`${name}님의 버킷리스트 챌린지`}
         title={"작은 소비가 쌓이는\n노력 자체는 의미가 깊어요"}
         description="지속가능성과 성장을 고려하는 절약은 의미있는 경험으로 쌓여, 노력의 양분이 될거예요."
         buttonLabel="예산목표 더보기"
@@ -152,6 +152,7 @@ function HoverLayout({ onButtonClick }) {
 }
 
 export default function HomeHeroIntro({ onButtonClick }) {
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [mode, setMode] = useState("default");
   const reduceMotion = useReducedMotion();
 
@@ -183,9 +184,9 @@ export default function HomeHeroIntro({ onButtonClick }) {
 
         <AnimatePresence mode="wait" initial={false}>
           {mode === "default" ? (
-            <DefaultLayout key="default" onButtonClick={onButtonClick} />
+            <DefaultLayout key="default" onButtonClick={onButtonClick} name={name} />
           ) : (
-            <HoverLayout key="hover" onButtonClick={onButtonClick} />
+            <HoverLayout key="hover" onButtonClick={onButtonClick} name={name} />
           )}
         </AnimatePresence>
       </div>
