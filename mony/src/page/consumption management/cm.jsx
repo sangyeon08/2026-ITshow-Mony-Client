@@ -67,74 +67,314 @@ const recentUsage = [
     icon: FoodIcon,
     color: "food",
   },
-  { name: "교보문고 광화문점", amount: "-35,400원", date: "3/24", icon: ShoppingIcon, color: "shopping" },
+  {
+    name: "교보문고 광화문점",
+    amount: "-35,400원",
+    date: "3/24",
+    icon: ShoppingIcon,
+    color: "shopping",
+  },
   { name: "롯데마트(주)", amount: "-10,600원", date: "3/22" },
   { name: "에이치앤엠", amount: "-34,020원", date: "3/20" },
 ];
 
 const detailRows = [
-  { date: "3월 26일", name: "백소정 관악점", time: "12:09/국내", amount: "-14,600원" },
-  { date: "3월 26일", name: "GS25 녹번점", time: "09:05/국내", amount: "-5,600원" },
+  {
+    date: "3월 26일",
+    name: "백소정 관악점",
+    time: "12:09/국내",
+    amount: "-14,600원",
+  },
+  {
+    date: "3월 26일",
+    name: "GS25 녹번점",
+    time: "09:05/국내",
+    amount: "-5,600원",
+  },
   { date: "3월 24일", name: "Apple", time: "17:50/국내", amount: "-5,400원" },
-  { date: "3월 24일", name: "교보문고 광화문점", time: "11:45/국내", amount: "-35,400원" },
-  { date: "3월 22일", name: "롯데쇼핑(주)", time: "18:13/국내", amount: "-10,600원" },
-  { date: "3월 20일", name: "에이치앤엠", time: "16:03/국내", amount: "-34,020원" },
+  {
+    date: "3월 24일",
+    name: "교보문고 광화문점",
+    time: "11:45/국내",
+    amount: "-35,400원",
+  },
+  {
+    date: "3월 22일",
+    name: "롯데쇼핑(주)",
+    time: "18:13/국내",
+    amount: "-10,600원",
+  },
+  {
+    date: "3월 20일",
+    name: "에이치앤엠",
+    time: "16:03/국내",
+    amount: "-34,020원",
+  },
 ];
 
 const categoryDetailRows = [
-  { date: "3월 26일", name: "백소정 관악점", time: "12:09/국내", amount: "-14,600원" },
-  { date: "3월 26일", name: "GS25 녹번점", time: "09:05/국내", amount: "-14,600원" },
-  { date: "3월 26일", name: "투썸플레이스", time: "11:05/국내", amount: "-17,700원" },
-  { date: "3월 26일", name: "GS25 녹번점", time: "16:38/국내", amount: "-9,600원" },
-  { date: "3월 19일", name: "컴포즈커피", time: "12:07/국내", amount: "-2,300원" },
-  { date: "3월 19일", name: "팻어케이크", time: "17:36/국내", amount: "-28,500원" },
+  {
+    date: "3월 26일",
+    name: "백소정 관악점",
+    time: "12:09/국내",
+    amount: "-14,600원",
+  },
+  {
+    date: "3월 26일",
+    name: "GS25 녹번점",
+    time: "09:05/국내",
+    amount: "-14,600원",
+  },
+  {
+    date: "3월 26일",
+    name: "투썸플레이스",
+    time: "11:05/국내",
+    amount: "-17,700원",
+  },
+  {
+    date: "3월 26일",
+    name: "GS25 녹번점",
+    time: "16:38/국내",
+    amount: "-9,600원",
+  },
+  {
+    date: "3월 19일",
+    name: "컴포즈커피",
+    time: "12:07/국내",
+    amount: "-2,300원",
+  },
+  {
+    date: "3월 19일",
+    name: "팻어케이크",
+    time: "17:36/국내",
+    amount: "-28,500원",
+  },
 ];
-
 
 const logCategories = ["식사/외식", "쇼핑", "여행", "취미", "장소", "기타"];
 
 const logBubbleMap = {
   "식사/외식": [
-    { day: 26, label: "백소정", amount: "-20,200", image: "/images/food-26.svg", tone: "normal" },
-    { day: 27, label: "일번지...", amount: "-30,240", image: "/images/food-27.svg", tone: "normal" },
-    { day: 28, label: "", amount: "", image: "/images/food-28.svg", tone: "normal" },
-    { day: 29, label: "업기떡...", amount: "-14,300", image: "/images/food-29.svg", tone: "normal" },
-    { day: 30, label: "분식집", amount: "-9,130", image: "/images/food-30.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "백소정",
+      amount: "-20,200",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "일번지...",
+      amount: "-30,240",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "",
+      amount: "",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "업기떡...",
+      amount: "-14,300",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "분식집",
+      amount: "-9,130",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
   ],
   쇼핑: [
-    { day: 26, label: "무신사", amount: "-48,900", image: "/images/food-27.svg", tone: "normal" },
-    { day: 27, label: "올리브영", amount: "-18,400", image: "/images/food-28.svg", tone: "normal" },
-    { day: 28, label: "교보문고", amount: "-35,400", image: "/images/food-29.svg", tone: "normal" },
-    { day: 29, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
-    { day: 30, label: "H&M", amount: "-34,020", image: "/images/food-26.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "무신사",
+      amount: "-48,900",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "올리브영",
+      amount: "-18,400",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "교보문고",
+      amount: "-35,400",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "",
+      amount: "",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "H&M",
+      amount: "-34,020",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
   ],
   여행: [
-    { day: 26, label: "KTX", amount: "-59,800", image: "/images/food-28.svg", tone: "normal" },
-    { day: 27, label: "숙소예약", amount: "-82,000", image: "/images/food-29.svg", tone: "normal" },
-    { day: 28, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
-    { day: 29, label: "공항버스", amount: "-17,000", image: "/images/food-26.svg", tone: "normal" },
-    { day: 30, label: "기념품", amount: "-22,500", image: "/images/food-27.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "KTX",
+      amount: "-59,800",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "숙소예약",
+      amount: "-82,000",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "",
+      amount: "",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "공항버스",
+      amount: "-17,000",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "기념품",
+      amount: "-22,500",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
   ],
   취미: [
-    { day: 26, label: "필라테스", amount: "-45,000", image: "/images/food-29.svg", tone: "normal" },
-    { day: 27, label: "", amount: "", image: "/images/food-30.svg", tone: "normal" },
-    { day: 28, label: "영화관", amount: "-15,000", image: "/images/food-26.svg", tone: "normal" },
-    { day: 29, label: "클래스", amount: "-28,000", image: "/images/food-27.svg", tone: "normal" },
-    { day: 30, label: "문구점", amount: "-8,400", image: "/images/food-28.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "필라테스",
+      amount: "-45,000",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "",
+      amount: "",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "영화관",
+      amount: "-15,000",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "클래스",
+      amount: "-28,000",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "문구점",
+      amount: "-8,400",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
   ],
   장소: [
-    { day: 26, label: "GS25", amount: "-5,600", image: "/images/food-30.svg", tone: "normal" },
-    { day: 27, label: "스타필드", amount: "-12,300", image: "/images/food-26.svg", tone: "normal" },
-    { day: 28, label: "홍대입구", amount: "-9,900", image: "/images/food-27.svg", tone: "normal" },
-    { day: 29, label: "", amount: "", image: "/images/food-28.svg", tone: "normal" },
-    { day: 30, label: "성수동", amount: "-16,800", image: "/images/food-29.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "GS25",
+      amount: "-5,600",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "스타필드",
+      amount: "-12,300",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "홍대입구",
+      amount: "-9,900",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "",
+      amount: "",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "성수동",
+      amount: "-16,800",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
   ],
   기타: [
-    { day: 26, label: "구독", amount: "-9,900", image: "/images/food-26.svg", tone: "normal" },
-    { day: 27, label: "통신비", amount: "-31,000", image: "/images/food-30.svg", tone: "normal" },
-    { day: 28, label: "", amount: "", image: "/images/food-29.svg", tone: "normal" },
-    { day: 29, label: "세탁", amount: "-6,500", image: "/images/food-28.svg", tone: "normal" },
-    { day: 30, label: "생활용품", amount: "-13,200", image: "/images/food-27.svg", tone: "normal" },
+    {
+      day: 26,
+      label: "구독",
+      amount: "-9,900",
+      image: "/images/food-26.svg",
+      tone: "normal",
+    },
+    {
+      day: 27,
+      label: "통신비",
+      amount: "-31,000",
+      image: "/images/food-30.svg",
+      tone: "normal",
+    },
+    {
+      day: 28,
+      label: "",
+      amount: "",
+      image: "/images/food-29.svg",
+      tone: "normal",
+    },
+    {
+      day: 29,
+      label: "세탁",
+      amount: "-6,500",
+      image: "/images/food-28.svg",
+      tone: "normal",
+    },
+    {
+      day: 30,
+      label: "생활용품",
+      amount: "-13,200",
+      image: "/images/food-27.svg",
+      tone: "normal",
+    },
   ],
 };
 
@@ -159,24 +399,39 @@ export default function Cm() {
     Math.round((savedAmount / savingsGoal) * 100),
   );
 
+  // ✅ 이번 달 텍스트 자동 계산
+  const now = new Date();
+  const currentMonthLabel = `${now.getMonth() + 1}월`;
+
+  // ✅ 목표 초과시 0원으로 표시
+  const remainAmount = Math.max(savingsGoal - savedAmount, 0);
+
   useEffect(() => {
     const periodDetail = new Date().toISOString().slice(0, 7);
 
-    goalsApi.getAll()
+    goalsApi
+      .getAll()
       .then((res) => {
-        const monthly = res.data?.find(
-          (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
-        ) ?? res.data?.[0];
+        const monthly =
+          res.data?.find(
+            (g) =>
+              g.period_type === "monthly" && g.period_detail === periodDetail,
+          ) ?? res.data?.[0];
         if (monthly?.target_amount) setSavingsGoal(monthly.target_amount);
       })
       .catch(() => {});
 
-    analysis.category(periodDetail)
+    analysis
+      .category(periodDetail)
       .then((res) => {
         if (!res.data?.length) return;
         const total = res.data.reduce((s, c) => s + c.total, 0);
         if (total === 0) return;
-        const iconMap = { 식비: FoodIcon, 쇼핑: ShoppingIcon, 교통: TrafficIcon };
+        const iconMap = {
+          식비: FoodIcon,
+          쇼핑: ShoppingIcon,
+          교통: TrafficIcon,
+        };
         const colorMap = { 식비: "food", 쇼핑: "shopping", 교통: "traffic" };
         const items = res.data
           .sort((a, b) => b.total - a.total)
@@ -195,7 +450,8 @@ export default function Cm() {
   const historyTitle = historyPage === 0 ? "최근 사용 내역" : "카테고리 소비";
   const goToPrevHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
   const goToNextHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));
-  const activeLogBubbles = logBubbleMap[activeLogCategory] ?? logBubbleMap["식사/외식"];
+  const activeLogBubbles =
+    logBubbleMap[activeLogCategory] ?? logBubbleMap["식사/외식"];
 
   return (
     <main className="cm-page">
@@ -252,21 +508,8 @@ export default function Cm() {
                 {...cardMotion}
               >
                 <div className="cm-challengeHead">
-                  <p>4월 저축 챌린지</p>
-                  {/* <span aria-hidden="true">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                    >
-                      <path
-                        d="M6.44669 16.3363L12.2104 10.48C12.3369 10.3523 12.4078 10.1798 12.4078 10C12.4078 9.82029 12.3369 9.64781 12.2104 9.52003L6.44794 3.66378C6.3216 3.53522 6.2508 3.36217 6.2508 3.18191C6.2508 3.00165 6.3216 2.8286 6.44794 2.70003C6.50966 2.63672 6.58343 2.58641 6.66491 2.55205C6.74638 2.5177 6.8339 2.5 6.92232 2.5C7.01074 2.5 7.09826 2.5177 7.17973 2.55205C7.2612 2.58641 7.33497 2.63672 7.39669 2.70003L13.1592 8.55503C13.5379 8.94069 13.75 9.45956 13.75 10C13.75 10.5405 13.5379 11.0594 13.1592 11.445L7.39669 17.3C7.33495 17.3635 7.26111 17.414 7.17952 17.4485C7.09793 17.483 7.01026 17.5007 6.92169 17.5007C6.83312 17.5007 6.74546 17.483 6.66387 17.4485C6.58228 17.414 6.50843 17.3635 6.44669 17.3C6.32035 17.1715 6.24955 16.9984 6.24955 16.8182C6.24955 16.6379 6.32035 16.4649 6.44669 16.3363Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </span> */}
+                  {/* ✅ 이번 달 텍스트 자동 계산 */}
+                  <p>{currentMonthLabel} 저축 챌린지</p>
                 </div>
                 <div className="cm-challengeAmounts">
                   <div>
@@ -289,11 +532,9 @@ export default function Cm() {
                   </div>
                   <span className="cm-challengePct">{savingsPct}%</span>
                 </div>
+                {/* ✅ 목표 초과시 0원으로 표시 */}
                 <p className="cm-challengeRemain">
-                  목표까지{" "}
-                  <strong>
-                    {(savingsGoal - savedAmount).toLocaleString()}원
-                  </strong>{" "}
+                  목표까지 <strong>{remainAmount.toLocaleString()}원</strong>{" "}
                   남았어요
                 </p>
               </Motion.article>
@@ -337,7 +578,12 @@ export default function Cm() {
                       {recentUsage.slice(0, 3).map((item) => (
                         <div key={item.name} className="cm-listRow">
                           <span className={`cm-iconBox is-${item.color}`}>
-                            <img className="cm-listIcon" src={item.icon} alt="" aria-hidden="true" />
+                            <img
+                              className="cm-listIcon"
+                              src={item.icon}
+                              alt=""
+                              aria-hidden="true"
+                            />
                           </span>
                           <div className="cm-listText">
                             <strong>{item.name}</strong>
@@ -355,13 +601,20 @@ export default function Cm() {
                     {...cardMotion}
                   >
                     <h3 className="cm-cardTitle">카테고리 소비</h3>
-                    <p className="cm-subtitle">쇼핑과 식사 지출의 증가가 보여요</p>
+                    <p className="cm-subtitle">
+                      쇼핑과 식사 지출의 증가가 보여요
+                    </p>
                     <div className="cm-categoryList">
                       {categoryItems.map((item) => (
                         <div key={item.name} className="cm-categoryItem">
                           <div className="cm-categoryTop">
                             <span className={`cm-iconBox is-${item.color}`}>
-                              <img className="cm-categoryIcon" src={item.icon} alt="" aria-hidden="true" />
+                              <img
+                                className="cm-categoryIcon"
+                                src={item.icon}
+                                alt=""
+                                aria-hidden="true"
+                              />
                             </span>
                             <div className="cm-categoryInfo">
                               <strong>{item.name}</strong>
@@ -421,15 +674,28 @@ export default function Cm() {
                     aria-label={`${historyPage === 0 ? "카테고리 소비" : "최근 사용 내역"} 보기`}
                   >
                     <h3 className="cm-cardTitle">{historyTitle}</h3>
-                    <span aria-hidden="true" className="cm-inlineChevron">›</span>
+                    <span aria-hidden="true" className="cm-inlineChevron">
+                      ›
+                    </span>
                   </button>
 
-                  <div className="cm-historyPager" aria-label="사용 내역 페이지">
-                    <button type="button" onClick={goToPrevHistory} aria-label="이전 페이지">
+                  <div
+                    className="cm-historyPager"
+                    aria-label="사용 내역 페이지"
+                  >
+                    <button
+                      type="button"
+                      onClick={goToPrevHistory}
+                      aria-label="이전 페이지"
+                    >
                       ‹
                     </button>
                     <span>{historyPage + 1} / 2</span>
-                    <button type="button" onClick={goToNextHistory} aria-label="다음 페이지">
+                    <button
+                      type="button"
+                      onClick={goToNextHistory}
+                      aria-label="다음 페이지"
+                    >
                       ›
                     </button>
                   </div>
@@ -457,14 +723,21 @@ export default function Cm() {
                 {historyPage === 0 ? (
                   <div className="cm-detailList">
                     {detailRows.map((item, index) => {
-                      const showDate = index === 0 || detailRows[index - 1].date !== item.date;
-
+                      const showDate =
+                        index === 0 || detailRows[index - 1].date !== item.date;
                       return (
-                        <div key={`${item.name}-${item.time}`} className="cm-detailRow">
-                          <span className="cm-detailDate">{showDate ? item.date : ""}</span>
+                        <div
+                          key={`${item.name}-${item.time}`}
+                          className="cm-detailRow"
+                        >
+                          <span className="cm-detailDate">
+                            {showDate ? item.date : ""}
+                          </span>
                           <strong className="cm-detailName">{item.name}</strong>
                           <span className="cm-detailTime">{item.time}</span>
-                          <strong className="cm-detailAmount">{item.amount}</strong>
+                          <strong className="cm-detailAmount">
+                            {item.amount}
+                          </strong>
                         </div>
                       );
                     })}
@@ -474,7 +747,9 @@ export default function Cm() {
                     <div className="cm-categoryLegend">
                       {categoryItems.map((item) => (
                         <div key={item.name} className="cm-categoryLegendItem">
-                          <span className={`cm-categoryLegendIcon is-${item.color}`}>
+                          <span
+                            className={`cm-categoryLegendIcon is-${item.color}`}
+                          >
                             <img src={item.icon} alt="" aria-hidden="true" />
                           </span>
                           <span>{item.name}</span>
@@ -483,14 +758,24 @@ export default function Cm() {
                     </div>
                     <div className="cm-detailList cm-detailList--category">
                       {categoryDetailRows.map((item, index) => {
-                        const showDate = index === 0 || categoryDetailRows[index - 1].date !== item.date;
-
+                        const showDate =
+                          index === 0 ||
+                          categoryDetailRows[index - 1].date !== item.date;
                         return (
-                          <div key={`${item.name}-${item.time}`} className="cm-detailRow">
-                            <span className="cm-detailDate">{showDate ? item.date : ""}</span>
-                            <strong className="cm-detailName">{item.name}</strong>
+                          <div
+                            key={`${item.name}-${item.time}`}
+                            className="cm-detailRow"
+                          >
+                            <span className="cm-detailDate">
+                              {showDate ? item.date : ""}
+                            </span>
+                            <strong className="cm-detailName">
+                              {item.name}
+                            </strong>
                             <span className="cm-detailTime">{item.time}</span>
-                            <strong className="cm-detailAmount">{item.amount}</strong>
+                            <strong className="cm-detailAmount">
+                              {item.amount}
+                            </strong>
                           </div>
                         );
                       })}
@@ -542,23 +827,22 @@ export default function Cm() {
                     </div>
                   </div>
                   <div className="cm-logFilters">
-                    {logCategories.map(
-                      (item) => (
-                        <button
-                          type="button"
-                          key={item}
-                          className={activeLogCategory === item ? "is-active" : ""}
-                          aria-pressed={activeLogCategory === item}
-                          onClick={() => setActiveLogCategory(item)}
-                        >
-                          {item}
-                        </button>
-                      ),
-                    )}
+                    {logCategories.map((item) => (
+                      <button
+                        type="button"
+                        key={item}
+                        className={
+                          activeLogCategory === item ? "is-active" : ""
+                        }
+                        aria-pressed={activeLogCategory === item}
+                        onClick={() => setActiveLogCategory(item)}
+                      >
+                        {item}
+                      </button>
+                    ))}
                   </div>
 
                   <div className="cm-logBubbles">
-                    {/* TODO: 오늘 날짜 기준으로 최근 날짜가 자동 생성되도록 수정 예정 */}
                     {activeLogBubbles.map((item) => (
                       <button
                         type="button"
@@ -568,7 +852,6 @@ export default function Cm() {
                         aria-label={`${item.day}일 소비 로그`}
                       >
                         <span className="cm-logBubbleDay">{item.day}</span>
-
                         {(item.label || item.amount) && (
                           <span className="cm-logBubbleInfo">
                             <strong>{item.label}</strong>

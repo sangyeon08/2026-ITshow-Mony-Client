@@ -8,7 +8,7 @@ import { revealVariants } from "./homeMotion.jsx";
 export default function HomeHeader() {
   const name = localStorage.getItem("joinName")?.trim() || "김수한무";
   const days = useMemo(() => {
-    const startDate = new Date("2025-04-17T00:00:00");
+    const startDate = new Date("2025-12-22T00:00:00");
     const today = new Date();
     return Math.max(0, Math.floor((today - startDate) / (1000 * 60 * 60 * 24)));
   }, []);

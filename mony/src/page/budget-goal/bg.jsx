@@ -150,6 +150,9 @@ const budgetGuide = {
 };
 
 export default function Bg() {
+  // ✅ 온보딩에서 저장한 이름 불러오기
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
+
   const [savingsGoal, setSavingsGoal] = useState(DEFAULT_savingsGoal);
   const [savingsAmount, setSavingsAmount] = useState(() => {
     const stored = localStorage.getItem("mony_saved_amount");
@@ -161,14 +164,18 @@ export default function Bg() {
   const [challengeTab, setChallengeTab] = useState("all");
   const [bucketChallenges, setBucketChallenges] = useState([]);
 
-  const savingsProgress = savingsGoal > 0 ? Math.min(savingsAmount / savingsGoal, 1) : 0;
+  const savingsProgress =
+    savingsGoal > 0 ? Math.min(savingsAmount / savingsGoal, 1) : 0;
   const isGoalReached = savingsGoal > 0 && savingsAmount >= savingsGoal;
-  const savingsMilestones = useMemo(() => [
-    { label: "25%", value: Math.round(savingsGoal * 0.25) },
-    { label: "50%", value: Math.round(savingsGoal * 0.5) },
-    { label: "75%", value: Math.round(savingsGoal * 0.75) },
-    { label: "100%", value: savingsGoal },
-  ], [savingsGoal]);
+  const savingsMilestones = useMemo(
+    () => [
+      { label: "25%", value: Math.round(savingsGoal * 0.25) },
+      { label: "50%", value: Math.round(savingsGoal * 0.5) },
+      { label: "75%", value: Math.round(savingsGoal * 0.75) },
+      { label: "100%", value: savingsGoal },
+    ],
+    [savingsGoal],
+  );
   const allChallenges = [...bucketChallenges, ...challengeCards].map((item) => {
     const targetAmount = Number(item.targetAmount) || 0;
     const currentAmount = Number(item.currentAmount) || 0;
@@ -212,11 +219,14 @@ export default function Bg() {
     setShowSavingsModal(false);
     setDepositInput("");
 
-    // 진행 중인 첫 번째 버킷의 저축 금액을 DB에 반영
     const primary = bucketChallenges.find((b) => b.status !== "completed");
     if (primary?.id) {
-      const newMonyFinish = Math.min(primary.currentAmount + num, primary.targetAmount);
-      bucketsApi.updateMoney(primary.id, newMonyFinish)
+      const newMonyFinish = Math.min(
+        primary.currentAmount + num,
+        primary.targetAmount,
+      );
+      bucketsApi
+        .updateMoney(primary.id, newMonyFinish)
         .then(() => {
           setBucketChallenges((prev) =>
             prev.map((b) =>
@@ -224,8 +234,14 @@ export default function Bg() {
                 ? {
                     ...b,
                     currentAmount: newMonyFinish,
-                    progress: primary.targetAmount ? newMonyFinish / primary.targetAmount : 0,
-                    status: newMonyFinish >= primary.targetAmount && primary.targetAmount > 0 ? "completed" : "progress",
+                    progress: primary.targetAmount
+                      ? newMonyFinish / primary.targetAmount
+                      : 0,
+                    status:
+                      newMonyFinish >= primary.targetAmount &&
+                      primary.targetAmount > 0
+                        ? "completed"
+                        : "progress",
                   }
                 : b,
             ),
@@ -244,23 +260,27 @@ export default function Bg() {
   };
 
   useEffect(() => {
-    // 이번 달 저축 목표 로드
-    goalsApi.getAll()
+    goalsApi
+      .getAll()
       .then((res) => {
         const periodDetail = new Date().toISOString().slice(0, 7);
-        const monthly = res.data?.find(
-          (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
-        ) ?? res.data?.[0];
+        const monthly =
+          res.data?.find(
+            (g) =>
+              g.period_type === "monthly" && g.period_detail === periodDetail,
+          ) ?? res.data?.[0];
         if (monthly?.target_amount) setSavingsGoal(monthly.target_amount);
       })
       .catch(() => {});
 
-    // 버킷리스트 챌린지 로드
-    bucketsApi.getAll()
+    bucketsApi
+      .getAll()
       .then((res) => {
         if (res.data?.length > 0) {
           const today = new Date().toLocaleDateString("ko-KR", {
-            year: "numeric", month: "numeric", day: "numeric",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
           });
           setBucketChallenges(
             res.data.map((b) => ({
@@ -363,7 +383,6 @@ export default function Bg() {
                         <strong>78%</strong>
                       </div>
                     </div>
-                    {/* 캐릭터 이미지 */}
                     <div className="bg-progressCharacter">
                       <img src={bgCh1} alt="캐릭터" />
                     </div>
@@ -379,13 +398,13 @@ export default function Bg() {
               >
                 <h3 className="test11">이번달의 예산목표</h3>
 
-                {/* 이미지 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */}
                 <div className="bg-goalLayout">
                   <div className="bg-goalAvatarWrap">
                     <div className="bg-goalAvatar">
                       <img src={bgCh2} alt="프로필" />
                     </div>
-                    <span className="bg-goalName">김수한무</span>
+                    {/* ✅ 온보딩 이름으로 변경 */}
+                    <span className="bg-goalName">{name}</span>
                   </div>
 
                   <div className="bg-goalCardList">
@@ -474,7 +493,6 @@ export default function Bg() {
                     </span>
                   </div>
 
-                  {/* 마일스톤 트랙 */}
                   <div className="bg-savingsTrackWrap">
                     <div className="bg-savingsTrack">
                       <ProgressFill
@@ -730,7 +748,7 @@ export default function Bg() {
         )}
       </AnimatePresence>
 
-      {/* 토스트 d*/}
+      {/* 토스트 */}
       <AnimatePresence>
         {toastMsg && (
           <motion.div
