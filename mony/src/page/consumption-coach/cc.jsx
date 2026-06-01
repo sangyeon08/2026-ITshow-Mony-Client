@@ -113,6 +113,7 @@ const callGroq = async (userText, history, systemPrompt) => {
 };
 
 export default function CC() {
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [ccSaveToast, setCcSaveToast] = useState(null);
@@ -284,7 +285,7 @@ export default function CC() {
                   variants={staggerItemVariants}
                 >
                   <p className="cc-heroEyebrow">
-                    김수한무님의 소비 관리에 있어서
+                    {name}님의 소비 관리에 있어서
                   </p>
                   <h2 className="cc-heroTitle">
                     MONY의 소비코치가

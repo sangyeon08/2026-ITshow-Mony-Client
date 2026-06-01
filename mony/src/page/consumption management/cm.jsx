@@ -379,6 +379,7 @@ const logBubbleMap = {
 };
 
 export default function Cm() {
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [historyPage, setHistoryPage] = useState(0);
   const [activeLogCategory, setActiveLogCategory] = useState("식사/외식");
   const [savedAmount] = useState(() => {
@@ -547,7 +548,7 @@ export default function Cm() {
                 >
                   <div className="cm-summaryCell">
                     <span>가장 많이 사용한 카드</span>
-                    <strong>김수한무의 카뱅 카드</strong>
+                    <strong>{name}의 카뱅 카드</strong>
                   </div>
                   <div className="cm-summaryCell">
                     <span>이 카드는</span>
@@ -639,7 +640,7 @@ export default function Cm() {
                   >
                     <h3 className="cm-cardTitle">소비 성격</h3>
                     <p className="cm-scoreCopy">
-                      최근 김수한무 님은
+                      최근 {name} 님은
                       <br />
                       <strong>#소소하지만확실한행복</strong>을
                       <br />
@@ -704,7 +705,7 @@ export default function Cm() {
                 <div className="cm-historyTop">
                   <div>
                     <span>카카오뱅크</span>
-                    <strong>김수한무의 카뱅 카드</strong>
+                    <strong>{name}의 카뱅 카드</strong>
                   </div>
                   <div>
                     <span>3월 사용금액</span>

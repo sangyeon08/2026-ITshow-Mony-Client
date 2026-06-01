@@ -109,6 +109,7 @@ const tripThumbs = [
 const SAVEABLE_AMOUNT = 72000;
 
 export default function Ca() {
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [caSavedAmount, setCaSavedAmount] = useState(null);
   const [fixedItems, setFixedItems] = useState(DEFAULT_FIXED_ITEMS);
   const [totalSpent, setTotalSpent] = useState(326000);
@@ -166,7 +167,7 @@ export default function Ca() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="ca-toolbar">
-              <span>카카오뱅크, 김수한무의 카방카드</span>
+              <span>카카오뱅크, {name}의 카방카드</span>
               <span aria-hidden="true">⌄</span>
             </div>
 

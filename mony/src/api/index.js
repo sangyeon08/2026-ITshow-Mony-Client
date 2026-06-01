@@ -1,8 +1,9 @@
 const BASE_URL = '/api';
 
 function getUserId() {
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   let id = localStorage.getItem('mony_user_id');
-  if (!id) {
+  if (!id || !uuidPattern.test(id)) {
     id = crypto.randomUUID();
     localStorage.setItem('mony_user_id', id);
   }

@@ -54,12 +54,6 @@ const recentItems = [
   },
 ];
 
-const quickEntries = [
-  { icon: "$", label: "이번 달 쓴 돈", value: "-428,000원", note: "이번 달 지출을 정리했어요" },
-  { icon: "B", label: "이번 달 모은 돈", value: "+124,000원", note: "고정 지출은 안정적이에요" },
-  { icon: "⚡", label: "이번 달 목표", value: "김수한무의 카방카드", note: "목표 카드에 가까워지고 있어요" },
-  { icon: "◔", label: "카테고리", value: "식비 31%", note: "식비 비중이 조금 높아요" },
-];
 
 const benefitRows = [
   {
@@ -238,6 +232,14 @@ function getBucketGoal() {
 
 export default function Home() {
   const navigate = useNavigate();
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
+
+  const quickEntries = [
+    { icon: "$", label: "이번 달 쓴 돈", value: "-428,000원", note: "이번 달 지출을 정리했어요" },
+    { icon: "B", label: "이번 달 모은 돈", value: "+124,000원", note: "고정 지출은 안정적이에요" },
+    { icon: "⚡", label: "이번 달 목표", value: `${name}의 카방카드`, note: "목표 카드에 가까워지고 있어요" },
+    { icon: "◔", label: "카테고리", value: "식비 31%", note: "식비 비중이 조금 높아요" },
+  ];
   const [activeTalkGroupIndex, setActiveTalkGroupIndex] = useState(0);
   const [activeTalkItem, setActiveTalkItem] = useState(null);
   const activeTalkGroup = talkGroups[activeTalkGroupIndex];
@@ -356,7 +358,7 @@ export default function Home() {
             >
               <p className="home-metricLabel">이번 달의 소비</p>
               <div className="home-metricRow">
-                <h3>김수한무의 카방카드</h3>
+                <h3>{name}의 카방카드</h3>
                 <strong>
                   <CountUp value={326000} suffix="원" />
                 </strong>
@@ -456,7 +458,7 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.35 }}
           >
-            <h3>김수한무 님의 활발한 4월의 소비를 확인해보세요! 🍃</h3>
+            <h3>{name} 님의 활발한 4월의 소비를 확인해보세요! 🍃</h3>
           </motion.section>
 
           <motion.section
@@ -542,7 +544,7 @@ export default function Home() {
                 </div>
                 <div className="home-summaryText">
                   <span>이번 달 지출 목표 지정 카드</span>
-                  <strong>김수한무의 카방카드</strong>
+                  <strong>{name}의 카방카드</strong>
                 </div>
               </div>
 
@@ -568,7 +570,7 @@ export default function Home() {
             viewport={{ once: true, amount: 0.18 }}
           >
             <motion.h3 className="home-bottomFeatureTitle" variants={staggerItemVariants}>
-              김수한무 님만을 위한 소비 이야기를 발견해보세요 ⭐
+              {name} 님만을 위한 소비 이야기를 발견해보세요 ⭐
             </motion.h3>
 
             <div className="home-bottomFeatureGrid">

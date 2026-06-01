@@ -156,7 +156,7 @@ function NextArrowIcon() {
   );
 }
 
-function FirstBanner({ direction, onGoConsumptionManagement }) {
+function FirstBanner({ direction, onGoConsumptionManagement, name }) {
   return (
     <Motion.div
       key="weekly-insight"
@@ -169,7 +169,7 @@ function FirstBanner({ direction, onGoConsumptionManagement }) {
     >
       <Motion.div className="home-heroIntro" variants={staggerItemVariants}>
         <div className="home-heroIndex">01</div>
-        <p>활기찬 하루를 보내고 있는, 김수한무 님</p>
+        <p>활기찬 하루를 보내고 있는, {name} 님</p>
         <h2 className="home-heroTitle">
           이번 주의 소비를 한 번
           <br />
@@ -223,7 +223,7 @@ function FirstBanner({ direction, onGoConsumptionManagement }) {
   );
 }
 
-function BucketListBanner({ direction, onGoBudgetGoal }) {
+function BucketListBanner({ direction, onGoBudgetGoal, name }) {
   return (
     <Motion.div
       key="bucket-list"
@@ -239,7 +239,7 @@ function BucketListBanner({ direction, onGoBudgetGoal }) {
 
       <div className="home-heroIntro home-heroIntro--bucket">
         <div className="home-heroIndex">02</div>
-        <p>김수한무님의 버킷리스트 챌린지</p>
+        <p>{name}님의 버킷리스트 챌린지</p>
         <h2 className="home-heroTitle">
           작은 소비가 쌓이는
           <br />
@@ -268,7 +268,7 @@ function BucketListBanner({ direction, onGoBudgetGoal }) {
   );
 }
 
-function FriendsBanner({ direction }) {
+function FriendsBanner({ direction, name }) {
   return (
     <Motion.div
       key="friends"
@@ -291,7 +291,7 @@ function FriendsBanner({ direction }) {
           더욱 즐겁게 다가가요
         </h2>
         <p className="home-heroDesc">
-          김수한무 님의 옆에서 MONY 친구들이 용기와 동기를 부여해요.
+          {name} 님의 옆에서 MONY 친구들이 용기와 동기를 부여해요.
         </p>
       </div>
 
@@ -306,6 +306,7 @@ function FriendsBanner({ direction }) {
 
 export default function Banner() {
   const navigate = useNavigate();
+  const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [activeBanner, setActiveBanner] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
   const bannerCount = 3;
@@ -338,15 +339,17 @@ export default function Banner() {
           <FirstBanner
             direction={slideDirection}
             onGoConsumptionManagement={() => navigate("/consumption-management")}
+            name={name}
           />
         ) : null}
         {activeBanner === 1 ? (
           <BucketListBanner
             direction={slideDirection}
             onGoBudgetGoal={() => navigate("/budget-goal")}
+            name={name}
           />
         ) : null}
-        {activeBanner === 2 ? <FriendsBanner direction={slideDirection} /> : null}
+        {activeBanner === 2 ? <FriendsBanner direction={slideDirection} name={name} /> : null}
       </AnimatePresence>
     </Motion.section>
   );
