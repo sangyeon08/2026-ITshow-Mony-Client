@@ -67,7 +67,7 @@ export default function Onboarding3() {
     if (bucketGoal?.bucketList && Array.isArray(bucketGoal.steps) && bucketGoal.steps.length === 3) {
       try {
         const targetAmt = Number(bucketGoal.targetAmount) || 0;
-        await buckets.create({
+        const bucketRes = await buckets.create({
           title: bucketGoal.bucketList,
           one:   bucketGoal.steps[0].title,
           two:   bucketGoal.steps[1].title,
@@ -77,6 +77,9 @@ export default function Onboarding3() {
           three_mony: targetAmt,
           mony_ing: targetAmt,
         });
+        if (bucketRes?.data?.id) {
+          localStorage.setItem("mony_primary_bucket_id", String(bucketRes.data.id));
+        }
       } catch (e) {
         console.warn("[onboarding] buckets.create 실패:", e.message);
       }

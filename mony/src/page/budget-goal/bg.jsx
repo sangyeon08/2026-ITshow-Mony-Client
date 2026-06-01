@@ -211,6 +211,29 @@ export default function Bg() {
     localStorage.setItem("mony_saved_amount", String(newTotal));
     setShowSavingsModal(false);
     setDepositInput("");
+
+    // 진행 중인 첫 번째 버킷의 저축 금액을 DB에 반영
+    const primary = bucketChallenges.find((b) => b.status !== "completed");
+    if (primary?.id) {
+      const newMonyFinish = Math.min(primary.currentAmount + num, primary.targetAmount);
+      bucketsApi.updateMoney(primary.id, newMonyFinish)
+        .then(() => {
+          setBucketChallenges((prev) =>
+            prev.map((b) =>
+              b.id === primary.id
+                ? {
+                    ...b,
+                    currentAmount: newMonyFinish,
+                    progress: primary.targetAmount ? newMonyFinish / primary.targetAmount : 0,
+                    status: newMonyFinish >= primary.targetAmount && primary.targetAmount > 0 ? "completed" : "progress",
+                  }
+                : b,
+            ),
+          );
+        })
+        .catch(() => {});
+    }
+
     const reached = newTotal >= savingsGoal;
     setToastMsg(
       reached

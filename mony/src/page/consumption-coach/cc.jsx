@@ -155,11 +155,25 @@ export default function CC() {
     });
   }, []);
 
-  const handleCcSave = (amount) => {
+  const handleCcSave = async (amount) => {
     const prev = Number(localStorage.getItem("mony_saved_amount") ?? 0);
     localStorage.setItem("mony_saved_amount", String(prev + amount));
     setCcSaveToast(amount);
     setTimeout(() => setCcSaveToast(null), 2500);
+
+    const bucketId = localStorage.getItem("mony_primary_bucket_id");
+    if (bucketId) {
+      try {
+        const res = await bucketsApi.getById(bucketId);
+        if (res.data) {
+          const newMonyFinish = Math.min(
+            (res.data.mony_finish || 0) + amount,
+            res.data.mony_ing || Infinity,
+          );
+          await bucketsApi.updateMoney(bucketId, newMonyFinish);
+        }
+      } catch {}
+    }
   };
 
   const sendMessage = async (text) => {
