@@ -390,149 +390,6 @@ export default function Bg() {
                 </div>
               </motion.article>
 
-              {/* ── 이번달 예산목표 ── */}
-              <motion.article
-                className="bg-card bg-card--goal"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <h3 className="test11">이번달의 예산목표</h3>
-
-                <div className="bg-goalLayout">
-                  <div className="bg-goalAvatarWrap">
-                    <div className="bg-goalAvatar">
-                      <img src={bgCh2} alt="프로필" />
-                    </div>
-                    {/* ✅ 온보딩 이름으로 변경 */}
-                    <span className="bg-goalName">{name}</span>
-                  </div>
-
-                  <div className="bg-goalCardList">
-                    {milestoneItems.map((item, index) => (
-                      <div key={item.title} className="bg-goalCard">
-                        <span className="bg-goalTag">
-                          진행중인 목표 {index + 1}
-                        </span>
-                        <div className="bg-goalRow">
-                          <div className="bg-goalLeft">
-                            <p>{item.desc}</p>
-                            <strong className="bg-goalTitle">
-                              {item.title}
-                            </strong>
-                          </div>
-                          <div className="bg-goalRight">
-                            <div className="bg-goalMeta">
-                              <span>진행률</span>
-                              <span>기간</span>
-                            </div>
-                            <div className="bg-goalMetaValues">
-                              <strong>
-                                {Math.round(item.progress * 100)}%
-                              </strong>
-                              <strong>{item.period}</strong>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.article>
-            </motion.div>
-
-            <motion.div
-              className="bg-gridBottom"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
-              {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
-              <motion.article
-                className="bg-card bg-card--guide"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <div className="bg-cardHead">
-                  <h3>예산 가이드</h3>
-                  <span aria-hidden="true">›</span>
-                </div>
-
-                <div className="bg-guideGrid">
-                  <div className="bg-guideSummary">
-                    <div>
-                      <strong>3월 30일 | 남은 기간 1일</strong>
-                      <p>4월이 되기 전 예산을 정리해요</p>
-                    </div>
-                    <strong className="bg-guideAmount">
-                      <CountUp value={122200} suffix="원" />
-                    </strong>
-                  </div>
-
-                  <div className="bg-guidePlan">
-                    <strong>예산 제안</strong>
-                    <p>! 식비를 20% 줄이면 예산 내 유지 가능</p>
-                    <p>! 쇼핑 지출을 절반으로 줄이면 안정</p>
-                  </div>
-                </div>
-
-                {/* ── 이번 달 저축 목표 ── */}
-                <div className="bg-savingsGoal">
-                  <div className="bg-savingsGoalHeader">
-                    <div>
-                      <span className="bg-savingsGoalLabel">
-                        이번 달 저축 목표
-                      </span>
-                      <strong className="bg-savingsGoalTitle">
-                        <CountUp value={savingsAmount} suffix="원" />
-                        <em> / {savingsGoal.toLocaleString()}원</em>
-                      </strong>
-                    </div>
-                    <span className="bg-savingsGoalPct">
-                      {Math.round(savingsProgress * 100)}%
-                    </span>
-                  </div>
-
-                  <div className="bg-savingsTrackWrap">
-                    <div className="bg-savingsTrack">
-                      <ProgressFill
-                        className="bg-progressFill is-lime"
-                        value={savingsProgress}
-                      />
-                    </div>
-                    <div className="bg-savingsMilestones">
-                      {savingsMilestones.map((m) => {
-                        const reached = savingsAmount >= m.value;
-                        return (
-                          <div
-                            key={m.label}
-                            className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
-                            style={{
-                              left: `${(m.value / savingsGoal) * 100}%`,
-                            }}
-                          >
-                            <span>{m.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {isGoalReached ? (
-                    <div className="bg-savingsComplete">
-                      🎉 이번 달 저축 목표 달성!
-                    </div>
-                  ) : (
-                    <button
-                      className="bg-savingsBtn"
-                      onClick={() => setShowSavingsModal(true)}
-                    >
-                      + 저축 적립하기
-                    </button>
-                  )}
-                </div>
-              </motion.article>
-
               {/* ── 버킷리스트 챌린지 ── */}
               <motion.article
                 className="bg-card bg-card--challenge"
@@ -681,6 +538,101 @@ export default function Bg() {
                   ))}
                 </div>
               </motion.article>
+            </motion.div>
+
+            <motion.div
+              className="bg-gridBottom"
+              variants={staggerContainerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.18 }}
+            >
+              {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
+              <motion.article
+                className="bg-card bg-card--guide"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
+                <div className="bg-cardHead">
+                  <h3>예산 가이드</h3>
+                  <span aria-hidden="true">›</span>
+                </div>
+
+                <div className="bg-guideGrid">
+                  <div className="bg-guideSummary">
+                    <div>
+                      <strong>3월 30일 | 남은 기간 1일</strong>
+                      <p>4월이 되기 전 예산을 정리해요</p>
+                    </div>
+                    <strong className="bg-guideAmount">
+                      <CountUp value={122200} suffix="원" />
+                    </strong>
+                  </div>
+
+                  <div className="bg-guidePlan">
+                    <strong>예산 제안</strong>
+                    <p>! 식비를 20% 줄이면 예산 내 유지 가능</p>
+                    <p>! 쇼핑 지출을 절반으로 줄이면 안정</p>
+                  </div>
+                </div>
+
+                {/* ── 이번 달 저축 목표 ── */}
+                <div className="bg-savingsGoal">
+                  <div className="bg-savingsGoalHeader">
+                    <div>
+                      <span className="bg-savingsGoalLabel">
+                        이번 달 저축 목표
+                      </span>
+                      <strong className="bg-savingsGoalTitle">
+                        <CountUp value={savingsAmount} suffix="원" />
+                        <em> / {savingsGoal.toLocaleString()}원</em>
+                      </strong>
+                    </div>
+                    <span className="bg-savingsGoalPct">
+                      {Math.round(savingsProgress * 100)}%
+                    </span>
+                  </div>
+
+                  <div className="bg-savingsTrackWrap">
+                    <div className="bg-savingsTrack">
+                      <ProgressFill
+                        className="bg-progressFill is-lime"
+                        value={savingsProgress}
+                      />
+                    </div>
+                    <div className="bg-savingsMilestones">
+                      {savingsMilestones.map((m) => {
+                        const reached = savingsAmount >= m.value;
+                        return (
+                          <div
+                            key={m.label}
+                            className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
+                            style={{
+                              left: `${(m.value / savingsGoal) * 100}%`,
+                            }}
+                          >
+                            <span>{m.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {isGoalReached ? (
+                    <div className="bg-savingsComplete">
+                      🎉 이번 달 저축 목표 달성!
+                    </div>
+                  ) : (
+                    <button
+                      className="bg-savingsBtn"
+                      onClick={() => setShowSavingsModal(true)}
+                    >
+                      + 저축 적립하기
+                    </button>
+                  )}
+                </div>
+              </motion.article>
+
             </motion.div>
           </motion.section>
         </section>
