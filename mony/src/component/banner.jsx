@@ -1,5 +1,5 @@
-import { AnimatePresence, motion as Motion } from "framer-motion";
-import { useState } from "react";
+import { motion as Motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { cardMotion, buttonMotion, staggerContainerVariants, staggerItemVariants } from "./homeMotion.jsx";
 import bannerBg from "../assets/home/banner_bg.png";
@@ -111,29 +111,6 @@ const highlightCards = [
   },
 ];
 
-const slideVariants = {
-  enter: (direction) => ({
-    x: direction > 0 ? "100%" : "-100%",
-    opacity: 0,
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.62,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-  exit: (direction) => ({
-    x: direction > 0 ? "-100%" : "100%",
-    opacity: 0,
-    transition: {
-      duration: 0.48,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }),
-};
-
 function PreviousArrowIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="19" viewBox="0 0 10 19" fill="none">
@@ -156,17 +133,9 @@ function NextArrowIcon() {
   );
 }
 
-function FirstBanner({ direction, onGoConsumptionManagement, name }) {
+function FirstBanner({ onGoConsumptionManagement, name }) {
   return (
-    <Motion.div
-      key="weekly-insight"
-      className="home-heroSlide is-weekly"
-      custom={direction}
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <div className="home-heroSlide is-weekly">
       <Motion.div className="home-heroIntro" variants={staggerItemVariants}>
         <div className="home-heroIndex">01</div>
         <p>활기찬 하루를 보내고 있는, {name} 님</p>
@@ -219,21 +188,13 @@ function FirstBanner({ direction, onGoConsumptionManagement, name }) {
           </Motion.article>
         ))}
       </Motion.div>
-    </Motion.div>
+    </div>
   );
 }
 
-function BucketListBanner({ direction, onGoBudgetGoal, name }) {
+function BucketListBanner({ onGoBudgetGoal, name }) {
   return (
-    <Motion.div
-      key="bucket-list"
-      className="home-heroSlide is-bucket"
-      custom={direction}
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <div className="home-heroSlide is-bucket">
       <div className="home-heroBucketBg" aria-hidden="true" style={{ backgroundImage: `url(${bannerBg})` }} />
       <div className="home-heroBucketOverlay" aria-hidden="true" />
 
@@ -264,21 +225,13 @@ function BucketListBanner({ direction, onGoBudgetGoal, name }) {
         <img className="home-bucketSide" src={bannerComponent2} alt="01 챌린지 기록" />
         <img className="home-bucketSide" src={bannerComponent3} alt="02 챌린지 기록" />
       </div>
-    </Motion.div>
+    </div>
   );
 }
 
-function FriendsBanner({ direction, name }) {
+function FriendsBanner({ name }) {
   return (
-    <Motion.div
-      key="friends"
-      className="home-heroSlide is-friends"
-      custom={direction}
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <div className="home-heroSlide is-friends">
       <div className="home-heroFriendsBg" aria-hidden="true" style={{ backgroundImage: `url(${bannerBg2})` }} />
       <div className="home-heroFriendsOverlay" aria-hidden="true" />
 
@@ -300,7 +253,7 @@ function FriendsBanner({ direction, name }) {
         <img src={bannerCh2} alt="MONY 친구 캐릭터" />
         <img src={bannerCh3} alt="코인 캐릭터" />
       </div>
-    </Motion.div>
+    </div>
   );
 }
 
@@ -308,16 +261,21 @@ export default function Banner() {
   const navigate = useNavigate();
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [activeBanner, setActiveBanner] = useState(0);
-  const [slideDirection, setSlideDirection] = useState(1);
   const bannerCount = 3;
+
   const showPrevious = () => {
-    setSlideDirection(1);
     setActiveBanner((current) => (current - 1 + bannerCount) % bannerCount);
   };
   const showNext = () => {
-    setSlideDirection(-1);
     setActiveBanner((current) => (current + 1) % bannerCount);
   };
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActiveBanner((current) => (current + 1) % bannerCount);
+    }, 6000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <Motion.section
@@ -334,23 +292,20 @@ export default function Banner() {
         <NextArrowIcon />
       </button>
 
-      <AnimatePresence mode="wait" initial={false} custom={slideDirection}>
-        {activeBanner === 0 ? (
-          <FirstBanner
-            direction={slideDirection}
-            onGoConsumptionManagement={() => navigate("/consumption-management")}
-            name={name}
-          />
-        ) : null}
-        {activeBanner === 1 ? (
-          <BucketListBanner
-            direction={slideDirection}
-            onGoBudgetGoal={() => navigate("/budget-goal")}
-            name={name}
-          />
-        ) : null}
-        {activeBanner === 2 ? <FriendsBanner direction={slideDirection} name={name} /> : null}
-      </AnimatePresence>
+      <div
+        className="home-heroTrack"
+        style={{ transform: `translateX(-${activeBanner * 100}%)` }}
+      >
+        <FirstBanner
+          onGoConsumptionManagement={() => navigate("/consumption-management")}
+          name={name}
+        />
+        <BucketListBanner
+          onGoBudgetGoal={() => navigate("/budget-goal")}
+          name={name}
+        />
+        <FriendsBanner name={name} />
+      </div>
     </Motion.section>
   );
 }
