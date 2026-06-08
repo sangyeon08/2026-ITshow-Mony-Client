@@ -403,6 +403,31 @@ html, body {
   color: #ff9a7a;
 }
 
+.join2-category {
+  margin-top: 12px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(205, 255, 78, 0.22);
+  background: rgba(205, 255, 78, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.join2-category span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.join2-category strong {
+  color: #CDFF4E;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .join2-planList {
   margin-top: 14px;
   display: grid;

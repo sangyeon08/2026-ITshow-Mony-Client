@@ -23,6 +23,14 @@ const stampImages = [
   "/src/assets/home/improvement.png",
 ];
 
+const DEFAULT_BUCKET_CATEGORY = "여행";
+const bucketCategories = ["자기계발", "취미", "여행"];
+const stampImagesByCategory = {
+  여행: stampImages[0],
+  취미: stampImages[1],
+  자기계발: stampImages[2],
+};
+
 const goalStats = [
   { label: "3월 예산", value: 550000, suffix: "원" },
   { label: "3월 사용금액", value: 428000, suffix: "원", extra: "(78%)" },
@@ -57,6 +65,7 @@ const challengeCards = [
     targetAmount: 100000,
     currentAmount: 45000,
     status: "progress",
+    category: "취미",
     completedAt: "",
   },
   {
@@ -65,6 +74,7 @@ const challengeCards = [
     targetAmount: 1500000,
     currentAmount: 300000,
     status: "progress",
+    category: "여행",
     completedAt: "",
   },
   {
@@ -73,6 +83,7 @@ const challengeCards = [
     targetAmount: 320000,
     currentAmount: 320000,
     status: "completed",
+    category: "여행",
     completedAt: "2026. 3. 18.",
   },
 ];
@@ -81,6 +92,7 @@ const challengeTabs = [
   { key: "all", label: "전체" },
   { key: "progress", label: "진행 중" },
   { key: "completed", label: "완료됨" },
+  ...bucketCategories.map((category) => ({ key: category, label: category })),
 ];
 
 const completedMessages = [
@@ -88,6 +100,17 @@ const completedMessages = [
   "이번 목표도 멋지게 성공했어요.",
   "작은 저축이 큰 성취가 되었어요.",
 ];
+
+const normalizeBucketCategory = (category) =>
+  bucketCategories.includes(category) ? category : DEFAULT_BUCKET_CATEGORY;
+
+function readPrimaryBucketGoal() {
+  try {
+    return JSON.parse(localStorage.getItem("bucketGoal") || "null");
+  } catch {
+    return null;
+  }
+}
 
 function readBucketGoals() {
   const today = new Date().toLocaleDateString("ko-KR", {
@@ -98,7 +121,7 @@ function readBucketGoals() {
 
   try {
     const savedGoals = JSON.parse(localStorage.getItem("bucketGoals") || "[]");
-    const savedGoal = JSON.parse(localStorage.getItem("bucketGoal") || "null");
+    const savedGoal = readPrimaryBucketGoal();
     const goals = Array.isArray(savedGoals) ? savedGoals : [];
 
     if (savedGoal?.bucketList) {
@@ -108,6 +131,7 @@ function readBucketGoals() {
         targetAmount: Number(savedGoal.targetAmount) || 0,
         currentAmount: Number(savedGoal.currentSaved) || 0,
         status: savedGoal.status,
+        category: normalizeBucketCategory(savedGoal.category),
         completedAt: savedGoal.completedAt,
       });
     }
@@ -120,6 +144,7 @@ function readBucketGoals() {
       return {
         id: goal.id || `bucket-goal-${index}`,
         title: goal.title || goal.bucketList || "버킷리스트 목표",
+        category: normalizeBucketCategory(goal.category),
         targetAmount,
         currentAmount,
         status: isCompleted
@@ -204,6 +229,8 @@ export default function Bg() {
   const filteredChallenges =
     challengeTab === "all"
       ? allChallenges
+      : bucketCategories.includes(challengeTab)
+        ? allChallenges.filter((item) => item.category === challengeTab)
       : allChallenges.filter((item) => item.status === challengeTab);
   const totalCompletedAmount = completedChallenges.reduce(
     (sum, item) => sum + item.targetAmount,
@@ -244,6 +271,7 @@ export default function Bg() {
                     progress: targetAmount
                       ? newMonyFinish / targetAmount
                       : 0,
+                    category: b.category,
                     status:
                       newMonyFinish >= targetAmount &&
                       targetAmount > 0
@@ -290,6 +318,7 @@ export default function Bg() {
             day: "numeric",
           });
           const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+          const storedBucketGoal = readPrimaryBucketGoal();
           const primaryBucket =
             res.data.find((b) => String(b.id) === primaryBucketId) ?? res.data[0];
           if (primaryBucket) {
@@ -304,6 +333,11 @@ export default function Bg() {
             res.data.map((b) => ({
               id: String(b.id),
               title: b.title,
+              category: normalizeBucketCategory(
+                String(b.id) === primaryBucketId || b.title === storedBucketGoal?.bucketList
+                  ? storedBucketGoal?.category
+                  : b.category,
+              ),
               targetAmount: b.mony_ing || 0,
               currentAmount: b.mony_finish || 0,
               status: (b.probability ?? 0) >= 100 ? "completed" : "progress",
@@ -341,6 +375,7 @@ export default function Bg() {
               whileInView="show"
               viewport={{ once: true, amount: 0.2 }}
             >
+              <div className="bg-leftColumn">
               {/* ── 월간 예산 ── */}
               <motion.article
                 className="bg-card bg-card--budget"
@@ -408,163 +443,6 @@ export default function Bg() {
                 </div>
               </motion.article>
 
-              {/* ── 버킷리스트 챌린지 ── */}
-              <motion.article
-                className="bg-card bg-card--challenge"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <div className="bg-cardHead">
-                  <h3>버킷리스트 챌린지</h3>
-                  <span aria-hidden="true">›</span>
-                </div>
-
-                <div className="bg-challengeSummary">
-                  <div>
-                    <span>완료한 버킷리스트</span>
-                    <strong>{completedChallenges.length}개</strong>
-                  </div>
-                  <div>
-                    <span>진행 중인 버킷리스트</span>
-                    <strong>{progressChallenges.length}개</strong>
-                  </div>
-                  <div>
-                    <span>총 달성 금액</span>
-                    <strong>{totalCompletedAmount.toLocaleString()}원</strong>
-                  </div>
-                </div>
-
-                <div
-                  className="bg-challengeTabs"
-                  role="tablist"
-                  aria-label="버킷리스트 상태"
-                >
-                  {challengeTabs.map((tab) => (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      role="tab"
-                      aria-selected={challengeTab === tab.key}
-                      className={challengeTab === tab.key ? "is-active" : ""}
-                      onClick={() => setChallengeTab(tab.key)}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="bg-challengeGrid">
-                  {filteredChallenges.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      className={`bg-challengeCard ${
-                        item.status === "completed"
-                          ? "is-completed"
-                          : "is-progress"
-                      }`}
-                      layout
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.26, delay: index * 0.04 }}
-                    >
-                      {item.status === "completed" ? (
-                        <>
-                          <motion.div
-                            className="bg-challengeStamp"
-                            initial={{ scale: 1.8, rotate: -18, opacity: 0 }}
-                            animate={{ scale: 1, rotate: -12, opacity: 0.42 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 420,
-                              damping: 15,
-                              delay: 0.16,
-                            }}
-                            style={{
-                              position: "absolute",
-                              top: "50%",
-                              left: "50%",
-                              translateX: "-50%",
-                              translateY: "-50%",
-                            }}
-                          >
-                            <img src={stampImages[0]} />
-                          </motion.div>
-                          <span className="bg-challengeBadge">
-                            칭찬도장 쾅!
-                          </span>
-                          <strong>{item.title}</strong>
-                          <p>
-                            {
-                              completedMessages[
-                                index % completedMessages.length
-                              ]
-                            }
-                          </p>
-                          <div className="bg-challengeCompleteMeta">
-                            <span>완료 금액</span>
-                            <strong>
-                              {item.targetAmount.toLocaleString()}원
-                            </strong>
-                            <span>달성 날짜</span>
-                            <strong>
-                              {item.completedAt || "2026. 3. 30."}
-                            </strong>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <strong>{item.title}</strong>
-                          <span>버킷리스트 진행 중</span>
-                          <div className="bg-challengeAmount">
-                            <CountUp value={item.currentAmount} suffix="원" />
-                            <small>
-                              {" "}
-                              / {item.targetAmount.toLocaleString()}원
-                            </small>
-                          </div>
-                          <div className="bg-challengeBar">
-                            <motion.div
-                              className="bg-progressFill is-lime"
-                              initial={{ scaleX: 0 }}
-                              animate={{ scaleX: item.progress }}
-                              transition={{
-                                duration: 1.2,
-                                ease: "easeOut",
-                                delay: index * 0.1,
-                              }}
-                              style={{
-                                transformOrigin: "0% 50%",
-                                height: "100%",
-                                borderRadius: "inherit",
-                              }}
-                            />
-                          </div>
-                          <p className="bg-challengeRemain">
-                            목표까지{" "}
-                            {Math.max(
-                              item.targetAmount - item.currentAmount,
-                              0,
-                            ).toLocaleString()}
-                            원 남았어요
-                          </p>
-                          <span className="bg-challengePct">
-                            현재 {Math.round(item.progress * 100)}% 달성 중
-                          </span>
-                        </>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.article>
-            </motion.div>
-
-            <motion.div
-              className="bg-gridBottom"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
               {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
               <motion.article
                 className="bg-card bg-card--guide"
@@ -650,8 +528,172 @@ export default function Bg() {
                   )}
                 </div>
               </motion.article>
+              </div>
 
+              {/* ── 버킷리스트 챌린지 ── */}
+              <motion.article
+                className="bg-card bg-card--challenge"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
+                <div className="bg-cardHead">
+                  <h3>버킷리스트 챌린지</h3>
+                  <span aria-hidden="true">›</span>
+                </div>
+
+                <div className="bg-challengeSummary">
+                  <div>
+                    <span>완료한 버킷리스트</span>
+                    <strong>{completedChallenges.length}개</strong>
+                  </div>
+                  <div>
+                    <span>진행 중인 버킷리스트</span>
+                    <strong>{progressChallenges.length}개</strong>
+                  </div>
+                  <div>
+                    <span>총 달성 금액</span>
+                    <strong>{totalCompletedAmount.toLocaleString()}원</strong>
+                  </div>
+                </div>
+
+                <div
+                  className="bg-challengeTabs"
+                  role="tablist"
+                  aria-label="버킷리스트 상태"
+                >
+                  {challengeTabs.map((tab) => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      role="tab"
+                      aria-selected={challengeTab === tab.key}
+                      className={challengeTab === tab.key ? "is-active" : ""}
+                      onClick={() => setChallengeTab(tab.key)}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="bg-challengeGrid">
+                  {filteredChallenges.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      className={`bg-challengeCard ${
+                        item.status === "completed"
+                          ? "is-completed"
+                          : "is-progress"
+                      }`}
+                      layout
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.26, delay: index * 0.04 }}
+                    >
+                      {item.status === "completed" ? (
+                        <>
+                          <motion.div
+                            className="bg-challengeStamp"
+                            initial={{ scale: 1.8, rotate: -18, opacity: 0 }}
+                            animate={{ scale: 1, rotate: -12, opacity: 0.42 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 420,
+                              damping: 15,
+                              delay: 0.16,
+                            }}
+                            style={{
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              translateX: "-50%",
+                              translateY: "-50%",
+                            }}
+                          >
+                            <img
+                              src={
+                                stampImagesByCategory[
+                                  normalizeBucketCategory(item.category)
+                                ]
+                              }
+                              alt=""
+                              aria-hidden="true"
+                            />
+                          </motion.div>
+                          <span className="bg-challengeBadge">
+                            칭찬도장 쾅!
+                          </span>
+                          <span className="bg-challengeCategory">
+                            {normalizeBucketCategory(item.category)}
+                          </span>
+                          <strong>{item.title}</strong>
+                          <p>
+                            {
+                              completedMessages[
+                                index % completedMessages.length
+                              ]
+                            }
+                          </p>
+                          <div className="bg-challengeCompleteMeta">
+                            <span>완료 금액</span>
+                            <strong>
+                              {item.targetAmount.toLocaleString()}원
+                            </strong>
+                            <span>달성 날짜</span>
+                            <strong>
+                              {item.completedAt || "2026. 3. 30."}
+                            </strong>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <strong>{item.title}</strong>
+                          <span className="bg-challengeCategory">
+                            {normalizeBucketCategory(item.category)}
+                          </span>
+                          <span>버킷리스트 진행 중</span>
+                          <div className="bg-challengeAmount">
+                            <CountUp value={item.currentAmount} suffix="원" />
+                            <small>
+                              {" "}
+                              / {item.targetAmount.toLocaleString()}원
+                            </small>
+                          </div>
+                          <div className="bg-challengeBar">
+                            <motion.div
+                              className="bg-progressFill is-lime"
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: item.progress }}
+                              transition={{
+                                duration: 1.2,
+                                ease: "easeOut",
+                                delay: index * 0.1,
+                              }}
+                              style={{
+                                transformOrigin: "0% 50%",
+                                height: "100%",
+                                borderRadius: "inherit",
+                              }}
+                            />
+                          </div>
+                          <p className="bg-challengeRemain">
+                            목표까지{" "}
+                            {Math.max(
+                              item.targetAmount - item.currentAmount,
+                              0,
+                            ).toLocaleString()}
+                            원 남았어요
+                          </p>
+                          <span className="bg-challengePct">
+                            현재 {Math.round(item.progress * 100)}% 달성 중
+                          </span>
+                        </>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.article>
             </motion.div>
+
           </motion.section>
         </section>
       </div>

@@ -22,6 +22,7 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 설명 문장이나 마크다운 없이 JSON만 반환해.
 
 {
+  "category": "여행" | "취미" | "자기계발",
   "targetAmount": 숫자,
   "monthlySaving": 숫자,
   "estimatedPeriod": "문자열",
@@ -50,6 +51,7 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 - 평균 월급은 약 240만 원 ~ 300만 원으로 가정하세요.
 - 월 저축 금액은 너무 과하지 않게 약 30만 원 ~ 100만 원 범위에서 현실적으로 잡으세요.
 - 버킷리스트에 맞는 목표 금액, 월 저축 금액, 예상 기간을 AI가 자연스럽게 추정해서 포함하세요.
+- 버킷리스트 내용을 보고 category를 반드시 여행, 취미, 자기계발 중 하나로 분류하세요.
 - currentSaved는 0 또는 현실적인 초기 저축액 숫자로 작성하세요.
 - 예: 집 사기라면 초기 자금 약 3,000만 원 ~ 5,000만 원, 월 50만 원 ~ 100만 원, 약 3년 ~ 5년처럼 작성하세요.
 
@@ -61,11 +63,15 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 5. 반드시 JSON 객체만 응답하세요. 다른 말은 하지 마세요.
 6. 각 description에는 목표 금액, 월 저축 금액, 예상 기간 중 적어도 하나 이상의 구체적인 금액 또는 기간 정보를 포함하세요.
 7. targetAmount와 monthlySaving은 숫자 타입 원 단위로 작성하세요.
-8. 금액은 사회 초년생 기준으로 현실적인 범위에서 임의로 추정하세요.`;
+8. category는 반드시 "여행", "취미", "자기계발" 중 하나의 문자열로만 작성하세요.
+9. 금액은 사회 초년생 기준으로 현실적인 범위에서 임의로 추정하세요.`;
 
 const DEFAULT_TARGET_AMOUNT = 3000000;
 const DEFAULT_MONTHLY_SAVING = 300000;
 const DEFAULT_PERIOD = "약 10개월";
+const DEFAULT_QUICK_SAVE_AMOUNT = 5000;
+const DEFAULT_BUCKET_CATEGORY = "여행";
+const BUCKET_CATEGORIES = ["여행", "취미", "자기계발"];
 
 const fallbackSavingsPlan = [
   {
@@ -83,6 +89,7 @@ const fallbackSavingsPlan = [
 ];
 
 const fallbackBucketGoal = {
+  category: DEFAULT_BUCKET_CATEGORY,
   targetAmount: DEFAULT_TARGET_AMOUNT,
   monthlySaving: DEFAULT_MONTHLY_SAVING,
   estimatedPeriod: DEFAULT_PERIOD,
@@ -96,6 +103,11 @@ const fallbackBucketGoal = {
 
 const hasConcreteMoneyInfo = (text) =>
   /(만\s*원|원|개월|년|월\s*\d|매월|월별|기간|저축)/.test(text);
+
+const normalizeBucketCategory = (value) => {
+  const category = String(value || "").trim();
+  return BUCKET_CATEGORIES.includes(category) ? category : DEFAULT_BUCKET_CATEGORY;
+};
 
 const parseSavingsPlan = (text) => {
   try {
@@ -117,6 +129,7 @@ const parseSavingsPlan = (text) => {
     if (steps.length !== 3) return fallbackBucketGoal;
 
     return {
+      category: normalizeBucketCategory(parsed.category),
       targetAmount: Number(parsed.targetAmount) || DEFAULT_TARGET_AMOUNT,
       monthlySaving: Number(parsed.monthlySaving) || DEFAULT_MONTHLY_SAVING,
       estimatedPeriod: String(parsed.estimatedPeriod || DEFAULT_PERIOD).trim(),
@@ -141,6 +154,7 @@ const generateSavingsPlan = async (bucketList) => {
             {
               text: `버킷리스트: ${bucketList}
 사회 초년생 기준으로 현실적인 목표 금액, 월 저축 금액, 예상 기간을 추정해서 이 목표를 이루기 위한 돈 모으기 3단계 저축 계획을 만들어줘.
+버킷리스트 카테고리를 여행, 취미, 자기계발 중 하나로 분류해서 category에 넣어줘.
 각 단계 설명에는 구체적인 금액 또는 기간 정보를 반드시 넣어줘.
 응답은 JSON 객체만 반환해줘.`,
             },
@@ -189,6 +203,10 @@ export default function Onboarding2() {
     return v ? [v] : [];
   });
   const [bucketList, setBucketList] = useState(initial.bucketList ?? "");
+  const [quickSaveAmount, setQuickSaveAmount] = useState(() => {
+    const n = Number(initial.quickSaveAmount ?? DEFAULT_QUICK_SAVE_AMOUNT);
+    return n > 0 ? n.toLocaleString() : "";
+  });
   const [savingsPlan, setSavingsPlan] = useState(
     Array.isArray(initial.savingsPlan) ? initial.savingsPlan : []
   );
@@ -204,6 +222,7 @@ export default function Onboarding2() {
         JSON.stringify({
           selectedGoals,
           bucketList,
+          quickSaveAmount: Number(quickSaveAmount.replace(/[^0-9]/g, "")) || 0,
           savingsPlan,
           generatedPlan,
         })
@@ -211,16 +230,22 @@ export default function Onboarding2() {
     } catch {
       // ignore
     }
-  }, [selectedGoals, bucketList, savingsPlan, generatedPlan]);
+  }, [selectedGoals, bucketList, quickSaveAmount, savingsPlan, generatedPlan]);
+
+  const quickSaveAmountNumber = useMemo(
+    () => Number(quickSaveAmount.replace(/[^0-9]/g, "")) || 0,
+    [quickSaveAmount]
+  );
 
   const isValid = useMemo(() => {
     return (
       selectedGoals.length > 0 &&
       bucketList.trim().length > 0 &&
+      quickSaveAmountNumber > 0 &&
       savingsPlan.length === 3 &&
       generatedPlan?.steps?.length === 3
     );
-  }, [selectedGoals, bucketList, savingsPlan, generatedPlan]);
+  }, [selectedGoals, bucketList, quickSaveAmountNumber, savingsPlan, generatedPlan]);
 
   const toggleGoal = (key) => {
     setSelectedGoals((prev) => {
@@ -243,10 +268,12 @@ export default function Onboarding2() {
       const goal = await generateSavingsPlan(bucket);
       const goalData = {
         bucketList: bucket,
+        category: goal.category,
         targetAmount: goal.targetAmount,
         monthlySaving: goal.monthlySaving,
         estimatedPeriod: goal.estimatedPeriod,
         currentSaved: Number(goal.currentSaved) || 0,
+        quickSaveAmount: quickSaveAmountNumber || DEFAULT_QUICK_SAVE_AMOUNT,
         steps: goal.steps,
       };
 
@@ -327,6 +354,13 @@ export default function Onboarding2() {
 
           {planError && <p className="join2-error">{planError}</p>}
 
+          {generatedPlan && (
+            <div className="join2-category" aria-label="AI가 분류한 버킷리스트 카테고리">
+              <span>AI 추천 카테고리</span>
+              <strong>{normalizeBucketCategory(generatedPlan.category)}</strong>
+            </div>
+          )}
+
           {savingsPlan.length > 0 && (
             <div className="join2-planList" aria-label="AI가 생성한 저축 계획">
               {savingsPlan.map((step, index) => (
@@ -340,6 +374,23 @@ export default function Onboarding2() {
           )}
         </div>
 
+        <div className="join2-block">
+          <p className="join2-subtitle">한 번에 얼마씩 저축할까요?</p>
+          <p className="join2-subhelp">홈 저축 저금통의 적립 버튼에 표시될 금액이에요</p>
+          <input
+            className="join2-amount"
+            inputMode="numeric"
+            placeholder="예) 5,000"
+            value={quickSaveAmount}
+            onChange={(e) => {
+              const digits = e.target.value.replace(/[^0-9]/g, "");
+              if (digits === "") return setQuickSaveAmount("");
+              const n = Number(digits);
+              setQuickSaveAmount(Number.isFinite(n) ? n.toLocaleString() : "");
+            }}
+          />
+        </div>
+
         <button
           type="button"
           disabled={!isValid}
@@ -348,19 +399,23 @@ export default function Onboarding2() {
             if (!isValid) return;
             const goalData = {
               bucketList,
+              category: normalizeBucketCategory(generatedPlan.category),
               targetAmount: generatedPlan.targetAmount,
               monthlySaving: generatedPlan.monthlySaving,
               estimatedPeriod: generatedPlan.estimatedPeriod,
               currentSaved: generatedPlan.currentSaved || 0,
+              quickSaveAmount: quickSaveAmountNumber,
               steps: generatedPlan.steps,
             };
 
             localStorage.setItem("bucketGoal", JSON.stringify(goalData));
+            localStorage.setItem("mony_quick_save_amount", String(quickSaveAmountNumber));
             navigate("/onboarding3", {
               state: {
                 name: userName,
                 selectedGoals,
                 bucketList,
+                quickSaveAmount: quickSaveAmountNumber,
                 savingsPlan,
               },
             });
