@@ -353,20 +353,18 @@
   min-height: 388px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;  /* 추가 */
+  justify-content: flex-start;
 }
 
-/* 전체 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */
 .bg-goalLayout {
-  margin-top: 18px;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
-  align-items: center;  /*위치를 어떻게 설정할 것인지?*/
+  align-items: center;
   gap: 18px;
   flex: 1;
 }
 
-/* 좌측: 아바타 + 이름 */
 .bg-goalAvatarWrap {
   display: flex;
   flex-direction: column;
@@ -398,7 +396,6 @@
   white-space: nowrap;
 }
 
-/* 우측: 카드 세로 스택 */
 .bg-goalCardList {
   flex: 1;
   display: flex;
@@ -432,23 +429,9 @@
   padding-left: 16px;
 }
 
-.bg-goalDescRow {
-  display: flex;
-  /* align-items: center;
-  justify-content: space-between;
-  gap: 12px; */
-  flex-direction: column;
-  gap: 4px;
-}
-
-.bg-goalDescRow p {
-  margin: 0;
-  flex: 1;
-}
-
 .bg-goalMeta span:first-child,
 .bg-goalMetaValues strong:first-child {
-  min-width: 35px;  /* 진행률 칸 너비 */
+  min-width: 35px;
 }
 
 .bg-goalMeta {
@@ -556,51 +539,6 @@
   color: rgba(215, 255, 71, 0.6);
   letter-spacing: 0.04em;
   margin-bottom: 4px;
-}
-.bg-goalRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.bg-goalLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-  padding-left: 16px;
-}
-.bg-goalLeft p {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.bg-goalRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  flex-shrink: 0;
-  margin-right: 70px;
-}
-.bg-goalTitle {
-  color: #d7ff47;
-  font-size: 16px;
-  font-weight: 700;
-}
-.bg-goalMetaValues {
-  display: flex;
-  gap: 20px;
-  justify-content: flex-start;
-}
-.bg-goalMetaValues strong {
-  color: rgba(255, 255, 255, 0.96);
-  font-size: 14px;
-  font-weight: 700;
-  min-width: 40px;
-  text-align: left;
 }
 .bg-savingsGoalTitle {
   font-size: 17px;
@@ -1035,10 +973,6 @@
   z-index: 200;
   white-space: nowrap;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-}
-.test11{
-  color: white;  
-  /* 하얀색으로  */
 }
 /* ── RESPONSIVE ── */
 @media (max-width: 1200px) {

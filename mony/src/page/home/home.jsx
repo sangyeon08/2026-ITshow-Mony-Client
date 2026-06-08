@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import MonthlyBudgetGoalCard from "../../component/MonthlyBudgetGoalCard";
+import HomeBucketChallengeCard from "../../component/HomeBucketChallengeCard";
 import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import Banner from "../../component/banner";
 import profile from "../../assets/home/homeprofile.svg";
 import Char from "../../assets/home/char.svg";
+import BgCh2 from "../../assets/home/bg_ch2.png";
 import Logo from "../../assets/menu/Logo.svg";
 import Economy from "../../assets/home/economy.svg";
 import Young from "../../assets/home/young.svg";
@@ -268,6 +271,27 @@ export default function Home() {
     : 0;
   const bucketProgress = bucketProgressPercent / 100;
   const bucketProgressPct = Math.round(bucketProgressPercent);
+  const homeGoalItems = [
+    bucketGoal
+      ? {
+          title: bucketGoal.bucketList,
+          progress: bucketProgressPct,
+          period: "3월~ 현재",
+          desc: "버킷리스트 목표를 진행하고 있어요",
+        }
+      : {
+          title: "없다!",
+          progress: 0,
+          period: "3월~ 현재",
+          desc: "진행 중인 목표가 없어요",
+        },
+    {
+      title: "천천히 소비하기",
+      progress: 48,
+      period: "2월~ 현재",
+      desc: "생각하면서 여유롭게 소비하고 싶어요",
+    },
+  ];
 
   const handleQuickSave = () => {
     const next = savedAmount + 5000;
@@ -427,7 +451,7 @@ export default function Home() {
               >
                 <img className="coin-run" src={coinRun} alt="" aria-hidden="true" />
                 <div className="home-progress">
-                  <ProgressFill className="home-progressBar" value={savingsProgress} />
+                  <div className="home-progressBar" />
                 </div>
               </div>
 
@@ -468,99 +492,23 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.18 }}
           >
-            <motion.article className="home-panelCard home-bucketCard" variants={staggerItemVariants} {...cardMotion}>
-              {bucketGoal ? (
-                <>
-                  <p className="home-panelMeta">나의 버킷리스트 목표</p>
-                  <h3 className="home-panelTitle home-bucketTitle">{bucketGoal.bucketList}</h3>
-
-                  <div className="home-bucketStats">
-                    <div>
-                      <span>목표 금액</span>
-                      <strong>{bucketTargetAmount.toLocaleString()}원</strong>
-                    </div>
-                    <div>
-                      <span>월 저축</span>
-                      <strong>{Number(bucketGoal.monthlySaving ?? 0).toLocaleString()}원</strong>
-                    </div>
-                    <div>
-                      <span>예상 기간</span>
-                      <strong>{bucketGoal.estimatedPeriod}</strong>
-                    </div>
-                    <div>
-                      <span>현재 저축액</span>
-                      <strong>{bucketCurrentSaved.toLocaleString()}원</strong>
-                    </div>
-                  </div>
-
-                  <div className="home-bucketProgress">
-                    <div className="home-bucketProgressHead">
-                      <span>목표 달성률</span>
-                      <strong>{bucketProgressPct}%</strong>
-                    </div>
-                    <div className="home-progress">
-                      <ProgressFill className="home-progressBar" value={bucketProgress} />
-                    </div>
-                  </div>
-
-                  <div className="home-bucketSteps">
-                    <p>AI 저축 플랜 3단계</p>
-                    {bucketGoal.steps?.slice(0, 3).map((step, index) => (
-                      <div key={`${step.title}-${index}`} className="home-bucketStep">
-                        <span>{step.step ?? index + 1}단계</span>
-                        <strong>{step.title}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <div className="home-bucketEmpty">
-                  <p className="home-panelMeta">나의 버킷리스트 목표</p>
-                  <h3 className="home-panelTitle">아직 설정된 버킷리스트 목표가 없어요</h3>
-                  <button
-                    type="button"
-                    className="home-bucketSetupBtn"
-                    onClick={() => navigate("/onboarding2")}
-                  >
-                    목표 설정하러 가기
-                  </button>
-                </div>
-              )}
+            <motion.article className="home-panelCard home-bucketCard bg-card--goal" variants={staggerItemVariants} {...cardMotion}>
+              <MonthlyBudgetGoalCard
+                name={name}
+                avatarSrc={BgCh2}
+                items={homeGoalItems}
+              />
             </motion.article>
 
-            <motion.article className="home-panelCard" variants={staggerItemVariants} {...cardMotion}>
-              <p className="home-panelMeta">{currentMonthLabel}</p>
-              <h3 className="home-panelTitle">최근 사용 내역</h3>
-
-              <div className="home-summaryCard">
-                <div className="home-summaryIcon">S</div>
-                <div className="home-summaryText">
-                  <span>이번 달 쓴 돈</span>
-                  <strong>-428,000원</strong>
-                </div>
-                <div className="home-summaryText">
-                  <span>이번 달 모은 돈</span>
-                  <strong>+124,000원</strong>
-                </div>
-                <div className="home-summaryText">
-                  <span>이번 달 지출 목표 지정 카드</span>
-                  <strong>{name}의 카방카드</strong>
-                </div>
-              </div>
-
-              <div className="home-quickGrid">
-                {quickEntries.map((entry) => (
-                  <div key={entry.label} className="home-quickItem">
-                    <div className="home-quickIcon">{entry.icon}</div>
-                    <div className="home-quickText">
-                      <span>{entry.label}</span>
-                      <strong>{entry.value}</strong>
-                      <small>{entry.note}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.article>
+            <HomeBucketChallengeCard
+              bucketGoal={bucketGoal}
+              bucketProgress={bucketProgress}
+              bucketTargetAmount={bucketTargetAmount}
+              currentMonthLabel={currentMonthLabel}
+              note={quickEntries[2]?.note}
+              variants={staggerItemVariants}
+              motionProps={cardMotion}
+            />
           </motion.section>
           <motion.section
             className="home-bottomFeature"

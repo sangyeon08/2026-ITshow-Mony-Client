@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import MonthlyBudgetGoalCard from "../../component/MonthlyBudgetGoalCard";
 import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import {
   CountUp,
@@ -396,47 +397,11 @@ export default function Bg() {
                 variants={staggerItemVariants}
                 {...cardMotion}
               >
-                <h3 className="test11">이번달의 예산목표</h3>
-
-                <div className="bg-goalLayout">
-                  <div className="bg-goalAvatarWrap">
-                    <div className="bg-goalAvatar">
-                      <img src={bgCh2} alt="프로필" />
-                    </div>
-                    {/* ✅ 온보딩 이름으로 변경 */}
-                    <span className="bg-goalName">{name}</span>
-                  </div>
-
-                  <div className="bg-goalCardList">
-                    {milestoneItems.map((item, index) => (
-                      <div key={item.title} className="bg-goalCard">
-                        <span className="bg-goalTag">
-                          진행중인 목표 {index + 1}
-                        </span>
-                        <div className="bg-goalRow">
-                          <div className="bg-goalLeft">
-                            <p>{item.desc}</p>
-                            <strong className="bg-goalTitle">
-                              {item.title}
-                            </strong>
-                          </div>
-                          <div className="bg-goalRight">
-                            <div className="bg-goalMeta">
-                              <span>진행률</span>
-                              <span>기간</span>
-                            </div>
-                            <div className="bg-goalMetaValues">
-                              <strong>
-                                {Math.round(item.progress * 100)}%
-                              </strong>
-                              <strong>{item.period}</strong>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <MonthlyBudgetGoalCard
+                  name={name}
+                  avatarSrc={bgCh2}
+                  items={milestoneItems}
+                />
               </motion.article>
             </motion.div>
 

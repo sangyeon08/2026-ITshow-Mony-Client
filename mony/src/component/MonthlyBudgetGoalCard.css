@@ -1,0 +1,208 @@
+.bg-card--goal {
+  min-height: 388px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.bg-goalLayout {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.bg-goalAvatarWrap {
+  width: 120px;
+  height: 210px;
+  box-sizing: border-box;
+  background: #222222;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 22px 0;
+}
+
+.goaltext{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bg-goalTitle1{
+  color: #B6B6B6;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.bg-goalAvatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #ffde5c;
+}
+
+.bg-goalAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bg-goalName {
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.bg-goalCardList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bg-goalCard {
+  padding: 20px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bg-goalCard p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  margin: 0;
+}
+
+.bg-goalCard strong {
+  color: #d7ff47;
+  font-size: 16px;
+}
+
+.bg-goalTag {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+  padding-left: 16px;
+}
+
+.bg-goalMeta span:first-child,
+.bg-goalMetaValues strong:first-child {
+  min-width: 35px;
+}
+
+.bg-goalMeta {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.bg-goalMeta span {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+}
+
+.bg-goalMeta strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+}
+
+.bg-goalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bg-goalLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
+}
+
+.bg-goalLeft p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bg-goalRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-right: 70px;
+}
+
+.bg-goalTitle {
+  color: #d7ff47;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bg-goalMetaValues {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.bg-goalMetaValues strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: left;
+}
+
+.title{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0 0 20px;
+}
+
+.test11 {
+  margin: 0;
+  color: white;
+}
+
+.test10 {
+  margin: 0;
+  color: white;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+@media (max-width: 1200px) {
+  .bg-goalLayout {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .bg-goalLayout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bg-goalCardList {
+    width: 100%;
+  }
+}
