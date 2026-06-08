@@ -1430,23 +1430,117 @@
   letter-spacing: 0.02em;
 }
 
-.ca-modal__dateInput {
+.ca-memoryCalendar {
   width: 100%;
-  padding: 11px 14px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 14px;
-  outline: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.028));
   box-sizing: border-box;
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-  transition: border-color 130ms;
-  color-scheme: dark;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.ca-modal__dateInput:focus {
-  border-color: rgba(215, 255, 71, 0.35);
+.ca-memoryCalendar__top {
+  display: grid;
+  grid-template-columns: 34px 1fr 34px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ca-memoryCalendar__top strong {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.93);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.ca-memoryCalendar__nav {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(255, 255, 255, 0.72);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background 140ms, color 140ms, transform 140ms, border-color 140ms;
+}
+
+.ca-memoryCalendar__nav:hover {
+  border-color: rgba(215, 255, 71, 0.3);
+  background: rgba(215, 255, 71, 0.1);
+  color: #d7ff47;
+  transform: translateY(-1px);
+}
+
+.ca-memoryCalendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+  align-items: center;
+}
+
+.ca-memoryCalendar__day,
+.ca-memoryCalendar__date {
+  min-width: 0;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.ca-memoryCalendar__day {
+  height: 24px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ca-memoryCalendar__date {
+  width: 32px;
+  justify-self: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.84);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+  transition: background 130ms, border-color 130ms, color 130ms, transform 130ms;
+}
+
+.ca-memoryCalendar__date:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.ca-memoryCalendar__date.is-muted {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.ca-memoryCalendar__date.is-today {
+  border-color: rgba(215, 255, 71, 0.45);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.ca-memoryCalendar__date.is-selected {
+  background: #d7ff47;
+  border-color: #d7ff47;
+  color: #111;
+  font-weight: 850;
+  box-shadow: 0 8px 18px rgba(215, 255, 71, 0.22);
+}
+
+.ca-memoryCalendar__date.is-selected:hover {
+  color: #111;
+  transform: translateY(-1px);
 }
 
 .ca-modal__textarea {

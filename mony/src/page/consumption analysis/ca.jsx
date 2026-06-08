@@ -78,6 +78,99 @@ function getProgress(bucket) {
   return Math.min(finish / target, 1);
 }
 
+const calendarWeekDays = ["일", "월", "화", "수", "목", "금", "토"];
+
+function toDateInputValue(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function parseDateInput(value) {
+  if (!value) return new Date();
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return new Date();
+  return new Date(year, month - 1, day);
+}
+
+function getCalendarCells(viewDate) {
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const start = new Date(year, month, 1 - firstDay.getDay());
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(start);
+    date.setDate(start.getDate() + index);
+    return date;
+  });
+}
+
+function MemoryDateCalendar({ value, onChange }) {
+  const selectedDate = parseDateInput(value);
+  const [viewDate, setViewDate] = useState(selectedDate);
+  const todayValue = toDateInputValue(new Date());
+  const selectedValue = toDateInputValue(selectedDate);
+
+  const moveMonth = (amount) => {
+    setViewDate((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1));
+  };
+
+  const selectDate = (date) => {
+    onChange(toDateInputValue(date));
+    setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
+  };
+
+  const cells = getCalendarCells(viewDate);
+  const monthLabel = `${viewDate.getFullYear()}년 ${viewDate.getMonth() + 1}월`;
+
+  return (
+    <div className="ca-memoryCalendar">
+      <div className="ca-memoryCalendar__top">
+        <button type="button" className="ca-memoryCalendar__nav" onClick={() => moveMonth(-1)}>
+          &lt;
+        </button>
+        <strong>{monthLabel}</strong>
+        <button type="button" className="ca-memoryCalendar__nav" onClick={() => moveMonth(1)}>
+          &gt;
+        </button>
+      </div>
+
+      <div className="ca-memoryCalendar__grid">
+        {calendarWeekDays.map((day) => (
+          <span key={day} className="ca-memoryCalendar__day">
+            {day}
+          </span>
+        ))}
+
+        {cells.map((date) => {
+          const dateValue = toDateInputValue(date);
+          const isSelected = dateValue === selectedValue;
+          const isToday = dateValue === todayValue;
+          const isMuted = date.getMonth() !== viewDate.getMonth();
+
+          return (
+            <button
+              key={dateValue}
+              type="button"
+              className={[
+                "ca-memoryCalendar__date",
+                isSelected ? "is-selected" : "",
+                isToday ? "is-today" : "",
+                isMuted ? "is-muted" : "",
+              ].filter(Boolean).join(" ")}
+              onClick={() => selectDate(date)}
+            >
+              {date.getDate()}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────── MemoryCard 컴포넌트 */
 function MemoryCard({ bucket, memoryData, onSave, onOpenModal }) {
   const cat = getCat(bucket.category);
@@ -687,11 +780,9 @@ export default function Ca() {
               {/* 날짜 */}
               <div className="ca-modal__field">
                 <label className="ca-modal__label">달성 날짜</label>
-                <input
-                  type="date"
-                  className="ca-modal__dateInput"
+                <MemoryDateCalendar
                   value={modalDate}
-                  onChange={(e) => setModalDate(e.target.value)}
+                  onChange={setModalDate}
                 />
               </div>
 
