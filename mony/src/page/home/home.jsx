@@ -233,6 +233,31 @@ function getBucketGoal() {
   }
 }
 
+function getQuickSaveAmount(bucketGoal) {
+  const fromBucket = Number(bucketGoal?.quickSaveAmount ?? 0);
+  if (fromBucket > 0) return fromBucket;
+
+  const stored = Number(localStorage.getItem("mony_quick_save_amount") ?? 0);
+  return stored > 0 ? stored : 5000;
+}
+
+function buildBucketGoalFromApi(apiBucket, storedBucketGoal) {
+  if (!apiBucket) return storedBucketGoal;
+
+  const targetAmount = Number(apiBucket.mony_ing ?? storedBucketGoal?.targetAmount ?? 0);
+  const currentSaved = Number(apiBucket.mony_finish ?? storedBucketGoal?.currentSaved ?? 0);
+
+  return {
+    ...storedBucketGoal,
+    id: String(apiBucket.id),
+    bucketList: apiBucket.title ?? storedBucketGoal?.bucketList ?? "버킷리스트 목표",
+    category: storedBucketGoal?.category ?? "여행",
+    targetAmount,
+    currentSaved,
+    quickSaveAmount: getQuickSaveAmount(storedBucketGoal),
+  };
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
@@ -260,7 +285,11 @@ export default function Home() {
     return n >= 0 ? n : 32000;
   });
   const [savingsToast, setSavingsToast] = useState(false);
+  const [isSavingToBucket, setIsSavingToBucket] = useState(false);
   const [bucketGoal, setBucketGoal] = useState(null);
+  const [quickSaveAmount, setQuickSaveAmount] = useState(() =>
+    getQuickSaveAmount(getBucketGoal())
+  );
 
   const savingsProgress = Math.min(1, savedAmount / savingsGoal);
   const savingsPct = Math.min(100, Math.round(savingsProgress * 100));
@@ -271,6 +300,7 @@ export default function Home() {
     : 0;
   const bucketProgress = bucketProgressPercent / 100;
   const bucketProgressPct = Math.round(bucketProgressPercent);
+  const quickSaveAmountText = quickSaveAmount.toLocaleString();
   const homeGoalItems = [
     bucketGoal
       ? {
@@ -293,16 +323,97 @@ export default function Home() {
     },
   ];
 
-  const handleQuickSave = () => {
-    const next = savedAmount + 5000;
-    setSavedAmount(next);
-    localStorage.setItem("mony_saved_amount", String(next));
-    setSavingsToast(true);
-    setTimeout(() => setSavingsToast(false), 2500);
+  const handleQuickSave = async () => {
+    if (isSavingToBucket) return;
+
+    const amount = quickSaveAmount;
+    const bucketId = bucketGoal?.id || localStorage.getItem("mony_primary_bucket_id");
+    setIsSavingToBucket(true);
+
+    try {
+      if (bucketId) {
+        const res = await bucketsApi.deposit(bucketId, amount);
+        const updatedBucket = res.data;
+        const nextSavedAmount = Number(updatedBucket?.mony_finish ?? savedAmount + amount);
+        const nextTargetAmount = Number(updatedBucket?.mony_ing ?? bucketGoal?.targetAmount ?? savingsGoal);
+        const storedBucketGoal = getBucketGoal();
+
+        setSavedAmount(nextSavedAmount);
+        setSavingsGoal((current) => (nextTargetAmount > 0 ? nextTargetAmount : current));
+        setBucketGoal((current) => {
+          const nextBucketGoal = {
+            id: String(updatedBucket?.id ?? bucketId),
+            bucketList: updatedBucket?.title ?? current?.bucketList ?? "버킷리스트 목표",
+            category: current?.category ?? storedBucketGoal?.category ?? "여행",
+            targetAmount: nextTargetAmount,
+            currentSaved: nextSavedAmount,
+            quickSaveAmount: getQuickSaveAmount(current ?? storedBucketGoal),
+          };
+          localStorage.setItem("bucketGoal", JSON.stringify(nextBucketGoal));
+          localStorage.setItem("mony_quick_save_amount", String(nextBucketGoal.quickSaveAmount));
+          return nextBucketGoal;
+        });
+        localStorage.setItem("mony_saved_amount", String(nextSavedAmount));
+      } else {
+        const next = Math.min(savedAmount + amount, savingsGoal);
+        setSavedAmount(next);
+        setBucketGoal((current) => {
+          if (!current) return current;
+          const nextBucketGoal = {
+            ...current,
+            currentSaved: Math.min(
+              Number(current.currentSaved ?? 0) + amount,
+              Number(current.targetAmount ?? savingsGoal)
+            ),
+            quickSaveAmount: amount,
+          };
+          localStorage.setItem("bucketGoal", JSON.stringify(nextBucketGoal));
+          return nextBucketGoal;
+        });
+        localStorage.setItem("mony_saved_amount", String(next));
+      }
+
+      setSavingsToast(true);
+      setTimeout(() => setSavingsToast(false), 2500);
+    } catch (error) {
+      console.warn("[home] buckets.deposit 실패:", error.message);
+    } finally {
+      setIsSavingToBucket(false);
+    }
   };
 
   const handleTalkRefresh = () => {
     setActiveTalkGroupIndex((currentIndex) => (currentIndex + 1) % talkGroups.length);
+  };
+
+  const bucketApi = async () => {
+    const storedBucketGoal = getBucketGoal();
+    setBucketGoal(storedBucketGoal);
+    setQuickSaveAmount(getQuickSaveAmount(storedBucketGoal));
+
+    try {
+      const res = await bucketsApi.getAll();
+      const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+      const bucket =
+        res.data?.find((item) => String(item.id) === primaryBucketId) ??
+        res.data?.[0];
+
+      if (!bucket) return;
+
+      const nextBucketGoal = buildBucketGoalFromApi(bucket, storedBucketGoal);
+      const nextQuickSaveAmount = getQuickSaveAmount(nextBucketGoal);
+
+      setBucketGoal(nextBucketGoal);
+      setQuickSaveAmount(nextQuickSaveAmount);
+      localStorage.setItem("bucketGoal", JSON.stringify(nextBucketGoal));
+      localStorage.setItem("mony_primary_bucket_id", String(bucket.id));
+      localStorage.setItem("mony_saved_amount", String(nextBucketGoal.currentSaved));
+      localStorage.setItem("mony_quick_save_amount", String(nextQuickSaveAmount));
+      setSavedAmount(nextBucketGoal.currentSaved);
+      if (nextBucketGoal.targetAmount > 0) setSavingsGoal(nextBucketGoal.targetAmount);
+    } catch (error) {
+      console.warn("[home] bucketApi 실패:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -315,7 +426,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    setBucketGoal(getBucketGoal());
+    const storedBucketGoal = getBucketGoal();
+    setBucketGoal(storedBucketGoal);
+    setQuickSaveAmount(getQuickSaveAmount(storedBucketGoal));
 
     const periodDetail = new Date().toISOString().slice(0, 7);
 
@@ -328,18 +441,7 @@ export default function Home() {
       })
       .catch(() => {});
 
-    bucketsApi.getAll()
-      .then((res) => {
-        const first = res.data?.[0];
-        if (first) {
-          setBucketGoal({
-            bucketList: first.title,
-            targetAmount: first.mony_ing || 0,
-            currentSaved: first.mony_finish || 0,
-          });
-        }
-      })
-      .catch(() => {});
+    bucketApi();
   }, []);
 
   return (
@@ -456,8 +558,13 @@ export default function Home() {
               </div>
 
               <div className="home-savingsActions">
-                <button type="button" className="home-savingsBtn" onClick={handleQuickSave}>
-                  + 5,000원 적립하기
+                <button
+                  type="button"
+                  className="home-savingsBtn"
+                  onClick={handleQuickSave}
+                  disabled={isSavingToBucket}
+                >
+                  {isSavingToBucket ? "저축 중..." : `+ ${quickSaveAmountText}원 적립하기`}
                 </button>
                 {savingsPct >= 50 && (
                   <div className="home-savingsAchieve">
@@ -469,7 +576,7 @@ export default function Home() {
 
               {savingsToast && (
                 <div className="home-savingsToast" role="status" aria-live="polite">
-                  🪙 5,000원이 저금통에 적립됐어요!
+                  🪙 {quickSaveAmountText}원이 저금통에 적립됐어요!
                 </div>
               )}
             </motion.article>
@@ -504,6 +611,7 @@ export default function Home() {
               bucketGoal={bucketGoal}
               bucketProgress={bucketProgress}
               bucketTargetAmount={bucketTargetAmount}
+              quickSaveAmount={quickSaveAmount}
               currentMonthLabel={currentMonthLabel}
               note={quickEntries[2]?.note}
               variants={staggerItemVariants}

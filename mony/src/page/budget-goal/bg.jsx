@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
-import MonthlyBudgetGoalCard from "../../component/MonthlyBudgetGoalCard";
 import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import {
   CountUp,
@@ -23,6 +22,14 @@ const stampImages = [
   "/src/assets/home/hobby.png",
   "/src/assets/home/improvement.png",
 ];
+
+const DEFAULT_BUCKET_CATEGORY = "여행";
+const bucketCategories = ["자기계발", "취미", "여행"];
+const stampImagesByCategory = {
+  여행: stampImages[0],
+  취미: stampImages[1],
+  자기계발: stampImages[2],
+};
 
 const goalStats = [
   { label: "3월 예산", value: 550000, suffix: "원" },
@@ -58,6 +65,7 @@ const challengeCards = [
     targetAmount: 100000,
     currentAmount: 45000,
     status: "progress",
+    category: "취미",
     completedAt: "",
   },
   {
@@ -66,6 +74,7 @@ const challengeCards = [
     targetAmount: 1500000,
     currentAmount: 300000,
     status: "progress",
+    category: "여행",
     completedAt: "",
   },
   {
@@ -74,6 +83,7 @@ const challengeCards = [
     targetAmount: 320000,
     currentAmount: 320000,
     status: "completed",
+    category: "여행",
     completedAt: "2026. 3. 18.",
   },
 ];
@@ -82,6 +92,7 @@ const challengeTabs = [
   { key: "all", label: "전체" },
   { key: "progress", label: "진행 중" },
   { key: "completed", label: "완료됨" },
+  ...bucketCategories.map((category) => ({ key: category, label: category })),
 ];
 
 const completedMessages = [
@@ -89,6 +100,17 @@ const completedMessages = [
   "이번 목표도 멋지게 성공했어요.",
   "작은 저축이 큰 성취가 되었어요.",
 ];
+
+const normalizeBucketCategory = (category) =>
+  bucketCategories.includes(category) ? category : DEFAULT_BUCKET_CATEGORY;
+
+function readPrimaryBucketGoal() {
+  try {
+    return JSON.parse(localStorage.getItem("bucketGoal") || "null");
+  } catch {
+    return null;
+  }
+}
 
 function readBucketGoals() {
   const today = new Date().toLocaleDateString("ko-KR", {
@@ -99,7 +121,7 @@ function readBucketGoals() {
 
   try {
     const savedGoals = JSON.parse(localStorage.getItem("bucketGoals") || "[]");
-    const savedGoal = JSON.parse(localStorage.getItem("bucketGoal") || "null");
+    const savedGoal = readPrimaryBucketGoal();
     const goals = Array.isArray(savedGoals) ? savedGoals : [];
 
     if (savedGoal?.bucketList) {
@@ -109,6 +131,7 @@ function readBucketGoals() {
         targetAmount: Number(savedGoal.targetAmount) || 0,
         currentAmount: Number(savedGoal.currentSaved) || 0,
         status: savedGoal.status,
+        category: normalizeBucketCategory(savedGoal.category),
         completedAt: savedGoal.completedAt,
       });
     }
@@ -121,6 +144,7 @@ function readBucketGoals() {
       return {
         id: goal.id || `bucket-goal-${index}`,
         title: goal.title || goal.bucketList || "버킷리스트 목표",
+        category: normalizeBucketCategory(goal.category),
         targetAmount,
         currentAmount,
         status: isCompleted
@@ -205,6 +229,8 @@ export default function Bg() {
   const filteredChallenges =
     challengeTab === "all"
       ? allChallenges
+      : bucketCategories.includes(challengeTab)
+        ? allChallenges.filter((item) => item.category === challengeTab)
       : allChallenges.filter((item) => item.status === challengeTab);
   const totalCompletedAmount = completedChallenges.reduce(
     (sum, item) => sum + item.targetAmount,
@@ -220,27 +246,35 @@ export default function Bg() {
     setShowSavingsModal(false);
     setDepositInput("");
 
-    const primary = bucketChallenges.find((b) => b.status !== "completed");
+    const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+    const primary =
+      bucketChallenges.find((b) => String(b.id) === primaryBucketId) ??
+      bucketChallenges.find((b) => b.status !== "completed");
     if (primary?.id) {
-      const newMonyFinish = Math.min(
-        primary.currentAmount + num,
-        primary.targetAmount,
-      );
       bucketsApi
-        .updateMoney(primary.id, newMonyFinish)
-        .then(() => {
+        .deposit(primary.id, num)
+        .then((res) => {
+          const updatedBucket = res.data;
+          const newMonyFinish = Number(updatedBucket?.mony_finish ?? primary.currentAmount + num);
+          const targetAmount = Number(updatedBucket?.mony_ing ?? primary.targetAmount);
+          localStorage.setItem("mony_primary_bucket_id", String(updatedBucket?.id ?? primary.id));
+          localStorage.setItem("mony_saved_amount", String(newMonyFinish));
+          setSavingsAmount(newMonyFinish);
+          if (targetAmount > 0) setSavingsGoal(targetAmount);
           setBucketChallenges((prev) =>
             prev.map((b) =>
               b.id === primary.id
                 ? {
                     ...b,
+                    targetAmount,
                     currentAmount: newMonyFinish,
-                    progress: primary.targetAmount
-                      ? newMonyFinish / primary.targetAmount
+                    progress: targetAmount
+                      ? newMonyFinish / targetAmount
                       : 0,
+                    category: b.category,
                     status:
-                      newMonyFinish >= primary.targetAmount &&
-                      primary.targetAmount > 0
+                      newMonyFinish >= targetAmount &&
+                      targetAmount > 0
                         ? "completed"
                         : "progress",
                   }
@@ -283,10 +317,27 @@ export default function Bg() {
             month: "numeric",
             day: "numeric",
           });
+          const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+          const storedBucketGoal = readPrimaryBucketGoal();
+          const primaryBucket =
+            res.data.find((b) => String(b.id) === primaryBucketId) ?? res.data[0];
+          if (primaryBucket) {
+            const currentSaved = primaryBucket.mony_finish || 0;
+            const targetAmount = primaryBucket.mony_ing || 0;
+            localStorage.setItem("mony_primary_bucket_id", String(primaryBucket.id));
+            localStorage.setItem("mony_saved_amount", String(currentSaved));
+            setSavingsAmount(currentSaved);
+            if (targetAmount > 0) setSavingsGoal(targetAmount);
+          }
           setBucketChallenges(
             res.data.map((b) => ({
               id: String(b.id),
               title: b.title,
+              category: normalizeBucketCategory(
+                String(b.id) === primaryBucketId || b.title === storedBucketGoal?.bucketList
+                  ? storedBucketGoal?.category
+                  : b.category,
+              ),
               targetAmount: b.mony_ing || 0,
               currentAmount: b.mony_finish || 0,
               status: (b.probability ?? 0) >= 100 ? "completed" : "progress",
@@ -324,6 +375,7 @@ export default function Bg() {
               whileInView="show"
               viewport={{ once: true, amount: 0.2 }}
             >
+              <div className="bg-leftColumn">
               {/* ── 월간 예산 ── */}
               <motion.article
                 className="bg-card bg-card--budget"
@@ -391,27 +443,6 @@ export default function Bg() {
                 </div>
               </motion.article>
 
-              {/* ── 이번달 예산목표 ── */}
-              <motion.article
-                className="bg-card bg-card--goal"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <MonthlyBudgetGoalCard
-                  name={name}
-                  avatarSrc={bgCh2}
-                  items={milestoneItems}
-                />
-              </motion.article>
-            </motion.div>
-
-            <motion.div
-              className="bg-gridBottom"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
               {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
               <motion.article
                 className="bg-card bg-card--guide"
@@ -497,6 +528,7 @@ export default function Bg() {
                   )}
                 </div>
               </motion.article>
+              </div>
 
               {/* ── 버킷리스트 챌린지 ── */}
               <motion.article
@@ -577,10 +609,21 @@ export default function Bg() {
                               translateY: "-50%",
                             }}
                           >
-                            <img src={stampImages[0]} />
+                            <img
+                              src={
+                                stampImagesByCategory[
+                                  normalizeBucketCategory(item.category)
+                                ]
+                              }
+                              alt=""
+                              aria-hidden="true"
+                            />
                           </motion.div>
                           <span className="bg-challengeBadge">
                             칭찬도장 쾅!
+                          </span>
+                          <span className="bg-challengeCategory">
+                            {normalizeBucketCategory(item.category)}
                           </span>
                           <strong>{item.title}</strong>
                           <p>
@@ -604,6 +647,9 @@ export default function Bg() {
                       ) : (
                         <>
                           <strong>{item.title}</strong>
+                          <span className="bg-challengeCategory">
+                            {normalizeBucketCategory(item.category)}
+                          </span>
                           <span>버킷리스트 진행 중</span>
                           <div className="bg-challengeAmount">
                             <CountUp value={item.currentAmount} suffix="원" />
@@ -647,6 +693,7 @@ export default function Bg() {
                 </div>
               </motion.article>
             </motion.div>
+
           </motion.section>
         </section>
       </div>
