@@ -931,10 +931,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 10px; /* 기존 대비 간격 확보 */
 }
 
 .home-savingsHeaderText h3 {
-  margin: 30px 0 0;
+  margin: 24px 0 0; /* 살짝 위 조절 */
   font-size: 16px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.96);
@@ -942,9 +943,10 @@
 }
 
 .home-savingsPiggy {
-  margin-top: 30px;
+  margin-top: 38px; /* 기존 30px -> 38px로 하향 조정 */
   font-size: 28px;
   line-height: 1;
+  display: inline-block;
 }
 
 .home-savingsStats {
@@ -1089,6 +1091,209 @@
   z-index: 10;
 }
 
+/* 예산목표 */
+/* 이번달의 예산목표 카드 컨테이너 */
+.bg-card--goal {
+  min-height: 388px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 전체 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */
+.bg-goalLayout {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+}
+
+/* 좌측: 아바타 + 이름 감싸는 영역 */
+.bg-goalAvatarWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* 아바타 원형 배경 */
+.bg-goalAvatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #FFDE5C;
+}
+
+.bg-goalAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 사용자 이름 */
+.bg-goalName {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* 우측: 카드 세로 스택 리스트 */
+.bg-goalCardList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 목표 행(Row) 컨테이너 */
+.bg-goalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* 목표 카드 내부 래퍼 (p태그와 타이틀 포함) */
+.bg-goalCard {
+  padding: 20px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bg-goalCard p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  margin: 0;
+}
+
+.bg-goalCard strong {
+  color: #d7ff47;
+  font-size: 16px;
+}
+
+/* 목표 왼쪽 영역 (텍스트 설명 및 제목) */
+.bg-goalLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
+}
+
+.bg-goalLeft p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bg-goalTitle {
+  color: #d7ff47;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* 목표 태그 */
+.bg-goalTag {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+  padding-left: 16px;
+}
+
+/* 목표 오른쪽 영역 (진행률 및 기간 수치 바깥 여백 조절) */
+.bg-goalRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-right: 70px;
+}
+
+/* 메타 정보 텍스트 (진행률 / 기간 라벨) */
+.bg-goalMeta {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.bg-goalMeta span {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+}
+
+.bg-goalMeta span:first-child,
+.bg-goalMetaValues strong:first-child {
+  min-width: 35px; /* 진행률 칸 너비 고정 */
+}
+
+/* 메타 정보 실제 값 (80% / 1개월 등) */
+.bg-goalMetaValues {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.bg-goalMetaValues strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: left;
+}
+
+.bg-goalMeta strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+}
+
+/* 기타 설명 구조용 */
+.bg-goalDescRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bg-goalDescRow p {
+  margin: 0;
+  flex: 1;
+}
+
+.bg-goalTitleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 테스트용 흰색 타이틀 컴포넌트 */
+.test11 {
+  color: white;
+}
+@media (max-width: 1200px) {
+  .bg-goalLayout {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .bg-goalLayout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .bg-goalCardList {
+    width: 100%;
+  }
+}
 @keyframes homeSavingsToastIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
