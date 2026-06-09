@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import coinImg from "../../assets/cm/coin.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { analysis, buckets as bucketsApi } from "../../api/index.js";
 import Menu from "../../component/menu";
@@ -760,7 +761,7 @@ export default function Ca() {
                       <div className="ca-sv__reactionTop">
                         <img
                           className="ca-sv__reactionChar"
-                          src="/src/assets/cm/coin.png"
+                          src={coinImg}
                           alt=""
                           aria-hidden="true"
                         />

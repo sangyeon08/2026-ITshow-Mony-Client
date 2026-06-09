@@ -13,22 +13,18 @@ import {
 } from "../../component/homeMotion.jsx";
 import "./bg.css";
 
-const bgCh1 = "/src/assets/home/bg_ch1.png";
-const bgCh2 = "/src/assets/home/bg_ch2.png";
-
-//버킷리스트 도장 이미지 배열
-const stampImages = [
-  "/src/assets/home/trip.png",
-  "/src/assets/home/hobby.png",
-  "/src/assets/home/improvement.png",
-];
+import bgCh1 from "../../assets/home/bg_ch1.png";
+import bgCh2 from "../../assets/home/bg_ch2.png";
+import tripStamp from "../../assets/home/trip.png";
+import hobbyStamp from "../../assets/home/hobby.png";
+import improvementStamp from "../../assets/home/improvement.png";
 
 const DEFAULT_BUCKET_CATEGORY = "여행";
 const bucketCategories = ["자기계발", "취미", "여행"];
 const stampImagesByCategory = {
-  여행: stampImages[0],
-  취미: stampImages[1],
-  자기계발: stampImages[2],
+  여행: tripStamp,
+  취미: hobbyStamp,
+  자기계발: improvementStamp,
 };
 
 const goalStats = [
