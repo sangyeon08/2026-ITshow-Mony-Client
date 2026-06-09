@@ -15,6 +15,7 @@ import "./cc.css";
 const GROQ_URL = "/api/groq";
 
 function buildSystemPrompt({ savingsGoal, savedAmount, totalSpent, bucket }) {
+  const bucketGoal = JSON.parse(localStorage.getItem("bucketGoal") || "{}");
   const pct = savingsGoal > 0 ? Math.round((savedAmount / savingsGoal) * 100) : 0;
   const remain = Math.max(0, savingsGoal - savedAmount);
   const bucketPct = bucket?.mony_ing > 0
@@ -24,7 +25,7 @@ function buildSystemPrompt({ savingsGoal, savedAmount, totalSpent, bucket }) {
   const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
   const daysPassed = today.getDate();
   const daysLeft = daysInMonth - daysPassed;
-  const dailyBudget = savingsGoal > 0 ? Math.round((savingsGoal - savedAmount) / Math.max(daysLeft, 1)) : 0;
+  const dailyBudget = remain > 0 ? Math.round(remain / Math.max(daysLeft, 1)) : 0;
   const JOIN_DATE = new Date("2025-12-22");
   const daysWithMony = Math.floor((Date.now() - JOIN_DATE.getTime()) / 86400000) + 1;
 
@@ -37,29 +38,33 @@ function buildSystemPrompt({ savingsGoal, savedAmount, totalSpent, bucket }) {
 - 저축 달성률: ${pct}%
 - 남은 저축 금액: ${remain.toLocaleString()}원
 - 이번 달 경과일: ${daysPassed}일 / ${daysInMonth}일 (남은 일수: ${daysLeft}일)
-- 오늘부터 목표 달성을 위한 하루 필요 저축액: ${dailyBudget.toLocaleString()}원${
+- 하루 필요 저축액: ${dailyBudget.toLocaleString()}원${
     totalSpent > 0 ? `\n- 이번 달 총 지출: ${totalSpent.toLocaleString()}원` : ""
-  }${
-    bucket
-      ? `\n\n버킷리스트 목표:\n- 목표명: ${bucket.title}\n- 목표 금액: ${(bucket.mony_ing || 0).toLocaleString()}원\n- 현재 모인 금액: ${(bucket.mony_finish || 0).toLocaleString()}원\n- 달성률: ${bucketPct}%\n- 남은 금액: ${((bucket.mony_ing || 0) - (bucket.mony_finish || 0)).toLocaleString()}원`
-      : ""
   }
 
-당신이 알고 있는 배경 지식:
+버킷리스트 목표 (사용자 설정):
+- 목표명: ${bucketGoal.bucketList || bucket?.title || "미설정"}
+- 카테고리: ${bucketGoal.category || "미분류"}
+- 목표 금액: ${Number(bucketGoal.targetAmount || bucket?.mony_ing || 0).toLocaleString()}원
+- 월 저축 권장액: ${Number(bucketGoal.monthlySaving || 0).toLocaleString()}원
+- 예상 달성 기간: ${bucketGoal.estimatedPeriod || "미정"}
+- 현재 모인 금액: ${Number(bucketGoal.currentSaved || bucket?.mony_finish || 0).toLocaleString()}원
+- 달성률: ${bucketGoal.targetAmount > 0 ? Math.round((Number(bucketGoal.currentSaved || 0) / bucketGoal.targetAmount) * 100) : bucketPct}%
+
+배경 지식:
 - 사회 초년생 평균 월급: 약 240만 원 ~ 300만 원
 - 적정 저축 비율: 월급의 20~30%
-- 주요 지출 카테고리: 식비, 교통비, 쇼핑, 구독서비스, 외식
-- 충동구매 방지 팁: 24시간 규칙(하루 뒤에 구매 결정), 장바구니 찜 후 대기
-- 절약 방법: 고정지출 점검(구독 해지), 식비는 장보기로 대체, 교통비 대중교통 활용
+- 충동구매 방지: 24시간 규칙, 장바구니 찜 후 대기
+- 절약 팁: 구독 서비스 점검, 식비는 장보기로 대체, 대중교통 활용
 
 규칙:
 1. 2~4문장으로 간결하게 답변하세요.
 2. 친근하고 따뜻한 말투를 사용하세요.
-3. 사용자 데이터의 구체적인 수치를 언급하세요.
+3. 사용자 데이터의 구체적인 수치를 반드시 언급하세요.
 4. 한국어로만 답변하세요.
-5. 마크다운 기호(**, ##, - 등)는 절대 사용하지 마세요. 일반 텍스트로만 답변하세요.
-6. 저축 관련 질문엔 남은 일수와 하루 필요 저축액을 활용해 조언하세요.
-7. 버킷리스트 관련 질문엔 달성률과 남은 금액을 언급하세요.`;
+5. 마크다운 기호(**, ##, - 등)는 절대 사용하지 마세요.
+6. 저축 관련 질문엔 남은 일수와 하루 필요 저축액을 활용하세요.
+7. 버킷리스트 관련 질문엔 목표명, 달성률, 남은 금액을 언급하세요.`;
 }
 
 const quickCards = [
