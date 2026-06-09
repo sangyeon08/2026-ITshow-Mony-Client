@@ -211,6 +211,7 @@ const talkGroups = [
 
 const currentMonthLabel = "2026년 3월";
 const todayLabel = getTodayLabel(new Date("2026-03-31T00:00:00"));
+const bucketGoalData = getBucketGoal();
 
 function parseMoney(value) {
   return Number(String(value).replace(/[^0-9]/g, "")) || 0;
@@ -520,8 +521,8 @@ export default function Home() {
             <motion.article className="home-savingsCard" {...cardMotion}>
               <div className="home-savingsHeader">
                 <div className="home-savingsHeaderText">
-                  <p className="home-metricLabel">이번 달 저축 챌린지</p>
-                  <h3>저축 저금통</h3>
+                  <p className="home-metricLabel">버킷리스트 챌린지</p>
+                  <h3>{bucketGoalData?.bucketList || "저축 저금통"}</h3>
                 </div>
                 <span className="home-savingsPiggy" aria-hidden="true">🪙</span>
               </div>

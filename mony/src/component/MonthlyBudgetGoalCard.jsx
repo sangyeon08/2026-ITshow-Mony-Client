@@ -6,7 +6,9 @@ export default function MonthlyBudgetGoalCard({
   items = [],
 }) {
   const displayName = name || "김수한무";
-
+// 상단에 추가
+const JOIN_DATE = new Date("2025-12-22");
+const daysWithMony = Math.floor((Date.now() - JOIN_DATE.getTime()) / 86400000) ;
   return (
     <>
       <div className="title">
@@ -18,7 +20,7 @@ export default function MonthlyBudgetGoalCard({
         <div className="bg-goalAvatarWrap">
           <div className="goaltext">
             <h2 className="bg-goalTitle1">MONY와 함께한 지</h2>
-            <h2 className="bg-goalTitle1">365일째</h2>
+            <h2 className="bg-goalTitle1">{daysWithMony}일째</h2>
           </div>
           <div className="bg-goalAvatar">
             <img src={avatarSrc} alt="프로필" />
