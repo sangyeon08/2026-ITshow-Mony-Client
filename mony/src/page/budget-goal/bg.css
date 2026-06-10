@@ -729,13 +729,35 @@
   margin-top: 4px;
   display: grid;
   grid-template-columns: repeat(2, minmax(210px, 1fr));
+  grid-auto-rows: 208px;
   align-items: stretch;
   gap: 12px;
+  max-height: calc((208px * 2) + 12px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(215, 255, 71, 0.45) rgba(255, 255, 255, 0.06);
+}
+
+.bg-challengeGrid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bg-challengeGrid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.bg-challengeGrid::-webkit-scrollbar-thumb {
+  background: rgba(215, 255, 71, 0.45);
+  border-radius: 999px;
 }
 
 .bg-challengeCard {
   position: relative;
-  min-height: 172px;
+  min-height: 0;
+  height: 208px;
   padding: 18px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
@@ -1012,6 +1034,7 @@
 @media (max-width: 640px) {
   .bg-page { padding: 12px; }
   .bg-budgetSummary, .bg-challengeGrid, .bg-challengeSummary { grid-template-columns: 1fr; }
+  .bg-challengeGrid { max-height: calc((208px * 4) + (12px * 3)); }
   .bg-challengeTabs { flex-wrap: wrap; }
   .bg-progressHero { flex-direction: column; }
   .bg-modalQuick { grid-template-columns: repeat(2, 1fr); }
