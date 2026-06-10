@@ -22,8 +22,17 @@ async function request(path, options = {}) {
     ...options,
     headers: { ...getHeaders(), ...options.headers },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || '요청 실패');
+
+  const text = await res.text();
+  const contentType = res.headers.get('content-type') || '';
+  const data = text && contentType.includes('application/json')
+    ? JSON.parse(text)
+    : {};
+
+  if (!res.ok) {
+    throw new Error(data.message || data.error || `요청 실패 (${res.status})`);
+  }
+
   return data;
 }
 

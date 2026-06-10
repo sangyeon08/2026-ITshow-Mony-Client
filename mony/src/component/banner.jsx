@@ -2,6 +2,7 @@ import { motion as Motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { cardMotion, buttonMotion, staggerContainerVariants, staggerItemVariants } from "./homeMotion.jsx";
+import { getShortMonthLabel } from "../utils/date.js";
 import bannerBg from "../assets/home/banner_bg.png";
 import bannerBg2 from "../assets/home/banner_bg2.png";
 import bannerCh1 from "../assets/home/banner_ch1.png";
@@ -134,6 +135,8 @@ function NextArrowIcon() {
 }
 
 function FirstBanner({ onGoConsumptionManagement, name }) {
+  const currentShortMonthLabel = getShortMonthLabel();
+
   return (
     <div className="home-heroSlide is-weekly">
       <Motion.div className="home-heroIntro" variants={staggerItemVariants}>
@@ -145,7 +148,7 @@ function FirstBanner({ onGoConsumptionManagement, name }) {
           살펴볼까요?
         </h2>
         <p className="home-heroDesc">
-          MONY와 함께한 4월의 1주차의 소비 기록으로 인사이트를 보여드려요
+          MONY와 함께한 {currentShortMonthLabel}의 소비 기록으로 인사이트를 보여드려요
         </p>
         <Motion.button
           className="home-heroButton"

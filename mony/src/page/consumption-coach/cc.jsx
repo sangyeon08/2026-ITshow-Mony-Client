@@ -11,6 +11,10 @@ import {
   staggerItemVariants,
 } from "../../component/homeMotion";
 import "./cc.css";
+import {
+  getDaysWithMony,
+  getShortMonthLabel,
+} from "../../utils/date.js";
 
 const GROQ_URL = "/api/groq";
 
@@ -26,8 +30,7 @@ function buildSystemPrompt({ savingsGoal, savedAmount, totalSpent, bucket }) {
   const daysPassed = today.getDate();
   const daysLeft = daysInMonth - daysPassed;
   const dailyBudget = remain > 0 ? Math.round(remain / Math.max(daysLeft, 1)) : 0;
-  const JOIN_DATE = new Date("2025-12-22");
-  const daysWithMony = Math.floor((Date.now() - JOIN_DATE.getTime()) / 86400000) + 1;
+  const daysWithMony = getDaysWithMony(today);
 
   return `당신은 MONY 앱의 소비 코치입니다. 사용자의 금융 데이터를 기반으로 맞춤형 조언을 제공하세요.
 
@@ -97,7 +100,7 @@ const quickCards = [
 const miniCards = [
   {
     label: "소비 흐름",
-    value: "3월은 지출이 증가하는 추세에요",
+    value: `${getShortMonthLabel()}은 지출이 증가하는 추세에요`,
     meta: "12% 증가",
   },
   {

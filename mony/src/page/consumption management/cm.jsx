@@ -16,17 +16,33 @@ import {
   staggerItemVariants,
 } from "../../component/homeMotion.jsx";
 import "./cm.css";
+import {
+  getKoreanDateLabel,
+  getMonthLabel,
+  getShortMonthLabel,
+  getToday,
+  getTodayLabel,
+  getWeekDateNumbers,
+} from "../../utils/date.js";
+
+const today = getToday();
+const currentFullMonthLabel = getMonthLabel(today);
+const currentShortMonthLabel = getShortMonthLabel(today);
+const todayKoreanLabel = getKoreanDateLabel(today);
+const todayCompactLabel = `${today.getMonth() + 1}/${today.getDate()}`;
+const todayDayNumber = today.getDate();
+const currentWeekDates = getWeekDateNumbers(today);
 
 const topMetrics = [
   {
     label: "오늘의 소비",
     value: 28000,
-    sub: "3월 30일",
+    sub: todayKoreanLabel,
     trend: "+12% ↑",
     suffix: "원",
   },
   {
-    label: "4월의 소비 점수",
+    label: `${currentShortMonthLabel}의 소비 점수`,
     value: 78,
     sub: "평균보다 안정적",
     trend: "",
@@ -42,7 +58,7 @@ const topMetrics = [
   {
     label: "TOP 소비",
     value: null,
-    sub: "3월 5주",
+    sub: `${currentShortMonthLabel} ${Math.ceil(today.getDate() / 7)}주`,
     trend: "+쇼핑/온라인 구독 ↑",
     text: "식비",
   },
@@ -52,7 +68,7 @@ const recentUsage = [
   {
     name: "GS25 녹번점",
     amount: "-5,600원",
-    date: "3/26",
+    date: todayCompactLabel,
     hint: "평소보다 1,200원 적게 썼어요",
     piggyAmount: 1200,
     icon: FoodIcon,
@@ -61,7 +77,7 @@ const recentUsage = [
   {
     name: "백소정 관악점",
     amount: "-14,600원",
-    date: "3/26",
+    date: todayCompactLabel,
     hint: "절약 가능 3,000원",
     piggyAmount: 3000,
     icon: FoodIcon,
@@ -70,42 +86,42 @@ const recentUsage = [
   {
     name: "교보문고 광화문점",
     amount: "-35,400원",
-    date: "3/24",
+    date: todayCompactLabel,
     icon: ShoppingIcon,
     color: "shopping",
   },
-  { name: "롯데마트(주)", amount: "-10,600원", date: "3/22" },
-  { name: "에이치앤엠", amount: "-34,020원", date: "3/20" },
+  { name: "롯데마트(주)", amount: "-10,600원", date: todayCompactLabel },
+  { name: "에이치앤엠", amount: "-34,020원", date: todayCompactLabel },
 ];
 
 const detailRows = [
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "백소정 관악점",
     time: "12:09/국내",
     amount: "-14,600원",
   },
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "GS25 녹번점",
     time: "09:05/국내",
     amount: "-5,600원",
   },
-  { date: "3월 24일", name: "Apple", time: "17:50/국내", amount: "-5,400원" },
+  { date: todayKoreanLabel, name: "Apple", time: "17:50/국내", amount: "-5,400원" },
   {
-    date: "3월 24일",
+    date: todayKoreanLabel,
     name: "교보문고 광화문점",
     time: "11:45/국내",
     amount: "-35,400원",
   },
   {
-    date: "3월 22일",
+    date: todayKoreanLabel,
     name: "롯데쇼핑(주)",
     time: "18:13/국내",
     amount: "-10,600원",
   },
   {
-    date: "3월 20일",
+    date: todayKoreanLabel,
     name: "에이치앤엠",
     time: "16:03/국내",
     amount: "-34,020원",
@@ -114,37 +130,37 @@ const detailRows = [
 
 const categoryDetailRows = [
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "백소정 관악점",
     time: "12:09/국내",
     amount: "-14,600원",
   },
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "GS25 녹번점",
     time: "09:05/국내",
     amount: "-14,600원",
   },
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "투썸플레이스",
     time: "11:05/국내",
     amount: "-17,700원",
   },
   {
-    date: "3월 26일",
+    date: todayKoreanLabel,
     name: "GS25 녹번점",
     time: "16:38/국내",
     amount: "-9,600원",
   },
   {
-    date: "3월 19일",
+    date: todayKoreanLabel,
     name: "컴포즈커피",
     time: "12:07/국내",
     amount: "-2,300원",
   },
   {
-    date: "3월 19일",
+    date: todayKoreanLabel,
     name: "팻어케이크",
     time: "17:36/국내",
     amount: "-28,500원",
@@ -156,35 +172,35 @@ const logCategories = ["식사/외식", "쇼핑", "여행", "취미", "장소", 
 const logBubbleMap = {
   "식사/외식": [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "백소정",
       amount: "-20,200",
       image: "/images/food-26.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "일번지...",
       amount: "-30,240",
       image: "/images/food-27.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-28.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "업기떡...",
       amount: "-14,300",
       image: "/images/food-29.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "분식집",
       amount: "-9,130",
       image: "/images/food-30.svg",
@@ -193,35 +209,35 @@ const logBubbleMap = {
   ],
   쇼핑: [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "무신사",
       amount: "-48,900",
       image: "/images/food-27.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "올리브영",
       amount: "-18,400",
       image: "/images/food-28.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "교보문고",
       amount: "-35,400",
       image: "/images/food-29.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-30.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "H&M",
       amount: "-34,020",
       image: "/images/food-26.svg",
@@ -230,35 +246,35 @@ const logBubbleMap = {
   ],
   여행: [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "KTX",
       amount: "-59,800",
       image: "/images/food-28.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "숙소예약",
       amount: "-82,000",
       image: "/images/food-29.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-30.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "공항버스",
       amount: "-17,000",
       image: "/images/food-26.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "기념품",
       amount: "-22,500",
       image: "/images/food-27.svg",
@@ -267,35 +283,35 @@ const logBubbleMap = {
   ],
   취미: [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "필라테스",
       amount: "-45,000",
       image: "/images/food-29.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-30.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "영화관",
       amount: "-15,000",
       image: "/images/food-26.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "클래스",
       amount: "-28,000",
       image: "/images/food-27.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "문구점",
       amount: "-8,400",
       image: "/images/food-28.svg",
@@ -304,35 +320,35 @@ const logBubbleMap = {
   ],
   장소: [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "GS25",
       amount: "-5,600",
       image: "/images/food-30.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "스타필드",
       amount: "-12,300",
       image: "/images/food-26.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "홍대입구",
       amount: "-9,900",
       image: "/images/food-27.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-28.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "성수동",
       amount: "-16,800",
       image: "/images/food-29.svg",
@@ -341,35 +357,35 @@ const logBubbleMap = {
   ],
   기타: [
     {
-      day: 26,
+      day: todayDayNumber,
       label: "구독",
       amount: "-9,900",
       image: "/images/food-26.svg",
       tone: "normal",
     },
     {
-      day: 27,
+      day: todayDayNumber,
       label: "통신비",
       amount: "-31,000",
       image: "/images/food-30.svg",
       tone: "normal",
     },
     {
-      day: 28,
+      day: todayDayNumber,
       label: "",
       amount: "",
       image: "/images/food-29.svg",
       tone: "normal",
     },
     {
-      day: 29,
+      day: todayDayNumber,
       label: "세탁",
       amount: "-6,500",
       image: "/images/food-28.svg",
       tone: "normal",
     },
     {
-      day: 30,
+      day: todayDayNumber,
       label: "생활용품",
       amount: "-13,200",
       image: "/images/food-27.svg",
@@ -708,7 +724,7 @@ export default function Cm() {
                     <strong>{name}의 카뱅 카드</strong>
                   </div>
                   <div>
-                    <span>3월 사용금액</span>
+                    <span>{currentShortMonthLabel} 사용금액</span>
                     <strong>326,000원</strong>
                   </div>
                   <div>
@@ -793,8 +809,8 @@ export default function Cm() {
                 >
                   <div className="cm-cardHeaderLine">
                     <div>
-                      <p className="cm-cardMeta">2026년 3월</p>
-                      <h3 className="cm-cardTitle">오늘 · 3월 30일 (월)</h3>
+                      <p className="cm-cardMeta">{currentFullMonthLabel}</p>
+                      <h3 className="cm-cardTitle">{getTodayLabel(today)}</h3>
                     </div>
                   </div>
 
@@ -804,11 +820,11 @@ export default function Cm() {
                         {day}
                       </span>
                     ))}
-                    {["29", "30", "31", "1", "2", "3", "4"].map(
-                      (day, index) => (
+                    {currentWeekDates.map(
+                      (day) => (
                         <span
                           key={day}
-                          className={`cm-calendarDate ${index === 1 ? "is-active" : ""}`}
+                          className={`cm-calendarDate ${day === String(todayDayNumber) ? "is-active" : ""}`}
                         >
                           {day}
                         </span>
@@ -824,7 +840,7 @@ export default function Cm() {
                 >
                   <div className="cm-cardHeaderLine">
                     <div>
-                      <p className="cm-cardMeta1">소비로그 · 2026년 3월</p>
+                      <p className="cm-cardMeta1">소비로그 · {currentFullMonthLabel}</p>
                     </div>
                   </div>
                   <div className="cm-logFilters">
@@ -844,10 +860,10 @@ export default function Cm() {
                   </div>
 
                   <div className="cm-logBubbles">
-                    {activeLogBubbles.map((item) => (
+                    {activeLogBubbles.map((item, index) => (
                       <button
                         type="button"
-                        key={`${activeLogCategory}-${item.day}`}
+                        key={`${activeLogCategory}-${item.day}-${item.label || "empty"}-${index}`}
                         className="cm-logBubble"
                         style={{ backgroundImage: `url(${item.image})` }}
                         aria-label={`${item.day}일 소비 로그`}

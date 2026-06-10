@@ -1,4 +1,5 @@
 import "./MonthlyBudgetGoalCard.css";
+import { getDaysWithMony, getMonthLabel } from "../utils/date.js";
 
 export default function MonthlyBudgetGoalCard({
   name,
@@ -6,13 +7,13 @@ export default function MonthlyBudgetGoalCard({
   items = [],
 }) {
   const displayName = name || "김수한무";
-// 상단에 추가
-const JOIN_DATE = new Date("2025-12-22");
-const daysWithMony = Math.floor((Date.now() - JOIN_DATE.getTime()) / 86400000) ;
+  const daysWithMony = getDaysWithMony();
+  const currentMonthLabel = getMonthLabel();
+
   return (
     <>
       <div className="title">
-        <h2 className="test10">2026년 6월</h2>
+        <h2 className="test10">{currentMonthLabel}</h2>
         <h3 className="test11">이번달의 예산목표</h3>
       </div>
 

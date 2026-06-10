@@ -13,9 +13,18 @@ import {
   staggerItemVariants,
 } from "../../component/homeMotion.jsx";
 import "./ca.css";
+import {
+  getShortMonthLabel,
+  getToday,
+  getWeekRangeLabel,
+} from "../../utils/date.js";
 import JejuImg from "../../assets/ca/jeju.png";
 import BusanImg from "../../assets/ca/busan.png";
 import JapanImg from "../../assets/ca/japan.png";
+
+const currentShortMonthLabel = getShortMonthLabel();
+const todayInputValue = toDateInputValue(getToday());
+const currentWeekRangeLabel = getWeekRangeLabel();
 
 /* ─────────────────────────────────────────── 예시 데이터 (폴백) */
 const DEMO_COMPLETED_BUCKETS = [
@@ -25,7 +34,7 @@ const DEMO_COMPLETED_BUCKETS = [
     category: "여행",
     mony_ing: 320000,
     mony_finish: 320000,
-    d_day: "2023-04-13",
+    d_day: todayInputValue,
   },
 ];
 
@@ -33,7 +42,7 @@ const DEMO_MEMORIES = {
   "demo-jeju": {
     photoUrl: JejuImg,
     memo: "드디어 제주도 다녀왔어요! 🌊",
-    date: "2023-04-13",
+    date: todayInputValue,
   },
 };
 
@@ -43,7 +52,7 @@ const weekBars = [
     day: "일",
     value: 42,
     blocks: ["base", "base", "base"],
-    period: "3/16(일) - 3/22(토)",
+    period: currentWeekRangeLabel,
     amount: "₩22,000",
     change: "-8%",
     active: false,
@@ -52,7 +61,7 @@ const weekBars = [
     day: "월",
     value: 72,
     blocks: ["light", "accent", "accent", "light"],
-    period: "3/23(월) - 3/30(일)",
+    period: currentWeekRangeLabel,
     amount: "₩28,000",
     change: "+12%",
     active: true,
@@ -61,7 +70,7 @@ const weekBars = [
     day: "화",
     value: 64,
     blocks: ["base", "base", "base", "base"],
-    period: "3/24(화) - 3/31(화)",
+    period: currentWeekRangeLabel,
     amount: "₩34,000",
     change: "+10%",
     active: false,
@@ -70,7 +79,7 @@ const weekBars = [
     day: "수",
     value: 76,
     blocks: ["base", "base", "base", "base", "base"],
-    period: "3/25(수) - 4/1(수)",
+    period: currentWeekRangeLabel,
     amount: "₩36,000",
     change: "+14%",
     active: false,
@@ -79,7 +88,7 @@ const weekBars = [
     day: "목",
     value: 64,
     blocks: ["base", "base", "base", "base"],
-    period: "3/26(목) - 4/2(목)",
+    period: currentWeekRangeLabel,
     amount: "₩31,000",
     change: "+6%",
     active: false,
@@ -88,7 +97,7 @@ const weekBars = [
     day: "금",
     value: 38,
     blocks: ["base", "base", "base"],
-    period: "3/27(금) - 4/3(금)",
+    period: currentWeekRangeLabel,
     amount: "₩18,000",
     change: "-3%",
     active: false,
@@ -97,7 +106,7 @@ const weekBars = [
     day: "토",
     value: 48,
     blocks: ["base", "base", "base"],
-    period: "3/28(토) - 4/4(토)",
+    period: currentWeekRangeLabel,
     amount: "₩24,000",
     change: "+2%",
     active: false,
@@ -541,7 +550,7 @@ export default function Ca() {
               >
                 <div className="ca-cardHead">
                   <div>
-                    <p>3월</p>
+                    <p>{currentShortMonthLabel}</p>
                     <strong>월 진행 대비 소비량</strong>
                   </div>
                   <span>시간 대비 소비 70%</span>
@@ -581,7 +590,7 @@ export default function Ca() {
                 </div>
                 <div className="ca-miniGrid">
                   <div className="ca-miniCard">
-                    <span>주간 | 3/23(월) - 3/30(일)</span>
+                    <span>주간 | {currentWeekRangeLabel}</span>
                     <strong>총 지출</strong>
                     <strong>₩28,000</strong>
                     <small>주변비례 +12%</small>
@@ -597,7 +606,7 @@ export default function Ca() {
                       안정적인 적정 소비
                     </span>
                     <div className="march-div">
-                      <strong className="march">3월,</strong>
+                      <strong className="march">{currentShortMonthLabel},</strong>
                       <br />
                       <strong className="march-description">
                         소비 패턴의 균형의 <br /> 유지가 적절해요
@@ -605,7 +614,7 @@ export default function Ca() {
                     </div>
                   </div>
                   <div className="ca-miniCard">
-                    <span>3월의 지출</span>
+                    <span>{currentShortMonthLabel}의 지출</span>
                     <strong>최다지출</strong>
                     <strong>₩125,000</strong>
                     <small>적정소비 주간 소비 비중↑</small>
@@ -627,7 +636,7 @@ export default function Ca() {
               >
                 <div className="ca-cardHead">
                   <div>
-                    <p>3월 사용금액</p>
+                    <p>{currentShortMonthLabel} 사용금액</p>
                     <strong className="ca-cardHeadStrong">
                       <CountUp value={totalSpent} suffix="원" />
                     </strong>

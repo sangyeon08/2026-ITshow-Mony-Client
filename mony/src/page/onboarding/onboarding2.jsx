@@ -101,6 +101,11 @@ const fallbackBucketGoal = {
   })),
 };
 
+const buildFallbackBucketGoal = () => ({
+  ...fallbackBucketGoal,
+  steps: fallbackBucketGoal.steps.map((step) => ({ ...step })),
+});
+
 const hasConcreteMoneyInfo = (text) =>
   /(만\s*원|원|개월|년|월\s*\d|매월|월별|기간|저축)/.test(text);
 
@@ -166,7 +171,9 @@ const generateSavingsPlan = async (bucketList) => {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || "저축 계획을 생성하지 못했어요.");
+    throw new Error(
+      err.error || `AI 서버 연결에 실패했어요. (${res.status})`
+    );
   }
 
   const data = await res.json();
@@ -280,9 +287,24 @@ export default function Onboarding2() {
       setGeneratedPlan(goalData);
       setSavingsPlan(goal.steps);
     } catch (error) {
+      const fallbackGoal = buildFallbackBucketGoal();
+      const goalData = {
+        bucketList: bucket,
+        category: fallbackGoal.category,
+        targetAmount: fallbackGoal.targetAmount,
+        monthlySaving: fallbackGoal.monthlySaving,
+        estimatedPeriod: fallbackGoal.estimatedPeriod,
+        currentSaved: Number(fallbackGoal.currentSaved) || 0,
+        quickSaveAmount: quickSaveAmountNumber || DEFAULT_QUICK_SAVE_AMOUNT,
+        steps: fallbackGoal.steps,
+      };
+
+      setGeneratedPlan(goalData);
+      setSavingsPlan(fallbackGoal.steps);
       setPlanError(
-        error?.message ||
-          "잠시 후 다시 시도해 주세요. 저축 계획을 불러오지 못했어요."
+        error?.message
+          ? `${error.message} 기본 저축 계획으로 대신 채워뒀어요.`
+          : "AI 서버에 연결하지 못해 기본 저축 계획으로 대신 채워뒀어요."
       );
     } finally {
       setIsGeneratingPlan(false);

@@ -12,6 +12,12 @@ import {
   staggerItemVariants,
 } from "../../component/homeMotion.jsx";
 import "./bg.css";
+import {
+  getDaysLeftInMonth,
+  getDotDateLabel,
+  getKoreanDateLabel,
+  getShortMonthLabel,
+} from "../../utils/date.js";
 
 import bgCh1 from "../../assets/home/bg_ch1.png";
 import bgCh2 from "../../assets/home/bg_ch2.png";
@@ -20,6 +26,10 @@ import hobbyStamp from "../../assets/home/hobby.png";
 import improvementStamp from "../../assets/home/improvement.png";
 
 const DEFAULT_BUCKET_CATEGORY = "여행";
+const currentShortMonthLabel = getShortMonthLabel();
+const todayDateLabel = getKoreanDateLabel();
+const todayDotLabel = getDotDateLabel();
+const daysLeftInMonth = getDaysLeftInMonth();
 const bucketCategories = ["자기계발", "취미", "여행"];
 const stampImagesByCategory = {
   여행: tripStamp,
@@ -28,8 +38,8 @@ const stampImagesByCategory = {
 };
 
 const goalStats = [
-  { label: "3월 예산", value: 550000, suffix: "원" },
-  { label: "3월 사용금액", value: 428000, suffix: "원", extra: "(78%)" },
+  { label: `${currentShortMonthLabel} 예산`, value: 550000, suffix: "원" },
+  { label: `${currentShortMonthLabel} 사용금액`, value: 428000, suffix: "원", extra: "(78%)" },
   { label: "남은 예산 금액", value: 122000, suffix: "원" },
   { label: "평균 횟수", value: 62, suffix: "건" },
 ];
@@ -43,13 +53,13 @@ const milestoneItems = [
   {
     title: "충동 구매 줄이기",
     progress: 0.23,
-    period: "3월~",
+    period: `${currentShortMonthLabel}~`,
     desc: "필요한 것만 사고 충동 구매는 줄일래요",
   },
   {
     title: "천천히 소비하기",
     progress: 0.48,
-    period: "2월~",
+    period: `${currentShortMonthLabel}~`,
     desc: "생각하면서 여유롭게 소비하고 싶어요",
   },
 ];
@@ -80,7 +90,7 @@ const challengeCards = [
     currentAmount: 320000,
     status: "completed",
     category: "여행",
-    completedAt: "2026. 3. 18.",
+    completedAt: todayDotLabel,
   },
 ];
 
@@ -453,8 +463,8 @@ export default function Bg() {
                 <div className="bg-guideGrid">
                   <div className="bg-guideSummary">
                     <div>
-                      <strong>3월 30일 | 남은 기간 1일</strong>
-                      <p>4월이 되기 전 예산을 정리해요</p>
+                      <strong>{todayDateLabel} | 남은 기간 {daysLeftInMonth}일</strong>
+                      <p>이번 달이 끝나기 전 예산을 정리해요</p>
                     </div>
                     <strong className="bg-guideAmount">
                       <CountUp value={122200} suffix="원" />
@@ -636,7 +646,7 @@ export default function Bg() {
                             </strong>
                             <span>달성 날짜</span>
                             <strong>
-                              {item.completedAt || "2026. 3. 30."}
+                              {item.completedAt || todayDotLabel}
                             </strong>
                           </div>
                         </>

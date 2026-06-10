@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { buttonMotion, staggerItemVariants } from "./homeMotion.jsx";
+import { getShortMonthLabel } from "../utils/date.js";
 import bannerBg from "../assets/home/banner_assets/bannerbg.png";
 import bannerItems from "../assets/home/banner_assets/banner_items.png";
 
@@ -71,6 +72,8 @@ function HeroText({ index, eyebrow, title, description, buttonLabel, onButtonCli
 }
 
 function DefaultLayout({ onButtonClick, name }) {
+  const currentShortMonthLabel = getShortMonthLabel();
+
   return (
     <motion.div
       className="hero-banner-layout is-default"
@@ -85,7 +88,7 @@ function DefaultLayout({ onButtonClick, name }) {
         index="01"
         eyebrow={`${name}님의 버킷리스트 챌린지`}
         title={"이번 주의 소비를 한 번\n살펴볼까요?"}
-        description="MONY와 함께한 4월의 1주차의 소비 기록으로 인사이트를 보여드려요"
+        description={`MONY와 함께한 ${currentShortMonthLabel}의 소비 기록으로 인사이트를 보여드려요`}
         buttonLabel="소비관리 더보기"
         onButtonClick={onButtonClick}
       />
