@@ -8,6 +8,7 @@ import Ca from "./page/consumption analysis/ca";
 import Bg from "./page/budget-goal/bg";
 import Cc from "./page/consumption-coach/cc";
 import { useInactivityReset } from "./hooks/useInactivityReset";
+import Splash from "./page/splash/splash";
 
 function InactivityGuard({ children }) {
   useInactivityReset();
@@ -25,6 +26,7 @@ function App() {
             path="/"
             element={<Navigate to={onboardingDone ? "/home" : "/onboarding1"} replace />}
           />
+          <Route path="/splash" element={<Splash />} />
           <Route path="/home" element={<Home />} />
           <Route path="/onboarding1" element={<Onboarding1 />} />
           <Route path="/onboarding2" element={<Onboarding2 />} />
