@@ -466,7 +466,7 @@ export default function Home() {
               variants={staggerItemVariants}
               {...cardMotion}
             >
-              <p className="home-metricLabel">4월의 소비 목표</p>
+              <p className="home-metricLabel">6월의 소비 목표</p>
               <div className="home-metricRow">
                 <h3>천천히 소비하기</h3>
                 <strong>
@@ -522,7 +522,7 @@ export default function Home() {
               <div className="home-savingsHeader">
                 <div className="home-savingsHeaderText">
                   <p className="home-metricLabel">버킷리스트 챌린지</p>
-                  <h3>{bucketGoalData?.bucketList || "저축 저금통"}</h3>
+                  <h3>{bucketGoal?.bucketList || "버킷리스트 챌린지"}</h3>
                 </div>
                 <span className="home-savingsPiggy" aria-hidden="true">🪙</span>
               </div>
@@ -590,7 +590,7 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.35 }}
           >
-            <h3>{name} 님의 활발한 4월의 소비를 확인해보세요! 🍃</h3>
+            <h3>{name} 님의 활발한 6월의 소비를 확인해보세요! 🍃</h3>
           </motion.section>
 
           <motion.section
