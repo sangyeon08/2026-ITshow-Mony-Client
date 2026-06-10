@@ -12,7 +12,7 @@ export function useInactivityReset() {
       clearTimeout(timer);
       timer = setTimeout(() => {
         localStorage.clear();
-        window.location.replace("/onboarding1");
+        window.location.replace("/splash");
       }, TIMEOUT_MS);
     }
 

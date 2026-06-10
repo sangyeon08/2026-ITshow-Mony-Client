@@ -1,11 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./onboarding1.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
 
 export default function Onboarding1() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromSplashScroll = location.state?.fromSplashScroll === true;
+  const [isReturningToSplash, setIsReturningToSplash] = useState(false);
+  const isNavigatingRef = useRef(false);
+  const touchStartYRef = useRef(null);
+  const navigateTimerRef = useRef(null);
   const [name, setName] = useState(
     () => localStorage.getItem("joinName") ?? "",
   );
@@ -19,8 +25,50 @@ export default function Onboarding1() {
     localStorage.setItem("joinName", name);
   }, [name]);
 
+  useEffect(() => {
+    return () => {
+      if (navigateTimerRef.current !== null) {
+        window.clearTimeout(navigateTimerRef.current);
+      }
+    };
+  }, []);
+
+  const goToSplash = useCallback(() => {
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
+    setIsReturningToSplash(true);
+
+    navigateTimerRef.current = window.setTimeout(() => {
+      navigate("/splash", { state: { fromOnboardingScroll: true } });
+    }, 420);
+  }, [navigate]);
+
+  const handleWheel = (event) => {
+    if (event.deltaY < -12) {
+      goToSplash();
+    }
+  };
+
+  const handleTouchStart = (event) => {
+    touchStartYRef.current = event.touches[0]?.clientY ?? null;
+  };
+
+  const handleTouchMove = (event) => {
+    if (touchStartYRef.current === null) return;
+
+    const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
+    if (currentY - touchStartYRef.current > 28) {
+      goToSplash();
+    }
+  };
+
   return (
-    <main className="join1-page">
+    <main
+      className={`join1-page ${fromSplashScroll ? "join1-page-enter" : ""} ${isReturningToSplash ? "join1-page-return" : ""}`}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+    >
       {/* Top Icon */}
       <div className="join1-iconWrap" aria-hidden="true">
         <JoinStarIcon />
