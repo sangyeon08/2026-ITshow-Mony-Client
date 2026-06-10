@@ -398,7 +398,7 @@ export default function Cm() {
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
   const [historyPage, setHistoryPage] = useState(0);
   const [activeLogCategory, setActiveLogCategory] = useState("식사/외식");
-  const [savedAmount] = useState(() => {
+  const [savedAmount, setSavedAmount] = useState(() => {
     const v = Number(localStorage.getItem("mony_saved_amount"));
     return v > 0 ? v : 0;
   });
@@ -422,6 +422,16 @@ export default function Cm() {
 
   // ✅ 목표 초과시 0원으로 표시
   const remainAmount = Math.max(savingsGoal - savedAmount, 0);
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === "mony_saved_amount") {
+        setSavedAmount(Number(e.newValue) || 0);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   useEffect(() => {
     const periodDetail = new Date().toISOString().slice(0, 7);

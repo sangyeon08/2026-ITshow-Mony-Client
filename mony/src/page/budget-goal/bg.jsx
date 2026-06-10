@@ -184,7 +184,9 @@ export default function Bg() {
   // ✅ 온보딩에서 저장한 이름 불러오기
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
 
-  const [savingsGoal, setSavingsGoal] = useState(DEFAULT_savingsGoal);
+  const [savingsGoal, setSavingsGoal] = useState(
+    () => Number(localStorage.getItem("mony_savings_goal")) || DEFAULT_savingsGoal,
+  );
   const [savingsAmount, setSavingsAmount] = useState(() => {
     const stored = localStorage.getItem("mony_saved_amount");
     return stored ? Number(stored) : 0;
@@ -252,45 +254,6 @@ export default function Bg() {
     setShowSavingsModal(false);
     setDepositInput("");
 
-    const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
-    const primary =
-      bucketChallenges.find((b) => String(b.id) === primaryBucketId) ??
-      bucketChallenges.find((b) => b.status !== "completed");
-    if (primary?.id) {
-      bucketsApi
-        .updateMoney(primary.id, primary.currentAmount + num)
-        .then((res) => {
-          const updatedBucket = res.data;
-          const newMonyFinish = Number(updatedBucket?.mony_finish ?? primary.currentAmount + num);
-          const targetAmount = Number(updatedBucket?.mony_ing ?? primary.targetAmount);
-          localStorage.setItem("mony_primary_bucket_id", String(updatedBucket?.id ?? primary.id));
-          localStorage.setItem("mony_saved_amount", String(newMonyFinish));
-          setSavingsAmount(newMonyFinish);
-          if (targetAmount > 0) setSavingsGoal(targetAmount);
-          setBucketChallenges((prev) =>
-            prev.map((b) =>
-              b.id === primary.id
-                ? {
-                    ...b,
-                    targetAmount,
-                    currentAmount: newMonyFinish,
-                    progress: targetAmount
-                      ? newMonyFinish / targetAmount
-                      : 0,
-                    category: b.category,
-                    status:
-                      newMonyFinish >= targetAmount &&
-                      targetAmount > 0
-                        ? "completed"
-                        : "progress",
-                  }
-                : b,
-            ),
-          );
-        })
-        .catch(() => {});
-    }
-
     const reached = newTotal >= savingsGoal;
     setToastMsg(
       reached
@@ -328,12 +291,7 @@ export default function Bg() {
           const primaryBucket =
             res.data.find((b) => String(b.id) === primaryBucketId) ?? res.data[0];
           if (primaryBucket) {
-            const currentSaved = primaryBucket.mony_finish || 0;
-            const targetAmount = primaryBucket.mony_ing || 0;
             localStorage.setItem("mony_primary_bucket_id", String(primaryBucket.id));
-            localStorage.setItem("mony_saved_amount", String(currentSaved));
-            setSavingsAmount(currentSaved);
-            if (targetAmount > 0) setSavingsGoal(targetAmount);
           }
           setBucketChallenges(
             res.data.map((b) => ({
