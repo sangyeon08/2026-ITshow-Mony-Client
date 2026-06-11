@@ -4,6 +4,7 @@ import "./onboarding2.css";
 import Check from "../../component/check";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
+import MonyAlert from "../../component/MonyAlert";
 
 const buildGoals = () => [
   {
@@ -41,10 +42,24 @@ const buildGoals = () => [
 const GROQ_URL = "/api/groq";
 
 const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
-사용자의 버킷리스트를 이루기 위한 사회 초년생 기준의 돈 모으기 계획을 만들어줘.
-반드시 아래 JSON 형식으로만 응답해.
-설명 문장이나 마크다운 없이 JSON만 반환해.
+사용자가 입력한 버킷리스트를 검토하고, 적합한 경우 저축 계획을 만들어줘.
+반드시 아래 중 하나의 JSON 형식으로만 응답해. 설명 문장이나 마크다운 없이 JSON만 반환해.
 
+[입력 검토 기준 — 먼저 판단하세요]
+다음 중 하나에 해당하면 즉시 오류 JSON으로 응답하세요:
+- 욕설·비속어·성적 표현·혐오 표현이 포함된 경우 (언어 불문)
+- 의미를 알 수 없는 무작위 문자·숫자 나열인 경우 (예: "ㅁㄴㅇㄹ", "1234", "asdf")
+- 여행, 취미, 자기계발 세 카테고리 어디에도 해석할 수 없는 내용인 경우
+  - 여행: 국내외 여행, 배낭여행, 항공, 숙소, 관광, 워케이션 등
+  - 취미: 악기, 운동, 독서, 요리, 게임, 반려동물, 공연·전시 관람, 수집 등
+  - 자기계발: 자격증, 어학, 학습, 창업, 건강 관리, 재테크 공부 등
+- 저축·목표와 전혀 관계없는 단순 감탄사·낙서인 경우
+
+오류 응답 형식:
+{"error": true, "message": "버킷리스트 목표로 적합하지 않은 내용이에요. 여행·취미·자기계발과 관련된 목표를 입력해주세요."}
+
+[정상 응답 형식]
+입력이 적합하면 아래 JSON으로만 응답하세요:
 {
   "category": "여행" | "취미" | "자기계발",
   "targetAmount": 숫자,
@@ -52,21 +67,9 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
   "estimatedPeriod": "문자열",
   "currentSaved": 숫자,
   "steps": [
-    {
-      "step": 1,
-      "title": "문자열",
-      "description": "문자열"
-    },
-    {
-      "step": 2,
-      "title": "문자열",
-      "description": "문자열"
-    },
-    {
-      "step": 3,
-      "title": "문자열",
-      "description": "문자열"
-    }
+    { "step": 1, "title": "문자열", "description": "문자열" },
+    { "step": 2, "title": "문자열", "description": "문자열" },
+    { "step": 3, "title": "문자열", "description": "문자열" }
   ]
 }
 
@@ -75,20 +78,17 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 - 평균 월급은 약 240만 원 ~ 300만 원으로 가정하세요.
 - 월 저축 금액은 너무 과하지 않게 약 30만 원 ~ 100만 원 범위에서 현실적으로 잡으세요.
 - 버킷리스트에 맞는 목표 금액, 월 저축 금액, 예상 기간을 AI가 자연스럽게 추정해서 포함하세요.
-- 버킷리스트 내용을 보고 category를 반드시 여행, 취미, 자기계발 중 하나로 분류하세요.
 - currentSaved는 0 또는 현실적인 초기 저축액 숫자로 작성하세요.
-- 예: 집 사기라면 초기 자금 약 3,000만 원 ~ 5,000만 원, 월 50만 원 ~ 100만 원, 약 3년 ~ 5년처럼 작성하세요.
 
 규칙:
-1. 한국어로만 답변하세요. 한문, 일본어, 영어등 다른 언어는 절대 사용하지 마세요. 다른나라 단어도 그냥 한국어로 해석해서 한국어만 작성하세요.
-2. 버킷리스트 준비 과정이 아니라 저축 방법, 소비 줄이기, 목표 금액 달성 계획 중심으로 작성하세요.
+1. 한국어로만 답변하세요. 다른 언어 단어도 한국어로 해석해서 작성하세요.
+2. 저축 방법, 소비 줄이기, 목표 금액 달성 계획 중심으로 작성하세요.
 3. 정확히 3단계만 작성하세요.
 4. 각 단계는 짧은 제목과 1~2문장 설명으로 작성하세요.
 5. 반드시 JSON 객체만 응답하세요. 다른 말은 하지 마세요.
-6. 각 description에는 목표 금액, 월 저축 금액, 예상 기간 중 적어도 하나 이상의 구체적인 금액 또는 기간 정보를 포함하세요.
+6. 각 description에는 목표 금액, 월 저축 금액, 예상 기간 중 적어도 하나 이상의 구체적인 정보를 포함하세요.
 7. targetAmount와 monthlySaving은 숫자 타입 원 단위로 작성하세요.
-8. category는 반드시 "여행", "취미", "자기계발" 중 하나의 문자열로만 작성하세요.
-9. 금액은 사회 초년생 기준으로 현실적인 범위에서 임의로 추정하세요.`;
+8. category는 반드시 "여행", "취미", "자기계발" 중 하나로만 작성하세요.`;
 
 const DEFAULT_TARGET_AMOUNT = 3000000;
 const DEFAULT_MONTHLY_SAVING = 300000;
@@ -148,6 +148,13 @@ const parseSavingsPlan = (text) => {
     const jsonText =
       text.match(/\{[\s\S]*\}/)?.[0] ?? text.match(/\[[\s\S]*\]/)?.[0] ?? text;
     const parsed = JSON.parse(jsonText);
+
+    if (parsed.error === true) {
+      const err = new Error(parsed.message || "적합하지 않은 버킷리스트 입력이에요.");
+      err.isValidationError = true;
+      throw err;
+    }
+
     const parsedSteps = Array.isArray(parsed) ? parsed : parsed.steps;
     if (!Array.isArray(parsedSteps)) return fallbackBucketGoal;
     const steps = parsedSteps
@@ -254,6 +261,7 @@ export default function Onboarding2() {
   );
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [planError, setPlanError] = useState("");
+  const [alertMsg, setAlertMsg] = useState(null);
 
   // ✅ 페이지 이동해도 값 유지
   useEffect(() => {
@@ -327,6 +335,10 @@ export default function Onboarding2() {
       setGeneratedPlan(goalData);
       setSavingsPlan(goal.steps);
     } catch (error) {
+      if (error?.isValidationError) {
+        setAlertMsg(error.message);
+        return;
+      }
       const fallbackGoal = buildFallbackBucketGoal();
       const goalData = {
         bucketList: bucket,
@@ -353,6 +365,8 @@ export default function Onboarding2() {
 
   return (
     <main className="join1-page">
+      <MonyAlert message={alertMsg} onClose={() => setAlertMsg(null)} />
+
       <div className="join1-iconWrap" aria-hidden="true">
         <JoinStarIcon />
       </div>
@@ -463,6 +477,11 @@ export default function Onboarding2() {
               if (digits === "") return setQuickSaveAmount("");
               const n = Number(digits);
               setQuickSaveAmount(Number.isFinite(n) ? n.toLocaleString() : "");
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && isValid) {
+                document.querySelector(".join1-button.is-enabled")?.click();
+              }
             }}
           />
         </div>

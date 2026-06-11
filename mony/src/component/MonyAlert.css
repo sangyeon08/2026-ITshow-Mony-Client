@@ -1,0 +1,69 @@
+.mony-alert-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.mony-alert-box {
+  width: 320px;
+  padding: 28px 24px 24px;
+  border-radius: 20px;
+  background: #1b1b1b;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.mony-alert-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(215, 255, 71, 0.12);
+  border: 1.5px solid rgba(215, 255, 71, 0.35);
+  color: #d7ff47;
+  font-size: 20px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mony-alert-msg {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.mony-alert-btn {
+  margin-top: 4px;
+  height: 40px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 999px;
+  background: #d7ff47;
+  color: #0f0f0f;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: opacity 0.15s;
+}
+
+.mony-alert-btn:active {
+  opacity: 0.82;
+}

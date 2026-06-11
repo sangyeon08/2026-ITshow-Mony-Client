@@ -147,6 +147,9 @@ export default function Onboarding3() {
                 const n = Number(digits);
                 setCustomAmount(Number.isFinite(n) ? n.toLocaleString() : "");
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && isValid) handleNext();
+              }}
             />
           )}
         </div>

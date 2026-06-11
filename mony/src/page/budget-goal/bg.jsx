@@ -181,8 +181,11 @@ const budgetGuide = {
 };
 
 export default function Bg() {
-  // ✅ 온보딩에서 저장한 이름 불러오기
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
+
+  const gridRef = useRef(null);
+  const [scrollRatio, setScrollRatio] = useState(0);
+  const [thumbHeight, setThumbHeight] = useState(0);
 
   const [savingsGoal, setSavingsGoal] = useState(
     () => Number(localStorage.getItem("mony_savings_goal")) || DEFAULT_savingsGoal,
@@ -245,12 +248,32 @@ export default function Bg() {
     0,
   );
 
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const update = () => {
+      const ratio = el.scrollTop / Math.max(el.scrollHeight - el.clientHeight, 1);
+      const thumb = Math.max((el.clientHeight / el.scrollHeight) * el.clientHeight, 28);
+      setScrollRatio(ratio);
+      setThumbHeight(thumb);
+    };
+    update();
+    el.addEventListener("scroll", update);
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [filteredChallenges]);
+
   const handleDeposit = (amount) => {
     const num = Number(amount);
     if (!num || num <= 0) return;
     const newTotal = Math.min(savingsAmount + num, savingsGoal);
     setSavingsAmount(newTotal);
     localStorage.setItem("mony_saved_amount", String(newTotal));
+    window.dispatchEvent(new StorageEvent("storage", { key: "mony_saved_amount", newValue: String(newTotal) }));
     setShowSavingsModal(false);
     setDepositInput("");
 
@@ -539,7 +562,8 @@ export default function Bg() {
                   ))}
                 </div>
 
-                <div className="bg-challengeGrid">
+                <div className="bg-challengeGridWrap">
+                <div className="bg-challengeGrid" ref={gridRef}>
                   {filteredChallenges.map((item, index) => (
                     <motion.div
                       key={item.id}
@@ -655,6 +679,20 @@ export default function Bg() {
                     </motion.div>
                   ))}
                 </div>
+                {thumbHeight < gridRef.current?.clientHeight && (
+                  <div className="bg-scrollTrack" aria-hidden="true">
+                    <div
+                      className="bg-scrollThumb"
+                      style={{
+                        height: thumbHeight,
+                        top: scrollRatio * (
+                          (gridRef.current?.clientHeight ?? 0) - thumbHeight
+                        ),
+                      }}
+                    />
+                  </div>
+                )}
+                </div>
               </motion.article>
             </motion.div>
 
@@ -706,6 +744,11 @@ export default function Bg() {
                   placeholder="직접 입력"
                   value={depositInput}
                   onChange={(e) => setDepositInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && depositInput && Number(depositInput) > 0) {
+                      handleDeposit(depositInput);
+                    }
+                  }}
                 />
                 <span>원</span>
               </div>
