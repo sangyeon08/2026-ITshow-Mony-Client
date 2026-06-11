@@ -463,23 +463,10 @@ export default function Ca() {
     localStorage.setItem("mony_memories", JSON.stringify(updated));
   };
 
-  const handleCaSave = async (amount) => {
+  const handleCaSave = (amount) => {
     const prev = Number(localStorage.getItem("mony_saved_amount") ?? 0);
     localStorage.setItem("mony_saved_amount", String(prev + amount));
     setCaSavedAmount(amount);
-    const bucketId = localStorage.getItem("mony_primary_bucket_id");
-    if (bucketId) {
-      try {
-        const res = await bucketsApi.getById(bucketId);
-        if (res.data) {
-          const newMonyFinish = Math.min(
-            (res.data.mony_finish || 0) + amount,
-            res.data.mony_ing || Infinity,
-          );
-          await bucketsApi.updateMoney(bucketId, newMonyFinish);
-        }
-      } catch {}
-    }
   };
 
   /* 탭 필터 */

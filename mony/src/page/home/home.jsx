@@ -276,8 +276,8 @@ export default function Home() {
     return n > 0 ? n : 100000;
   });
   const [savedAmount, setSavedAmount] = useState(() => {
-    const n = Number(localStorage.getItem("mony_saved_amount") ?? -1);
-    return n >= 0 ? n : 32000;
+    const bg = getBucketGoal();
+    return Number(bg?.currentSaved ?? 0);
   });
   const [savingsToast, setSavingsToast] = useState(false);
   const [isSavingToBucket, setIsSavingToBucket] = useState(false);
@@ -348,7 +348,6 @@ export default function Home() {
           localStorage.setItem("mony_quick_save_amount", String(nextBucketGoal.quickSaveAmount));
           return nextBucketGoal;
         });
-        localStorage.setItem("mony_saved_amount", String(nextSavedAmount));
       } else {
         const next = Math.min(savedAmount + amount, savingsGoal);
         setSavedAmount(next);
@@ -365,7 +364,6 @@ export default function Home() {
           localStorage.setItem("bucketGoal", JSON.stringify(nextBucketGoal));
           return nextBucketGoal;
         });
-        localStorage.setItem("mony_saved_amount", String(next));
       }
 
       setSavingsToast(true);
@@ -402,7 +400,6 @@ export default function Home() {
       setQuickSaveAmount(nextQuickSaveAmount);
       localStorage.setItem("bucketGoal", JSON.stringify(nextBucketGoal));
       localStorage.setItem("mony_primary_bucket_id", String(bucket.id));
-      localStorage.setItem("mony_saved_amount", String(nextBucketGoal.currentSaved));
       localStorage.setItem("mony_quick_save_amount", String(nextQuickSaveAmount));
       setSavedAmount(nextBucketGoal.currentSaved);
       if (nextBucketGoal.targetAmount > 0) setSavingsGoal(nextBucketGoal.targetAmount);

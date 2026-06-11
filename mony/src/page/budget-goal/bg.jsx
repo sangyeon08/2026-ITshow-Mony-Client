@@ -251,6 +251,7 @@ export default function Bg() {
     const newTotal = Math.min(savingsAmount + num, savingsGoal);
     setSavingsAmount(newTotal);
     localStorage.setItem("mony_saved_amount", String(newTotal));
+    window.dispatchEvent(new StorageEvent("storage", { key: "mony_saved_amount", newValue: String(newTotal) }));
     setShowSavingsModal(false);
     setDepositInput("");
 
