@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Navigate to={onboardingDone ? "/home" : "/onboarding1"} replace />}
+            element={<Navigate to={onboardingDone ? "/home" : "/splash"} replace />}
           />
           <Route path="/splash" element={<Splash />} />
           <Route path="/home" element={<Home />} />

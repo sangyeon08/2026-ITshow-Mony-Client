@@ -60,6 +60,7 @@ export default function Splash() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
+      <div className="splash-page-gradient" />
       <div className="splash">
         <img className="star star-top-left" src={Star2} alt="" />
         <img className="star star-top-right" src={Star1} alt="" />
