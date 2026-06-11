@@ -18,6 +18,14 @@ const MENU = [
   { key: "consumption-coach", label: "소비코치", icon: ConsumptionCoachIcon, to: "/consumption-coach" },
 ];
 
+const RESET_KEYS = [
+  "joinName", "onboardingCompleted", "onboarding2Form",
+  "bucketGoal", "bucketGoals",
+  "mony_savings_goal", "mony_saved_amount", "mony_challenge_saved_amount",
+  "mony_savings_method", "mony_primary_bucket_id",
+  "mony_quick_save_amount", "mony_memories",
+];
+
 function guessActiveKey(pathname) {
   if (pathname === "/" || pathname.startsWith("/home")) return "home";
   if (pathname.startsWith("/consumption-management")) return "consumption-management";
@@ -43,6 +51,11 @@ export default function Menu() {
   }, [nameFromState]);
 
   const activeKey = useMemo(() => guessActiveKey(location.pathname), [location.pathname]);
+
+  const handleReset = () => {
+    RESET_KEYS.forEach((k) => localStorage.removeItem(k));
+    navigate("/splash");
+  };
 
   return (
     <aside className="menu" aria-label="사이드 메뉴">
@@ -84,18 +97,18 @@ export default function Menu() {
         </LayoutGroup>
       </nav>
 
-      <div className="menu-bottom" >
+      <div className="menu-bottom">
         <h4>오늘의 이야기</h4>
         <div className="menu-bottom-top-box">
           이해하는 소비를 실천해 볼까요?
         </div>
         <div className="menu-bottom-context">
           <span className="title">목적을 잃지 마라 !!</span>
-          돈을 아끼는 것이 미덕이지만, 
-          돈을 아끼는 것이 목적이 
-          되어서는 안 된다.
+          돈을 아끼는 것이 미덕이지만,
+          돈을 아끼는 것이 목적이
+          되어서는 안 된다.
         </div>
-        <p>처음으로 가기</p>
+        <p className="menu-resetBtn" onClick={handleReset}>처음으로 가기</p>
       </div>
     </aside>
   );

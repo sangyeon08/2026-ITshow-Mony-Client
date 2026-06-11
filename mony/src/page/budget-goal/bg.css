@@ -725,6 +725,12 @@
   color: #d7ff47;
 }
 
+.bg-challengeGridWrap {
+  position: relative;
+  display: flex;
+  gap: 0;
+}
+
 .bg-challengeGrid {
   margin-top: 4px;
   display: grid;
@@ -733,25 +739,34 @@
   align-items: stretch;
   gap: 12px;
   max-height: calc((208px * 2) + 12px);
-  overflow-y: auto;
+  overflow-y: scroll;
   overscroll-behavior: contain;
   padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(215, 255, 71, 0.45) rgba(255, 255, 255, 0.06);
+  flex: 1;
+  scrollbar-width: none;
 }
 
 .bg-challengeGrid::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
-.bg-challengeGrid::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.06);
+.bg-scrollTrack {
+  position: absolute;
+  right: -10px;
+  top: 4px;
+  bottom: 0;
+  width: 5px;
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
 }
 
-.bg-challengeGrid::-webkit-scrollbar-thumb {
-  background: rgba(215, 255, 71, 0.45);
+.bg-scrollThumb {
+  position: absolute;
+  left: 0;
+  width: 100%;
   border-radius: 999px;
+  background: rgba(215, 255, 71, 0.55);
+  transition: top 0.06s linear, height 0.1s ease;
 }
 
 .bg-challengeCard {

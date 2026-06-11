@@ -509,13 +509,18 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.3 }}
           >
-            <motion.article className="home-savingsCard" {...cardMotion}>
+            <motion.article
+              className={`home-savingsCard${bucketProgressPct >= 100 ? " is-completed" : ""}`}
+              {...cardMotion}
+            >
               <div className="home-savingsHeader">
                 <div className="home-savingsHeaderText">
                   <p className="home-metricLabel">버킷리스트 챌린지</p>
                   <h3>{bucketGoal?.bucketList || "버킷리스트 챌린지"}</h3>
                 </div>
-                <span className="home-savingsPiggy" aria-hidden="true">🪙</span>
+                <span className="home-savingsPiggy" aria-hidden="true">
+                  {bucketProgressPct >= 100 ? "🏆" : "🪙"}
+                </span>
               </div>
 
               <div className="home-savingsStats">
@@ -550,14 +555,28 @@ export default function Home() {
               </div>
 
               <div className="home-savingsActions">
-                <button
-                  type="button"
-                  className="home-savingsBtn"
-                  onClick={handleQuickSave}
-                  disabled={isSavingToBucket}
-                >
-                  {isSavingToBucket ? "추가 중..." : `+ ${quickSaveAmountText}원 적립하기`}
-                </button>
+                {bucketProgressPct >= 100 ? (
+                  <div className="home-savingsComplete">
+                    <motion.div
+                      className="home-savingsCompleteInner"
+                      initial={{ scale: 0.85, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 320, damping: 22 }}
+                    >
+                      <span className="home-savingsCompleteIcon">✓</span>
+                      <span>목표 달성 완료!</span>
+                    </motion.div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="home-savingsBtn"
+                    onClick={handleQuickSave}
+                    disabled={isSavingToBucket}
+                  >
+                    {isSavingToBucket ? "추가 중..." : `+ ${quickSaveAmountText}원 적립하기`}
+                  </button>
+                )}
                 {savingsPct >= 50 && (
                   <div className="home-savingsAchieve">
                     <span aria-hidden="true">🏅</span>
