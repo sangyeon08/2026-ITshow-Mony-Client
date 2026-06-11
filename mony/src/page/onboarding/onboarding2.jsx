@@ -143,6 +143,7 @@ const normalizeBucketCategory = (value) => {
     : DEFAULT_BUCKET_CATEGORY;
 };
 
+// ✅ 핵심 수정: validation error는 catch에서 다시 throw해서 팝업까지 전달
 const parseSavingsPlan = (text) => {
   try {
     const jsonText =
@@ -182,7 +183,9 @@ const parseSavingsPlan = (text) => {
       currentSaved: Number(parsed.currentSaved) || 0,
       steps,
     };
-  } catch {
+  } catch (err) {
+    // ✅ validation error는 다시 던져서 팝업이 뜨도록 함
+    if (err?.isValidationError) throw err;
     return fallbackBucketGoal;
   }
 };
@@ -335,6 +338,7 @@ export default function Onboarding2() {
       setGeneratedPlan(goalData);
       setSavingsPlan(goal.steps);
     } catch (error) {
+      // ✅ validation error면 팝업만 띄우고 fallback 계획은 채우지 않음
       if (error?.isValidationError) {
         setAlertMsg(error.message);
         return;
