@@ -383,7 +383,7 @@ export default function Cm() {
   const [historyPage, setHistoryPage] = useState(0);
   const [activeLogCategory, setActiveLogCategory] = useState("식사/외식");
   const [savedAmount] = useState(() => {
-    const v = Number(localStorage.getItem("mony_saved_amount"));
+    const v = Number(localStorage.getItem("mony_challenge_saved_amount"));
     return v > 0 ? v : 0;
   });
   const [savingsGoal, setSavingsGoal] = useState(
