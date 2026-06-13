@@ -187,6 +187,40 @@ export default function Bg() {
   const [scrollRatio, setScrollRatio] = useState(0);
   const [thumbHeight, setThumbHeight] = useState(0);
 
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartY = useRef(0);
+  const dragStartScrollTop = useRef(0);
+
+  const handleThumbMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartY.current = e.clientY;
+    dragStartScrollTop.current = gridRef.current?.scrollTop ?? 0;
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const el = gridRef.current;
+    if (!el) return;
+
+    const handleMouseMove = (e) => {
+      const trackHeight = el.clientHeight;
+      const scrollableHeight = el.scrollHeight - el.clientHeight;
+      const dy = e.clientY - dragStartY.current;
+      const scrollDelta = (dy / (trackHeight - thumbHeight)) * scrollableHeight;
+      el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, thumbHeight]);
+
   const [savingsGoal, setSavingsGoal] = useState(
     () => Number(localStorage.getItem("mony_savings_goal")) || DEFAULT_savingsGoal,
   );
@@ -680,15 +714,17 @@ export default function Bg() {
                   ))}
                 </div>
                 {thumbHeight < gridRef.current?.clientHeight && (
-                  <div className="bg-scrollTrack" aria-hidden="true">
+                  <div
+                    className={`bg-scrollTrack${isDragging ? " is-dragging" : ""}`}
+                    aria-hidden="true"
+                  >
                     <div
                       className="bg-scrollThumb"
                       style={{
                         height: thumbHeight,
-                        top: scrollRatio * (
-                          (gridRef.current?.clientHeight ?? 0) - thumbHeight
-                        ),
+                        transform: `translateY(${scrollRatio * ((gridRef.current?.clientHeight ?? 0) - thumbHeight)}px)`,
                       }}
+                      onMouseDown={handleThumbMouseDown}
                     />
                   </div>
                 )}

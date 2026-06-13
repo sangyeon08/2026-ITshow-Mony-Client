@@ -568,6 +568,40 @@ export default function Ca() {
   const gridScrollRef = useRef(null);
   const { scrollRatio, thumbHeight } = useScrollIndicator(gridScrollRef);
 
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartY = useRef(0);
+  const dragStartScrollTop = useRef(0);
+
+  const handleThumbMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartY.current = e.clientY;
+    dragStartScrollTop.current = gridScrollRef.current?.scrollTop ?? 0;
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const el = gridScrollRef.current;
+    if (!el) return;
+
+    const handleMouseMove = (e) => {
+      const trackHeight = el.clientHeight;
+      const scrollableHeight = el.scrollHeight - el.clientHeight;
+      const dy = e.clientY - dragStartY.current;
+      const scrollDelta = (dy / (trackHeight - thumbHeight)) * scrollableHeight;
+      el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, thumbHeight]);
+
   useEffect(() => {
     if (gridScrollRef.current) {
       gridScrollRef.current.scrollTop = 0;
@@ -1160,18 +1194,17 @@ export default function Ca() {
                   </div>
 
                   {/* 커스텀 스크롤 트랙 */}
-                  <div className="ca-mc__scrollTrack" aria-hidden="true">
+                  <div
+                    className={`ca-mc__scrollTrack${isDragging ? " is-dragging" : ""}`}
+                    aria-hidden="true"
+                  >
                     <div
                       className="ca-mc__scrollThumb"
                       style={{
                         height: thumbHeight,
-                        // ✅ 수정: scrollRatio로 top 위치 계산
-                        top:
-                          scrollRatio *
-                          ((gridScrollRef.current?.clientHeight ?? 0) -
-                            thumbHeight),
-                        transition: "none",
+                        transform: `translateY(${scrollRatio * ((gridScrollRef.current?.clientHeight ?? 0) - thumbHeight)}px)`,
                       }}
+                      onMouseDown={handleThumbMouseDown}
                     />
                   </div>
                 </div>
