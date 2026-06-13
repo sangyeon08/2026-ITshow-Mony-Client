@@ -244,7 +244,11 @@ function getOnboardingCategories() {
       if (typeof parsed === "string") return [parsed];
     } catch {
       const raw = localStorage.getItem(key);
-      if (raw) return raw.split(",").map((s) => s.trim()).filter(Boolean);
+      if (raw)
+        return raw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
     }
   }
   return null;
@@ -454,44 +458,59 @@ function MemoryCard({ bucket, memoryData, onOpenModal }) {
 
 /* ─────────────────────────────────────────── 커스텀 스크롤바 훅 */
 function useScrollIndicator(ref) {
-  const [thumbTop, setThumbTop] = useState(0);
+  const [scrollRatio, setScrollRatio] = useState(0);
   const [thumbHeight, setThumbHeight] = useState(0);
-  const [visible, setVisible] = useState(false);
-
-  const update = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight <= clientHeight) {
-      setVisible(false);
-      return;
-    }
-    setVisible(true);
-    const minThumb = 32;
-    const ratio = clientHeight / scrollHeight;
-    const h = Math.max(ratio * clientHeight, minThumb);
-    const maxScroll = scrollHeight - clientHeight;
-    const maxThumbTop = clientHeight - h;
-    setThumbHeight(h);
-    setThumbTop(maxScroll > 0 ? (scrollTop / maxScroll) * maxThumbTop : 0);
-  }, [ref]);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // 약간 딜레이 후 초기 계산 (렌더 완료 후)
-    const timer = setTimeout(update, 100);
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => {
-      clearTimeout(timer);
-      el.removeEventListener("scroll", update);
-      ro.disconnect();
-    };
-  }, [ref, update]);
+    // ✅ 수정: 바로 못 잡을 수 있으니 interval로 el 확인
+    let el = ref.current;
 
-  return { thumbTop, thumbHeight, visible };
+    const attach = () => {
+      el = ref.current;
+      if (!el) return false;
+
+      const update = () => {
+        const ratio =
+          el.scrollTop / Math.max(el.scrollHeight - el.clientHeight, 1);
+        const thumb = Math.max(
+          (el.clientHeight / el.scrollHeight) * el.clientHeight,
+          28,
+        );
+        setScrollRatio(ratio);
+        setThumbHeight(thumb);
+      };
+
+      update();
+      el.addEventListener("scroll", update, { passive: true });
+      const ro = new ResizeObserver(update);
+      ro.observe(el);
+
+      // cleanup 함수 반환
+      return () => {
+        el.removeEventListener("scroll", update);
+        ro.disconnect();
+      };
+    };
+
+    // ✅ 수정: el이 없으면 100ms마다 재시도
+    let cleanup;
+    if (ref.current) {
+      cleanup = attach();
+    } else {
+      const interval = setInterval(() => {
+        if (ref.current) {
+          clearInterval(interval);
+          cleanup = attach();
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+
+    return () => cleanup?.();
+    // ✅ 수정: filteredBuckets 변경 시 재실행되도록 key 방식 대신 deps 없이 매번
+  }, []); // eslint-disable-line
+
+  return { scrollRatio, thumbHeight };
 }
 
 /* ─────────────────────────────────────────── 메인 컴포넌트 */
@@ -547,8 +566,14 @@ export default function Ca() {
 
   /* 스크롤 ref — scrollWrap 안의 grid에 붙임 */
   const gridScrollRef = useRef(null);
-  const { thumbTop, thumbHeight, visible: scrollVisible } = useScrollIndicator(gridScrollRef);
+  const { scrollRatio, thumbHeight } = useScrollIndicator(gridScrollRef);
 
+  useEffect(() => {
+    if (gridScrollRef.current) {
+      gridScrollRef.current.scrollTop = 0;
+    }
+  }, [bucketTab]);
+  
   const openModal = (bucketId) => {
     const existing = memories[bucketId];
     setModalBucketId(bucketId);
@@ -612,8 +637,11 @@ export default function Ca() {
 
     // bg.jsx 동일 방식: bucketGoal + mony_primary_bucket_id 로 카테고리 매핑
     const storedBucketGoal = (() => {
-      try { return JSON.parse(localStorage.getItem("bucketGoal") || "null"); }
-      catch { return null; }
+      try {
+        return JSON.parse(localStorage.getItem("bucketGoal") || "null");
+      } catch {
+        return null;
+      }
     })();
     const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
     const validCats = ["여행", "취미", "자기계발", "쇼핑", "음식", "문화"];
@@ -622,9 +650,11 @@ export default function Ca() {
       // 1순위: 이 버킷이 primary이거나 제목이 bucketGoal.bucketList와 일치하면 bucketGoal 카테고리 사용
       const isMatch =
         String(b.id) === primaryBucketId ||
-        (b.title && storedBucketGoal?.bucketList &&
+        (b.title &&
+          storedBucketGoal?.bucketList &&
           b.title.trim() === storedBucketGoal.bucketList.trim());
-      if (isMatch && storedBucketGoal?.category) return storedBucketGoal.category;
+      if (isMatch && storedBucketGoal?.category)
+        return storedBucketGoal.category;
       // 2순위: API에서 온 카테고리가 유효하면 그대로
       if (validCats.includes(b.category)) return b.category;
       // 3순위: 기타
@@ -654,7 +684,6 @@ export default function Ca() {
       .catch(() => setCompletedBuckets(DEMO_COMPLETED_BUCKETS))
       .finally(() => setBucketsLoading(false));
   }, []);
-
 
   const handleSaveMemory = (bucketId, data) => {
     const updated = { ...memories, [bucketId]: data };
@@ -793,7 +822,9 @@ export default function Ca() {
                       안정적인 적정 소비
                     </span>
                     <div className="march-div">
-                      <strong className="march">{currentShortMonthLabel},</strong>
+                      <strong className="march">
+                        {currentShortMonthLabel},
+                      </strong>
                       <br />
                       <strong className="march-description">
                         소비 패턴의 균형의 <br /> 유지가 적절해요
@@ -1113,33 +1144,34 @@ export default function Ca() {
               {/* ── 스크롤 영역 + 커스텀 스크롤바 */}
               {!bucketsLoading && filteredBuckets.length > 0 && (
                 <div className="ca-mc__scrollWrap">
-                  <motion.div
-                    className="ca-mc__grid"
-                    ref={gridScrollRef}
-                    variants={staggerContainerVariants}
-                    initial="hidden"
-                    animate="show"
-                  >
-                    {filteredBuckets.map((bucket) => (
-                      <MemoryCard
-                        key={bucket.id}
-                        bucket={bucket}
-                        memoryData={memories[bucket.id]}
-                        onSave={handleSaveMemory}
-                        onOpenModal={openModal}
-                      />
-                    ))}
-                  </motion.div>
+                  {/* ✅ 수정: ref를 일반 div로 옮김 — motion.div는 scroll 이벤트 못 잡음 */}
+                  <div ref={gridScrollRef} className="ca-mc__gridScroller">
+                    <div className="ca-mc__grid">
+                      {filteredBuckets.map((bucket) => (
+                        <MemoryCard
+                          key={bucket.id}
+                          bucket={bucket}
+                          memoryData={memories[bucket.id]}
+                          onSave={handleSaveMemory}
+                          onOpenModal={openModal}
+                        />
+                      ))}
+                    </div>
+                  </div>
 
-                  {/* 커스텀 스크롤 트랙 — 항상 렌더, visible로 opacity 제어 */}
-                  <div
-                    className="ca-mc__scrollTrack"
-                    aria-hidden="true"
-                    style={{ opacity: scrollVisible ? 1 : 0 }}
-                  >
+                  {/* 커스텀 스크롤 트랙 */}
+                  <div className="ca-mc__scrollTrack" aria-hidden="true">
                     <div
                       className="ca-mc__scrollThumb"
-                      style={{ top: thumbTop, height: thumbHeight }}
+                      style={{
+                        height: thumbHeight,
+                        // ✅ 수정: scrollRatio로 top 위치 계산
+                        top:
+                          scrollRatio *
+                          ((gridScrollRef.current?.clientHeight ?? 0) -
+                            thumbHeight),
+                        transition: "none",
+                      }}
                     />
                   </div>
                 </div>

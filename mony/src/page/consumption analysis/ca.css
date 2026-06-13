@@ -14,6 +14,20 @@
   align-items: start;
 }
 
+.ca-mc__gridScroller {
+  flex: 1;
+  min-width: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ca-mc__gridScroller::-webkit-scrollbar {
+  display: none;
+}
+
+
 .ca-mc__scrollWrap {
   position: relative;
   display: flex;
@@ -40,32 +54,31 @@
 .ca-mc__scrollTrack {
   position: relative;
   flex-shrink: 0;
-  width: 4px;
+  width: 6px;                              /* 4 → 6px */
   align-self: stretch;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.2);   /* 더 진하게 */
 }
 
 .ca-mc__scrollTrack:has(.ca-mc__scrollThumb) {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.ca-mc__scrollThumb:hover {
+  background: #d7ff47;
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(215, 255, 71, 0.8);
+}
+
 .ca-mc__scrollThumb {
   position: absolute;
   left: 0;
   right: 0;
-  min-height: 36px;
+  min-height: 32px;
   border-radius: 99px;
   background: #d7ff47;
-  opacity: 0.7;
-  transition: opacity 0.15s;
+  box-shadow: 0 0 8px rgba(215, 255, 71, 0.5);
 }
-
-.ca-mc__scrollThumb:hover {
-  background: rgba(255, 255, 255, 0.55);
-  opacity: 1;
-}
-
 
 .ca-main {
   min-width: 0;
