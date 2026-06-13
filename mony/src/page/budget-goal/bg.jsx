@@ -184,8 +184,9 @@ export default function Bg() {
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
 
   const gridRef = useRef(null);
-  const [scrollRatio, setScrollRatio] = useState(0);
+  const thumbRef = useRef(null);
   const [thumbHeight, setThumbHeight] = useState(0);
+  const thumbHeightRef = useRef(0);
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -207,7 +208,7 @@ export default function Bg() {
       const trackHeight = el.clientHeight;
       const scrollableHeight = el.scrollHeight - el.clientHeight;
       const dy = e.clientY - dragStartY.current;
-      const scrollDelta = (dy / (trackHeight - thumbHeight)) * scrollableHeight;
+      const scrollDelta = (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
       el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
     };
 
@@ -219,7 +220,7 @@ export default function Bg() {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, thumbHeight]);
+  }, [isDragging]);
 
   const [savingsGoal, setSavingsGoal] = useState(
     () => Number(localStorage.getItem("mony_savings_goal")) || DEFAULT_savingsGoal,
@@ -288,11 +289,14 @@ export default function Bg() {
     const update = () => {
       const ratio = el.scrollTop / Math.max(el.scrollHeight - el.clientHeight, 1);
       const thumb = Math.max((el.clientHeight / el.scrollHeight) * el.clientHeight, 28);
-      setScrollRatio(ratio);
+      thumbHeightRef.current = thumb;
       setThumbHeight(thumb);
+      if (thumbRef.current) {
+        thumbRef.current.style.transform = `translateY(${ratio * Math.max(el.clientHeight - thumb, 0)}px)`;
+      }
     };
     update();
-    el.addEventListener("scroll", update);
+    el.addEventListener("scroll", update, { passive: true });
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => {
@@ -720,10 +724,8 @@ export default function Bg() {
                   >
                     <div
                       className="bg-scrollThumb"
-                      style={{
-                        height: thumbHeight,
-                        transform: `translateY(${scrollRatio * ((gridRef.current?.clientHeight ?? 0) - thumbHeight)}px)`,
-                      }}
+                      ref={thumbRef}
+                      style={{ height: thumbHeight }}
                       onMouseDown={handleThumbMouseDown}
                     />
                   </div>

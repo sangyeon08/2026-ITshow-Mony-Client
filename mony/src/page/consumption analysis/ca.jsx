@@ -457,12 +457,11 @@ function MemoryCard({ bucket, memoryData, onOpenModal }) {
 }
 
 /* ─────────────────────────────────────────── 커스텀 스크롤바 훅 */
-function useScrollIndicator(ref) {
-  const [scrollRatio, setScrollRatio] = useState(0);
+function useScrollIndicator(ref, thumbRef) {
   const [thumbHeight, setThumbHeight] = useState(0);
+  const thumbHeightRef = useRef(0);
 
   useEffect(() => {
-    // ✅ 수정: 바로 못 잡을 수 있으니 interval로 el 확인
     let el = ref.current;
 
     const attach = () => {
@@ -476,8 +475,11 @@ function useScrollIndicator(ref) {
           (el.clientHeight / el.scrollHeight) * el.clientHeight,
           28,
         );
-        setScrollRatio(ratio);
+        thumbHeightRef.current = thumb;
         setThumbHeight(thumb);
+        if (thumbRef.current) {
+          thumbRef.current.style.transform = `translateY(${ratio * Math.max(el.clientHeight - thumb, 0)}px)`;
+        }
       };
 
       update();
@@ -485,14 +487,12 @@ function useScrollIndicator(ref) {
       const ro = new ResizeObserver(update);
       ro.observe(el);
 
-      // cleanup 함수 반환
       return () => {
         el.removeEventListener("scroll", update);
         ro.disconnect();
       };
     };
 
-    // ✅ 수정: el이 없으면 100ms마다 재시도
     let cleanup;
     if (ref.current) {
       cleanup = attach();
@@ -507,10 +507,9 @@ function useScrollIndicator(ref) {
     }
 
     return () => cleanup?.();
-    // ✅ 수정: filteredBuckets 변경 시 재실행되도록 key 방식 대신 deps 없이 매번
   }, []); // eslint-disable-line
 
-  return { scrollRatio, thumbHeight };
+  return { thumbHeight, thumbHeightRef };
 }
 
 /* ─────────────────────────────────────────── 메인 컴포넌트 */
@@ -566,7 +565,8 @@ export default function Ca() {
 
   /* 스크롤 ref — scrollWrap 안의 grid에 붙임 */
   const gridScrollRef = useRef(null);
-  const { scrollRatio, thumbHeight } = useScrollIndicator(gridScrollRef);
+  const thumbRef = useRef(null);
+  const { thumbHeight, thumbHeightRef } = useScrollIndicator(gridScrollRef, thumbRef);
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -588,7 +588,7 @@ export default function Ca() {
       const trackHeight = el.clientHeight;
       const scrollableHeight = el.scrollHeight - el.clientHeight;
       const dy = e.clientY - dragStartY.current;
-      const scrollDelta = (dy / (trackHeight - thumbHeight)) * scrollableHeight;
+      const scrollDelta = (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
       el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
     };
 
@@ -600,7 +600,7 @@ export default function Ca() {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, thumbHeight]);
+  }, [isDragging]);
 
   useEffect(() => {
     if (gridScrollRef.current) {
@@ -1200,10 +1200,8 @@ export default function Ca() {
                   >
                     <div
                       className="ca-mc__scrollThumb"
-                      style={{
-                        height: thumbHeight,
-                        transform: `translateY(${scrollRatio * ((gridScrollRef.current?.clientHeight ?? 0) - thumbHeight)}px)`,
-                      }}
+                      ref={thumbRef}
+                      style={{ height: thumbHeight }}
                       onMouseDown={handleThumbMouseDown}
                     />
                   </div>

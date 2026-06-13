@@ -774,7 +774,7 @@
   background: rgba(215, 255, 71, 0.55);
   cursor: grab;
   will-change: transform;
-  transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.12s ease, background 0.15s ease;
+  transition: height 0.12s ease, background 0.15s ease;
 }
 
 .bg-scrollThumb:hover {
