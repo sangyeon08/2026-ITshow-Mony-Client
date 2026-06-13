@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./onboarding3.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
-import { goals, buckets } from "../../api/index.js";
+import { goals, buckets, stats } from "../../api/index.js";
 
 const GOAL_PRESETS = [
   { label: "100,000원", value: 100000 },
@@ -84,6 +84,8 @@ export default function Onboarding3() {
         console.warn("[onboarding] buckets.create 실패:", e.message);
       }
     }
+
+    stats.increment().catch(() => {});
 
     localStorage.setItem("onboardingCompleted", "true");
     navigate("/home", { state: { name: userName } });
