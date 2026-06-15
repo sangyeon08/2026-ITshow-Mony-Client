@@ -755,9 +755,15 @@
   right: -10px;
   top: 4px;
   bottom: 0;
-  width: 5px;
+  width: 4px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
+  transition: width 0.2s ease;
+}
+
+.bg-scrollTrack:hover,
+.bg-scrollTrack.is-dragging {
+  width: 8px;
 }
 
 .bg-scrollThumb {
@@ -766,7 +772,19 @@
   width: 100%;
   border-radius: 999px;
   background: rgba(215, 255, 71, 0.55);
-  transition: top 0.06s linear, height 0.1s ease;
+  cursor: grab;
+  will-change: transform;
+  transition: height 0.12s ease, background 0.15s ease;
+}
+
+.bg-scrollThumb:hover {
+  background: rgba(215, 255, 71, 0.75);
+}
+
+.bg-scrollTrack.is-dragging .bg-scrollThumb {
+  cursor: grabbing;
+  background: rgba(215, 255, 71, 0.88);
+  transition: height 0.12s ease;
 }
 
 .bg-challengeCard {

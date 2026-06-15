@@ -54,20 +54,16 @@
 .ca-mc__scrollTrack {
   position: relative;
   flex-shrink: 0;
-  width: 6px;                              /* 4 → 6px */
+  width: 4px;
   align-self: stretch;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.2);   /* 더 진하게 */
-}
-
-.ca-mc__scrollTrack:has(.ca-mc__scrollThumb) {
   background: rgba(255, 255, 255, 0.1);
+  transition: width 0.2s ease;
 }
 
-.ca-mc__scrollThumb:hover {
-  background: #d7ff47;
-  opacity: 1;
-  box-shadow: 0 0 10px rgba(215, 255, 71, 0.8);
+.ca-mc__scrollTrack:hover,
+.ca-mc__scrollTrack.is-dragging {
+  width: 8px;
 }
 
 .ca-mc__scrollThumb {
@@ -76,8 +72,22 @@
   right: 0;
   min-height: 32px;
   border-radius: 99px;
-  background: #d7ff47;
-  box-shadow: 0 0 8px rgba(215, 255, 71, 0.5);
+  background: rgba(215, 255, 71, 0.55);
+  box-shadow: 0 0 8px rgba(215, 255, 71, 0.4);
+  cursor: grab;
+  will-change: transform;
+  transition: height 0.12s ease, background 0.15s ease;
+}
+
+.ca-mc__scrollThumb:hover {
+  background: rgba(215, 255, 71, 0.75);
+  box-shadow: 0 0 10px rgba(215, 255, 71, 0.7);
+}
+
+.ca-mc__scrollTrack.is-dragging .ca-mc__scrollThumb {
+  cursor: grabbing;
+  background: rgba(215, 255, 71, 0.88);
+  transition: height 0.12s ease;
 }
 
 .ca-main {

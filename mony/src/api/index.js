@@ -66,6 +66,12 @@ export const buckets = {
   remove: (id) => request(`/buckets/${id}`, { method: 'DELETE' }),
 };
 
+// ── Stats ─────────────────────────────────────────────
+export const stats = {
+  increment: () => request('/stats/increment', { method: 'POST' }),
+  getCount: () => request('/stats'),
+};
+
 // ── Analysis ──────────────────────────────────────────
 export const analysis = {
   summary: (periodDetail) => request(`/analysis/summary/${periodDetail}`),
