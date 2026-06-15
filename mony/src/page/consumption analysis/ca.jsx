@@ -748,7 +748,6 @@ export default function Ca() {
           >
             <div className="ca-toolbar">
               <span>카카오뱅크, {name}의 카방카드</span>
-              <span aria-hidden="true">⌄</span>
             </div>
 
             <motion.div
