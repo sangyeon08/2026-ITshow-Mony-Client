@@ -757,11 +757,11 @@ export default function Cm() {
                   </div>
                   <div>
                     <span>국내 정상 (27건)</span>
-                    <strong>326,000원</strong>
+                    <strong className="rabbit">국내 취소 (0)</strong>
                   </div>
                   <div>
-                    <span>국내 취소 (0)</span>
-                    <strong>0원</strong>
+                    <span>326,000원</span>
+                    <strong className="rabbit">0원</strong>
                   </div>
                 </div>
 

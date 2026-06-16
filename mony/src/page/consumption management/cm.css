@@ -296,7 +296,14 @@
   flex-shrink: 0;
 }
 
-
+.rabbit {
+  color: #B6B6B6 !important;
+  font-family: Pretendard !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+}
 
 .cm-summaryCell strong {
   color: rgba(255, 255, 255, 0.96);
