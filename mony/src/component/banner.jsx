@@ -105,7 +105,7 @@ const highlightCards = [
   {
     no: "04",
     title: "벚꽃이 핀\n봄나들이",
-    desc: "야외 활동이 소비를 선호하시는 군요",
+    desc: "야외 활동이 소비를 선호하시는군요",
     tags: "#따릉이 #노들섬 #한강",
     tone: "pink",
     decor: "moon",
