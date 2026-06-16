@@ -91,7 +91,7 @@ const quickCards = [
     savings: true,
   },
   {
-    title: "목표 달성하려면 얼마나 아껴야 해?",
+    title: "목표까지 얼마나 아껴야 해?",
     text: "목표 달성 소비?",
     savings: true,
   },
