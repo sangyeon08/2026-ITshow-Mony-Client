@@ -51,7 +51,7 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 - 의미를 알 수 없는 무작위 문자·숫자 나열인 경우 (예: "ㅁㄴㅇㄹ", "1234", "asdf")
 - 여행, 취미, 자기계발 세 카테고리 어디에도 해석할 수 없는 내용인 경우
   - 여행: 국내외 여행, 배낭여행, 항공, 숙소, 관광, 워케이션 등
-  - 취미: 악기, 운동, 독서, 요리, 게임, 반려동물, 공연·전시 관람, 수집, 물건 구매 등
+  - 취미: 악기, 운동, 독서, 요리, 게임, 반려동물, 공연·전시 관람, 수집, 물건 구매, 무언가를 사기 등
   - 자기계발: 자격증, 어학, 학습, 창업, 건강 관리, 재테크 공부 등
 - 저축·목표와 전혀 관계없는 단순 감탄사·낙서인 경우
 
@@ -481,6 +481,10 @@ export default function Onboarding2() {
               const digits = e.target.value.replace(/[^0-9]/g, "");
               if (digits === "") return setQuickSaveAmount("");
               const n = Number(digits);
+              if (n > 100000000) {
+                setAlertMsg("1억 미만의 금액을 입력해주세요.");
+                return;
+              }
               setQuickSaveAmount(Number.isFinite(n) ? n.toLocaleString() : "");
             }}
             onKeyDown={(e) => {
