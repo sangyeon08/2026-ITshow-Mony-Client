@@ -289,11 +289,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 772px;
+  width: 865px;
   padding: 18px 4px;
   align-items: center;
   gap: 24px;
   flex-shrink: 0;
+  margin-left: 10px;
 }
 
 .rabbit {
@@ -482,6 +483,7 @@
   display: flex;
   align-items: center;
   gap: 50px;
+  margin-right: 55px;
 }
 
 .item strong {
