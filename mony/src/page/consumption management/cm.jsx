@@ -7,6 +7,7 @@ import Coinimg from "../../assets/cm/coin.png";
 import FoodIcon from "../../assets/cm/food.svg";
 import ShoppingIcon from "../../assets/cm/shopping.svg";
 import TrafficIcon from "../../assets/cm/traffic.svg";
+import BankIcon from "../../assets/cm/bank.png";
 
 import {
   CountUp,
@@ -107,7 +108,12 @@ const detailRows = [
     time: "09:05/국내",
     amount: "-5,600원",
   },
-  { date: todayKoreanLabel, name: "Apple", time: "17:50/국내", amount: "-5,400원" },
+  {
+    date: todayKoreanLabel,
+    name: "Apple",
+    time: "17:50/국내",
+    amount: "-5,400원",
+  },
   {
     date: todayKoreanLabel,
     name: "교보문고 광화문점",
@@ -573,24 +579,36 @@ export default function Cm() {
                   {...cardMotion}
                 >
                   <div className="cm-summaryCell">
-                    <span>가장 많이 사용한 카드</span>
-                    <strong>{name}의 카뱅 카드</strong>
-                  </div>
-                  <div className="cm-summaryCell">
-                    <span>이 카드는</span>
-                    <strong>식비 중심으로 사용되고 있어요</strong>
-                  </div>
-                  <div className="cm-summaryCell">
-                    <span>이번 달 쓴 돈</span>
-                    <strong>-326,000원</strong>
-                  </div>
-                  <div className="cm-summaryCell">
-                    <span>전체 소비</span>
-                    <strong>약 42%</strong>
-                  </div>
-                  <div className="cm-summaryCell">
-                    <span>지난 달에 비해</span>
-                    <strong>12% ↑</strong>
+
+                    <div className="dog">
+                      <img className="bankicon" src={BankIcon} alt="" />
+
+
+                      <div className="item">
+                        <span>가장 많이 사용한 카드</span>
+                        <strong>{name}의 카뱅카드</strong>
+                      </div>
+
+                      <div className="item">
+                        <span>이 카드는</span>
+                        <strong>식비 중심으로 사용되고 있어요</strong>
+                      </div>
+
+                      <div className="item">
+                        <span>이번 달 쓴 돈</span>
+                        <strong>-326,000원</strong>
+                      </div>
+
+                      <div className="item">
+                        <span>전체 소비</span>
+                        <strong>약 42%</strong>
+                      </div>
+
+                      <div className="item">
+                        <span>지난 달에 비해</span>
+                        <strong>12% ↑</strong>
+                      </div>
+                    </div>
                   </div>
                 </Motion.article>
 
@@ -739,11 +757,11 @@ export default function Cm() {
                   </div>
                   <div>
                     <span>국내 정상 (27건)</span>
-                    <strong>326,000원</strong>
+                    <strong className="rabbit">국내 취소 (0)</strong>
                   </div>
                   <div>
-                    <span>국내 취소 (0)</span>
-                    <strong>0원</strong>
+                    <span>326,000원</span>
+                    <strong className="rabbit">0원</strong>
                   </div>
                 </div>
 
@@ -830,16 +848,14 @@ export default function Cm() {
                         {day}
                       </span>
                     ))}
-                    {currentWeekDates.map(
-                      (day) => (
-                        <span
-                          key={day}
-                          className={`cm-calendarDate ${day === String(todayDayNumber) ? "is-active" : ""}`}
-                        >
-                          {day}
-                        </span>
-                      ),
-                    )}
+                    {currentWeekDates.map((day) => (
+                      <span
+                        key={day}
+                        className={`cm-calendarDate ${day === String(todayDayNumber) ? "is-active" : ""}`}
+                      >
+                        {day}
+                      </span>
+                    ))}
                   </div>
                 </Motion.article>
 
@@ -850,7 +866,9 @@ export default function Cm() {
                 >
                   <div className="cm-cardHeaderLine">
                     <div>
-                      <p className="cm-cardMeta1">소비로그 · {currentFullMonthLabel}</p>
+                      <p className="cm-cardMeta1">
+                        소비로그 · {currentFullMonthLabel}
+                      </p>
                     </div>
                   </div>
                   <div className="cm-logFilters">

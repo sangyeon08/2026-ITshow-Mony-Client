@@ -5,6 +5,15 @@
   box-sizing: border-box;
 }
 
+.bankicon {
+  display: flex;
+  width: 52px;
+  height: 52px;
+  padding: 9px;
+  align-items: center;
+  gap: 8px;
+}
+
 .cm-shell {
   width: min(1440px, 100%);
   margin: 0 auto;
@@ -275,13 +284,25 @@
 }
 
 .cm-summaryCell {
-  padding: 14px 12px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
+  width: 772px;
+  padding: 18px 4px;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.rabbit {
+  color: #B6B6B6 !important;
+  font-family: Pretendard !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
 }
 
 .cm-summaryCell strong {
@@ -439,6 +460,37 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.item span {
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.dog {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.item strong {
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .cm-categoryTop {

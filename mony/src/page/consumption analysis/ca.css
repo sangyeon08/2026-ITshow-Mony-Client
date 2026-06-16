@@ -146,13 +146,13 @@
 
 .ca-toolbar {
   padding: 25px 25px 32px;
-  color: rgba(255, 255, 255, 0.92);
+  color: white;
   font-size: 14px;
   font-weight: 600;
 }
 
 .ca-toolbar span:last-child {
-  color: rgba(255, 255, 255, 0.62);
+  color: white;
 }
 
 .ca-gridTop,
