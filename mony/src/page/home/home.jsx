@@ -66,6 +66,7 @@ const recentItems = [
 
 const benefitRows = [
   {
+    brand: "현대카드",
     amount: "2,100원",
     period: `${currentShortMonthLabel}의 혜택`,
     cardName: "현대 제로 카드",
@@ -75,6 +76,7 @@ const benefitRows = [
     discountValue: "100원",
   },
   {
+    brand: "카카오페이",
     amount: "17원",
     cardName: "카카오페이머니",
     pointTitle: "포인트 적립",
@@ -650,50 +652,50 @@ export default function Home() {
                 <div className="home-featureHeader">
                   <div>
                     <p className="home-featureLabel">결제 수단 혜택</p>
-                    <h4 className="home-featureTitle">현대카드</h4>
                   </div>
                   <img className="home-featureIcon" src={Char} alt="" aria-hidden="true" />
                 </div>
 
                 <div className="home-benefitList">
-                  {benefitRows.map((row) => (
-                    <div key={row.cardName} className="home-benefitRow">
-                      <div className="home-benefitMain">
-                        <strong className="cat">
-                          {benefitCardInView ? (
-                            <CountUp value={parseMoney(row.amount)} suffix="원" />
-                          ) : (
-                            "0원"
-                          )}
-                        </strong>
-                        <span>{row.period}</span>
-                      </div>
-
-                      <div className="home-benefitCardName">
-                        <span>결제 혜택 지정 카드</span>
-                        <strong>{row.cardName}</strong>
-                      </div>
-
-                      <div className="home-benefitMeta">
-                        <div>
-                          <span>{row.pointTitle}</span>
-                          <strong>
+                  {benefitRows.map((row, i) => (
+                    <div key={row.cardName} className={`home-benefitSection${i === 1 ? " home-benefitSection--kakao" : ""}`}>
+                      <h4 className="home-featureTitle">{row.brand}</h4>
+                      <div className="home-benefitRow">
+                        <div className="home-benefitMain">
+                          <strong className="cat">
                             {benefitCardInView ? (
-                              <CountUp value={parseMoney(row.pointValue)} suffix="원" />
+                              <CountUp value={parseMoney(row.amount)} suffix="원" />
                             ) : (
                               "0원"
                             )}
                           </strong>
+                          <span>{row.period}</span>
                         </div>
-                        <div>
-                          <span>{row.discountTitle}</span>
-                          <strong>
-                            {benefitCardInView ? (
-                              <CountUp value={parseMoney(row.discountValue)} suffix="원" />
-                            ) : (
-                              "0원"
-                            )}
-                          </strong>
+                        <div className="home-benefitCardName">
+                          <span>결제 혜택 지정 카드</span>
+                          <strong>{row.cardName}</strong>
+                        </div>
+                        <div className="home-benefitMeta">
+                          <div>
+                            <span>{row.pointTitle}</span>
+                            <strong>
+                              {benefitCardInView ? (
+                                <CountUp value={parseMoney(row.pointValue)} suffix="원" />
+                              ) : (
+                                "0원"
+                              )}
+                            </strong>
+                          </div>
+                          <div>
+                            <span>{row.discountTitle}</span>
+                            <strong>
+                              {benefitCardInView ? (
+                                <CountUp value={parseMoney(row.discountValue)} suffix="원" />
+                              ) : (
+                                "0원"
+                              )}
+                            </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
