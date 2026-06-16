@@ -89,7 +89,15 @@
   background: rgba(215, 255, 71, 0.88);
   transition: height 0.12s ease;
 }
-
+.ca-fixedCardTitle{
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  align-self: stretch;
+}
 .ca-main {
   min-width: 0;
   display: flex;
@@ -127,6 +135,13 @@
   margin: 0;
   padding: 10px 10px 32px;
   align-items: center;
+
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .ca-cardHeadStrong{
@@ -268,7 +283,47 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
+.One{
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  height: 17px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+}
 
+.Two{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  box-sizing: border-box;
+  min-width: 0; 
+}
+.mony{
+  color: #FFF;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 10px;
+  font-weight: 200;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.sum{
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 10px;
+  font-weight: 100;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 .ca-miniCard {
   min-height: 92px;
   padding: 12px;
@@ -280,12 +335,18 @@
   align-items: flex-start;
   gap: 6px;
   text-align: left;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 0;
+  box-sizing: border-box;  /* ← 이거 추가 */
+  width: 100%;             
 }
 
 .ca-miniCard--steady {
-  width: 170px;
   grid-row: span 2;
   min-height: 192px;
+  width: 100%;        /* ← 170px 고정 제거, 100%로 */
   justify-content: flex-start;
 }
 
@@ -510,28 +571,102 @@
 }
 
 .ca-fixedSummary {
-  margin-top: 12px;
-  padding: 16px;
+  margin-top: 22px;
+  padding: 24px;
+  padding-left: 30px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
-  display: grid;
+  display: flex;
+  height: 98px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-}
-
-.ca-fixedRow {
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  gap: 6px;
-  margin: 5px 0 0 5px;
+  margin-bottom: 12px;
 }
 
-.ca-fixedRow strong {
-  display: block;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
+.ca-fixedSummaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 107px;
 }
+
+.ca-fixedSummaryLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ca-fixedSummaryItem {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ca-fixedSummaryItem strong {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 48px;
+  color: #FFF;
+  font-style: normal;
+  line-height: normal;
+  font-family: Pretendard;
+}
+
+.ca-fixedSummaryItem  {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  min-width: 48px;
+}
+
+.ca-fixedAmount {
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-fixedAmount em {
+  margin-left: 4px;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ca-fixedSummaryRight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+.ca-fixedSummaryRight span{
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.ca-fixedSummaryRight strong {
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
 
 .ca-fixedGrid {
   margin-top: 14px;
@@ -541,14 +676,116 @@
 }
 
 .ca-fixedCard {
-  min-height: 138px;
-  padding: 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
   display: flex;
+  height: 278px;
   flex-direction: column;
   justify-content: space-between;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 32px 30px;
+  align-self: stretch;
 }
+.ca-fixedCardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  align-self: stretch;
+}
+.Test1{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ca-fixedCardList li {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  align-self: stretch;
+  justify-content: space-between;
+  color: #FFF;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.ca-fixedCardList li em 
+{
+  width: 28px;
+  color: #B6B6B6;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ca-fixedCardMore {
+  margin-left: auto;
+  color: #B6B6B6 !important;
+  text-align: right !important;
+  font-family: Pretendard;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: normal !important;
+  display: flex !important;
+  justify-content: flex-end;  
+}
+.ca-fixedCardFoot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.ca-fixedCardFootLabel {
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  align-self: stretch;
+}
+.ca-fixedCardFootItems {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  font-size: 12px;
+  align-self: stretch;
+  align-items: center;
+  color: rgba(255,255,255,0.6);
+}
+
+.ca-bank{
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.ca-fixedCardChip {
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap; 
+}
+
 
 .ca-fixedCard strong,
 .ca-fixedCard span,
@@ -569,17 +806,6 @@
   color: #ffffff;
   font-size: 16px;
   font-weight: 700;
-}
-
-.ca-fixedCardFoot {
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.ca-fixedCardFoot small,
-.ca-fixedCardFoot span {
-  color: rgba(255, 255, 255, 0.58);
-  font-weight: 200;
 }
 
 .ca-tripCards {

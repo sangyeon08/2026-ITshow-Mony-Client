@@ -566,7 +566,10 @@ export default function Ca() {
   /* 스크롤 ref — scrollWrap 안의 grid에 붙임 */
   const gridScrollRef = useRef(null);
   const thumbRef = useRef(null);
-  const { thumbHeight, thumbHeightRef } = useScrollIndicator(gridScrollRef, thumbRef);
+  const { thumbHeight, thumbHeightRef } = useScrollIndicator(
+    gridScrollRef,
+    thumbRef,
+  );
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -588,8 +591,12 @@ export default function Ca() {
       const trackHeight = el.clientHeight;
       const scrollableHeight = el.scrollHeight - el.clientHeight;
       const dy = e.clientY - dragStartY.current;
-      const scrollDelta = (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
-      el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
+      const scrollDelta =
+        (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
+      el.scrollTop = Math.max(
+        0,
+        Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight),
+      );
     };
 
     const handleMouseUp = () => setIsDragging(false);
@@ -607,7 +614,7 @@ export default function Ca() {
       gridScrollRef.current.scrollTop = 0;
     }
   }, [bucketTab]);
-  
+
   const openModal = (bucketId) => {
     const existing = memories[bucketId];
     setModalBucketId(bucketId);
@@ -635,35 +642,6 @@ export default function Ca() {
     if (!f) return;
     setModalPhoto(URL.createObjectURL(f));
   };
-
-  /* analysis API */
-  useEffect(() => {
-    const periodDetail = new Date().toISOString().slice(0, 7);
-    analysis
-      .summary(periodDetail)
-      .then((res) => {
-        const d = res.data;
-        if (!d) return;
-        if (d.total > 0) setTotalSpent(d.total);
-        if (d.fixed > 0 || d.variable > 0) {
-          setFixedItems([
-            {
-              title: "줄이기 어려운 소비",
-              value: d.fixed,
-              suffix: "원",
-              meta: "고정 지출",
-            },
-            {
-              title: "조절 가능한 소비",
-              value: d.variable,
-              suffix: "원",
-              meta: "변동 지출",
-            },
-          ]);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   /* 버킷 API */
   useEffect(() => {
@@ -781,7 +759,9 @@ export default function Ca() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="ca-toolbar">
-              <span>월별 / 주별 지출ㅤ|ㅤ💳 카카오뱅크, {name}님의 카뱅카드</span>
+              <span>
+                월별 / 주별 지출ㅤ|ㅤ💳 카카오뱅크, {name}님의 카뱅카드
+              </span>
             </div>
 
             <motion.div
@@ -838,18 +818,73 @@ export default function Ca() {
                   </p>
                 </div>
                 <div className="ca-miniGrid">
-                  <div className="ca-miniCard">
-                    <span>주간 | {currentWeekRangeLabel}</span>
-                    <strong>총 지출</strong>
-                    <strong>₩28,000</strong>
-                    <small>주변비례 +12%</small>
+                  {/* 왼쪽 컬럼: 일반 카드 4개 */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
+                    <div className="ca-miniCard">
+                      <span className="One">
+                        주간 | {currentWeekRangeLabel}
+                      </span>
+                      <div className="Two">
+                        <strong className="sum">총 지출</strong>
+                        <strong className="mony">₩28,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">주별대비</strong>
+                        <strong className="mony">+12%</strong>
+                      </div>
+                    </div>
+                    <div className="ca-miniCard">
+                      <span>6월의 지출</span>
+                      <div className="Two">
+                        <strong className="sum">최대지출</strong>
+                        <strong className="mony">₩125,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">집중소비</strong>
+                        <strong className="mony">주간 소비 비중↑</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div className="ca-miniCard">
-                    <span>지난달 대비 누적 소비</span>
-                    <strong>이번달 누적</strong>
-                    <strong>₩428,000</strong>
-                    <small>지난달 누적 ₩380,000</small>
+
+                  {/* 중간 컬럼: 일반 카드 2개 */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
+                    <div className="ca-miniCard">
+                      <span>지난달 대비 누적 소비</span>
+                      <div className="Two">
+                        <strong className="sum">이번달 누적</strong>
+                        <strong className="mony">₩428,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">지난달 누적</strong>
+                        <strong className="mony">₩380,000</strong>
+                      </div>
+                    </div>
+                    <div className="ca-miniCard">
+                      <span>이번 달 소비 속도</span>
+                      <div className="Two">
+                        <strong className="sum">예상지출</strong>
+                        <strong className="mony">₩530,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">예상 대비</strong>
+                        <strong className="mony">적정한 지출량</strong>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* 오른쪽 컬럼: steady 카드 1개 (tall) */}
                   <div className="ca-miniCard ca-miniCard--steady">
                     <span className="ca-miniCard__label">
                       안정적인 적정 소비
@@ -863,18 +898,6 @@ export default function Ca() {
                         소비 패턴의 균형의 <br /> 유지가 적절해요
                       </strong>
                     </div>
-                  </div>
-                  <div className="ca-miniCard">
-                    <span>{currentShortMonthLabel}의 지출</span>
-                    <strong>최다지출</strong>
-                    <strong>₩125,000</strong>
-                    <small>적정소비 주간 소비 비중↑</small>
-                  </div>
-                  <div className="ca-miniCard">
-                    <span>이번 달 소비 속도</span>
-                    <strong>예상지출</strong>
-                    <strong>₩530,000</strong>
-                    <small>예상 대비 적정한 지출량</small>
                   </div>
                 </div>
               </motion.article>
@@ -1063,40 +1086,90 @@ export default function Ca() {
               {...cardMotion}
             >
               <div className="ca-cardHead">
-                <h3>소비 구조 분석</h3>
+                <h3>고정 / 변동 지출</h3>
               </div>
-              <p className="ca-fixedConvert">
-                이번 달 조절 가능한 소비 중 <strong>42,000원</strong>을 저축으로
-                전환할 수 있어요.
-              </p>
+
+              {/* 상단 요약 영역 */}
               <div className="ca-fixedSummary">
-                {fixedItems.map((item) => (
-                  <div key={item.title} className="ca-fixedRow">
-                    <div>
-                      <strong>{item.title}</strong>
-                      <span>
-                        <CountUp value={item.value} suffix={item.suffix} />
+                <div className="ca-fixedSummaryRow">
+                  <div className="ca-fixedSummaryLeft">
+                    <div className="ca-fixedSummaryItem">
+                      <strong>고정지출</strong>
+                      <span className="ca-fixedAmount">
+                        256,800원 <em>(60%)</em>
                       </span>
                     </div>
-                    <small>{item.meta}</small>
+                    <div className="ca-fixedSummaryItem">
+                      <strong>변동지출</strong>
+                      <span className="ca-fixedAmount">
+                        171,200원 <em>(40%)</em>
+                      </span>
+                    </div>
                   </div>
-                ))}
+                  <div className="ca-fixedSummaryRight">
+                    <span>
+                      지출의 고정 비용 중심&nbsp;&nbsp;<strong>ㅤㅤ12건</strong>
+                    </span>
+                    <span>
+                      유동적인 소비 중심&nbsp;&nbsp;<strong>ㅤㅤㅤㅤ6건</strong>
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {/* 하단 2열 그리드 */}
               <div className="ca-fixedGrid">
-                {monthlyItems.map((item) => (
-                  <div key={item.title} className="ca-fixedCard">
-                    <div className="ca-fixedCardTop">
-                      <strong>{item.title}</strong>
-                      <span>
-                        <CountUp value={item.value} suffix="원" />
+                {/* 고정지출 카드 */}
+                <div className="ca-fixedCard">
+                  <strong className="ca-fixedCardTitle">고정지출</strong>
+                  <ul className="ca-fixedCardList">
+                    <li>
+                      <span>월세</span>
+                      <span className="Test1">
+                        500,000원&nbsp;<em>1건</em>
                       </span>
+                    </li>
+                    <li>
+                      <span>구독</span>
+                      <span className="Test1">
+                        29,000원&nbsp;<em>3건</em>
+                      </span>
+                    </li>
+                    <li className="ca-fixedCardMore">이외 8 건</li>
+                  </ul>
+                  <div className="ca-fixedCardFoot">
+                    <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
+                    <div className="ca-fixedCardFootItems">
+                      <span className="ca-fixedCardChip">토스</span>
+                      <span className="ca-bank">토스뱅크/토스유스카드</span>
                     </div>
-                    <div className="ca-fixedCardFoot">
-                      <small>{item.count}</small>
-                      <span>고정카드/계좌</span>
-                    </div>
+                    <span className="ca-fixedCardMore">이외 3 건</span>
                   </div>
-                ))}
+                </div>
+
+                {/* 변동지출 카드 */}
+                <div className="ca-fixedCard">
+                  <strong className="ca-fixedCardTitle">변동지출</strong>
+                  <ul className="ca-fixedCardList">
+                    <li>
+                      <span>식비</span>
+                      <span>180,000원</span>
+                    </li>
+                    <li>
+                      <span>쇼핑</span>
+                      <span>120,000원</span>
+                    </li>
+                    <li className="ca-fixedCardMore">이외 4 건</li>
+                  </ul>
+                  <div className="ca-fixedCardFoot">
+                    <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
+                    <div className="ca-fixedCardFootItems">
+                      <span className="ca-fixedCardChip">카카오...</span>
+                      <span className="ca-bank">카카오뱅크/카카오체크...</span>
+                    </div>
+                    <span className="ca-fixedCardMore">이외 2 건</span>
+                  </div>
+                </div>
               </div>
             </motion.article>
 

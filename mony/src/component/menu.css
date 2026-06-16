@@ -160,7 +160,7 @@
 .menu-bottom-context {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 28px;
-  padding: 20px 20px 24px;
+  padding: 15px 20px 24px;
   color: rgba(255, 255, 255, 0.96);
   background: rgba(255, 255, 255, 0.02);
   font-size: 12px;
@@ -171,12 +171,25 @@
 }
 
 .menu-bottom-context .title {
+  margin: 15px 0 14px 0;
   display: block;
-  margin-bottom: 14px;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: 18.486px; /* 154.054% */
+  letter-spacing: -0.24px;
+  color: #FFF;
+  font-family: Pretendard;
+}
+
+.menu-bottom-context .lion {
+  display: block;
+  font-size: 12px;
+  font-style: normal;
+  color: #FFF;
+  font-family: Pretendard;
+  font-weight: 300;
+  line-height: 17.716px; /* 147.635% */
   letter-spacing: -0.24px;
 }
 

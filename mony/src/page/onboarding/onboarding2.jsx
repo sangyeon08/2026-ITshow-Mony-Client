@@ -51,7 +51,7 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 - 의미를 알 수 없는 무작위 문자·숫자 나열인 경우 (예: "ㅁㄴㅇㄹ", "1234", "asdf")
 - 여행, 취미, 자기계발 세 카테고리 어디에도 해석할 수 없는 내용인 경우
   - 여행: 국내외 여행, 배낭여행, 항공, 숙소, 관광, 워케이션 등
-  - 취미: 악기, 운동, 독서, 요리, 게임, 반려동물, 공연·전시 관람, 수집 등
+  - 취미: 악기, 운동, 독서, 요리, 게임, 반려동물, 공연·전시 관람, 수집, 물건 구매, 무언가를 사기 등
   - 자기계발: 자격증, 어학, 학습, 창업, 건강 관리, 재테크 공부 등
 - 저축·목표와 전혀 관계없는 단순 감탄사·낙서인 경우
 
@@ -88,7 +88,8 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 5. 반드시 JSON 객체만 응답하세요. 다른 말은 하지 마세요.
 6. 각 description에는 목표 금액, 월 저축 금액, 예상 기간 중 적어도 하나 이상의 구체적인 정보를 포함하세요.
 7. targetAmount와 monthlySaving은 숫자 타입 원 단위로 작성하세요.
-8. category는 반드시 "여행", "취미", "자기계발" 중 하나로만 작성하세요.`;
+8. category는 반드시 "여행", "취미", "자기계발" 중 하나로만 작성하세요.
+9. 답변을 한국어로 한번 더 번역하세요. 절대 영어, 한자, 일어, 외국어로 된 단어는 포함하지 마세요.`;
 
 const DEFAULT_TARGET_AMOUNT = 3000000;
 const DEFAULT_MONTHLY_SAVING = 300000;
@@ -480,6 +481,10 @@ export default function Onboarding2() {
               const digits = e.target.value.replace(/[^0-9]/g, "");
               if (digits === "") return setQuickSaveAmount("");
               const n = Number(digits);
+              if (n > 100000000) {
+                setAlertMsg("1억 미만의 금액을 입력해주세요.");
+                return;
+              }
               setQuickSaveAmount(Number.isFinite(n) ? n.toLocaleString() : "");
             }}
             onKeyDown={(e) => {

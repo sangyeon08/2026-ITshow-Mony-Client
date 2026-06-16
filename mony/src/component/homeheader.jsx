@@ -4,11 +4,12 @@ import homeicon from "../assets/home/homeicon.svg";
 import "./homeheader.css";
 import homeheaderimg from "../assets/home/homeheaderimg.png";
 import { revealVariants } from "./homeMotion.jsx";
-import { getDaysWithMony } from "../utils/date.js";
+import { getDaysWithMony, getDaysWithTeam } from "../utils/date.js";
 
 export default function HomeHeader() {
   const name = localStorage.getItem("joinName")?.trim() || "김수한무";
   const days = useMemo(() => getDaysWithMony(), []);
+  const teamDays = useMemo(() => getDaysWithTeam(), []);
 
   const [count, setCount] = useState(0);
   const reduceMotion = useReducedMotion();
@@ -61,6 +62,9 @@ export default function HomeHeader() {
           <span className="homeheader-pillText">
             MONY 와 함께한지 <strong>{count}일</strong>
           </span>
+          <div className="homeheader-pillTooltip" role="tooltip">
+            Mony를 개발한 팀이 결성된 지 <strong>{teamDays}일</strong> 째예요!
+          </div>
         </div>
 
         <div className="homeheader-avatarWrap" aria-hidden="true">

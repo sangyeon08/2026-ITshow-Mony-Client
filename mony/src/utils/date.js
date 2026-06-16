@@ -1,4 +1,5 @@
 const JOIN_DATE = new Date("2025-12-22T00:00:00");
+const TEAM_DATE = new Date("2025-12-22T00:00:00");
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const WEEK_DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -34,6 +35,10 @@ export function getCompactDotDateLabel(date = getToday()) {
 
 export function getDaysWithMony(date = getToday()) {
   return Math.max(1, Math.floor((date - JOIN_DATE) / MS_PER_DAY) + 1);
+}
+
+export function getDaysWithTeam(date = getToday()) {
+  return Math.max(1, Math.floor((date - TEAM_DATE) / MS_PER_DAY) + 1);
 }
 
 export function getDaysLeftInMonth(date = getToday()) {
