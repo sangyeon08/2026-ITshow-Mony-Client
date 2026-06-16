@@ -659,7 +659,7 @@ export default function Home() {
                   {benefitRows.map((row) => (
                     <div key={row.cardName} className="home-benefitRow">
                       <div className="home-benefitMain">
-                        <strong>
+                        <strong className="cat">
                           {benefitCardInView ? (
                             <CountUp value={parseMoney(row.amount)} suffix="원" />
                           ) : (

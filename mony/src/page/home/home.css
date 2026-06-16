@@ -338,6 +338,15 @@
   gap: 10px;
 }
 
+.cat span{
+  color: #FFF !important;
+  font-family: Pretendard;
+  font-size: 18px !important;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
 .home-bucketStats div {
   min-height: 64px;
   padding: 12px;
