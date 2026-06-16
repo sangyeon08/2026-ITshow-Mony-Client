@@ -43,9 +43,17 @@
 /* .sobee{
   margin: 15px 0 0;
 } */
-
+.bucket{
+  margin: 30px 0 0;
+  font-size: 12px;
+  font-style: normal;
+  line-height: normal;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.62);
+}
 .home-metricLabel {
-  margin: 15px 0 0;
+  margin: 5px 0 0;
   font-size: 12px;
   font-style: normal;
   line-height: normal;
@@ -1321,6 +1329,9 @@
   min-width: 35px; /* 진행률 칸 너비 고정 */
 }
 
+.bg-goalMetaValues strong:first-child{
+  color: white;
+}
 /* 메타 정보 실제 값 (80% / 1개월 등) */
 .bg-goalMetaValues {
   display: flex;

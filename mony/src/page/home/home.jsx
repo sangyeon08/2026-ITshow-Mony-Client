@@ -516,7 +516,7 @@ export default function Home() {
             >
               <div className="home-savingsHeader">
                 <div className="home-savingsHeaderText">
-                  <p className="home-metricLabel">버킷리스트 챌린지</p>
+                  <p className="bucket">버킷리스트 챌린지</p>
                   <h3>{bucketGoal?.bucketList || "버킷리스트 챌린지"}</h3>
                 </div>
                 <span className="home-savingsPiggy" aria-hidden="true">
