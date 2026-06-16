@@ -1214,6 +1214,8 @@
 
 /* 전체 레이아웃: 좌측 아바타 고정 + 우측 카드 세로 스택 */
 .bg-goalLayout {
+  margin-left: 20px;
+  margin-right: 20px;
   margin-top: 18px;
   display: flex;
   flex-direction: row;
