@@ -517,28 +517,102 @@
 }
 
 .ca-fixedSummary {
-  margin-top: 12px;
-  padding: 16px;
+  margin-top: 22px;
+  padding: 24px;
+  padding-left: 30px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
-  display: grid;
+  display: flex;
+  height: 98px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-}
-
-.ca-fixedRow {
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  gap: 6px;
-  margin: 5px 0 0 5px;
+  margin-bottom: 12px;
 }
 
-.ca-fixedRow strong {
-  display: block;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
+.ca-fixedSummaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 107px;
 }
+
+.ca-fixedSummaryLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ca-fixedSummaryItem {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ca-fixedSummaryItem strong {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 48px;
+  color: #FFF;
+  font-style: normal;
+  line-height: normal;
+  font-family: Pretendard;
+}
+
+.ca-fixedSummaryItem  {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  min-width: 48px;
+}
+
+.ca-fixedAmount {
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-fixedAmount em {
+  margin-left: 4px;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ca-fixedSummaryRight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+.ca-fixedSummaryRight span{
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.ca-fixedSummaryRight strong {
+  color: #B6B6B6;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
 
 .ca-fixedGrid {
   margin-top: 14px;
@@ -555,7 +629,64 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 8px;
 }
+
+.ca-fixedCardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ca-fixedCardList li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+}
+.ca-fixedCardList li em {
+  font-style: normal;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+}
+
+.ca-fixedCardMore {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  text-align: right;
+}
+.ca-fixedCardFoot {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.ca-fixedCardFootLabel {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  display: block;
+  margin-bottom: 4px;
+}
+.ca-fixedCardFootItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+.ca-fixedCardChip {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+  width: fit-content;
+  text-decoration: underline;
+}
+
 
 .ca-fixedCard strong,
 .ca-fixedCard span,
@@ -576,17 +707,6 @@
   color: #ffffff;
   font-size: 16px;
   font-weight: 700;
-}
-
-.ca-fixedCardFoot {
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.ca-fixedCardFoot small,
-.ca-fixedCardFoot span {
-  color: rgba(255, 255, 255, 0.58);
-  font-weight: 200;
 }
 
 .ca-tripCards {

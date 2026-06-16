@@ -566,7 +566,10 @@ export default function Ca() {
   /* 스크롤 ref — scrollWrap 안의 grid에 붙임 */
   const gridScrollRef = useRef(null);
   const thumbRef = useRef(null);
-  const { thumbHeight, thumbHeightRef } = useScrollIndicator(gridScrollRef, thumbRef);
+  const { thumbHeight, thumbHeightRef } = useScrollIndicator(
+    gridScrollRef,
+    thumbRef,
+  );
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -588,8 +591,12 @@ export default function Ca() {
       const trackHeight = el.clientHeight;
       const scrollableHeight = el.scrollHeight - el.clientHeight;
       const dy = e.clientY - dragStartY.current;
-      const scrollDelta = (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
-      el.scrollTop = Math.max(0, Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight));
+      const scrollDelta =
+        (dy / (trackHeight - thumbHeightRef.current)) * scrollableHeight;
+      el.scrollTop = Math.max(
+        0,
+        Math.min(dragStartScrollTop.current + scrollDelta, scrollableHeight),
+      );
     };
 
     const handleMouseUp = () => setIsDragging(false);
@@ -607,7 +614,7 @@ export default function Ca() {
       gridScrollRef.current.scrollTop = 0;
     }
   }, [bucketTab]);
-  
+
   const openModal = (bucketId) => {
     const existing = memories[bucketId];
     setModalBucketId(bucketId);
@@ -635,7 +642,6 @@ export default function Ca() {
     if (!f) return;
     setModalPhoto(URL.createObjectURL(f));
   };
-
 
   /* 버킷 API */
   useEffect(() => {
@@ -753,7 +759,9 @@ export default function Ca() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="ca-toolbar">
-              <span>월별 / 주별 지출ㅤ|ㅤ💳 카카오뱅크, {name}님의 카뱅카드</span>
+              <span>
+                월별 / 주별 지출ㅤ|ㅤ💳 카카오뱅크, {name}님의 카뱅카드
+              </span>
             </div>
 
             <motion.div
@@ -1028,16 +1036,6 @@ export default function Ca() {
             whileInView="show"
             viewport={{ once: true, amount: 0.18 }}
           >
-
-
-
-
-
-
-
-
-
-
             {/* 소비 구조 분석 */}
             <motion.article
               className="ca-card ca-card--fixed"
@@ -1048,48 +1046,89 @@ export default function Ca() {
                 <h3>고정 / 변동 지출</h3>
               </div>
 
+              {/* 상단 요약 영역 */}
               <div className="ca-fixedSummary">
-                {fixedItems.map((item) => (
-                  <div key={item.title} className="ca-fixedRow">
-                    <div>
-                      <strong>{item.title}</strong>
-                      <span>
-                        <CountUp value={item.value} suffix={item.suffix} />
+                <div className="ca-fixedSummaryRow">
+                  <div className="ca-fixedSummaryLeft">
+                    <div className="ca-fixedSummaryItem">
+                      <strong>고정지출</strong>
+                      <span className="ca-fixedAmount">
+                        256,800원 <em>(60%)</em>
                       </span>
                     </div>
-                    <small>{item.meta}</small>
+                    <div className="ca-fixedSummaryItem">
+                      <strong>변동지출</strong>
+                      <span className="ca-fixedAmount">
+                        171,200원 <em>(40%)</em>
+                      </span>
+                    </div>
                   </div>
-                ))}
+                  <div className="ca-fixedSummaryRight">
+                    <span>
+                      지출의 고정 비용 중심&nbsp;&nbsp;<strong>ㅤㅤ12건</strong>
+                    </span>
+                    <span>
+                      유동적인 소비 중심&nbsp;&nbsp;<strong>ㅤㅤㅤㅤ6건</strong>
+                    </span>
+                  </div>
+                </div>
               </div>
 
-
-
-
+              {/* 하단 2열 그리드 */}
               <div className="ca-fixedGrid">
-                {monthlyItems.map((item) => (
-                  <div key={item.title} className="ca-fixedCard">
-                    <div className="ca-fixedCardTop">
-                      <strong>{item.title}</strong>
+                {/* 고정지출 카드 */}
+                <div className="ca-fixedCard">
+                  <strong className="ca-fixedCardTitle">고정지출</strong>
+                  <ul className="ca-fixedCardList">
+                    <li>
+                      <span>월세</span>
                       <span>
-                        <CountUp value={item.value} suffix="원" />
+                        500,000원&nbsp;<em>1건</em>
                       </span>
-                    </div>
-                    <div className="ca-fixedCardFoot">
-                      <small>{item.count}</small>
-                      <span>고정카드/계좌</span>
+                    </li>
+                    <li>
+                      <span>구독</span>
+                      <span>
+                        29,000원&nbsp;<em>3건</em>
+                      </span>
+                    </li>
+                    <li className="ca-fixedCardMore">이외 8 건</li>
+                  </ul>
+                  <div className="ca-fixedCardFoot">
+                    <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
+                    <div className="ca-fixedCardFootItems">
+                      <span className="ca-fixedCardChip">토스</span>
+                      <span>토스뱅크/토스유스카드</span>
+                      <span className="ca-fixedCardMore">이외 3 건</span>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* 변동지출 카드 */}
+                <div className="ca-fixedCard">
+                  <strong className="ca-fixedCardTitle">변동지출</strong>
+                  <ul className="ca-fixedCardList">
+                    <li>
+                      <span>식비</span>
+                      <span>180,000원</span>
+                    </li>
+                    <li>
+                      <span>쇼핑</span>
+                      <span>120,000원</span>
+                    </li>
+                    <li className="ca-fixedCardMore">이외 4 건</li>
+                  </ul>
+                  <div className="ca-fixedCardFoot">
+                    <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
+                    <div className="ca-fixedCardFootItems">
+                      <span className="ca-fixedCardChip">카카오...</span>
+                      <span>카카오뱅크/카카오체크...</span>
+                      <span className="ca-fixedCardMore">이외 2 건</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.article>
-
-
-
-
-
-
-
-
 
             {/* ══ 달성 버킷 추억 카드 ══ */}
             <motion.article
