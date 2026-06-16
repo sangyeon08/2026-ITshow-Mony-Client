@@ -636,34 +636,6 @@ export default function Ca() {
     setModalPhoto(URL.createObjectURL(f));
   };
 
-  /* analysis API */
-  useEffect(() => {
-    const periodDetail = new Date().toISOString().slice(0, 7);
-    analysis
-      .summary(periodDetail)
-      .then((res) => {
-        const d = res.data;
-        if (!d) return;
-        if (d.total > 0) setTotalSpent(d.total);
-        if (d.fixed > 0 || d.variable > 0) {
-          setFixedItems([
-            {
-              title: "줄이기 어려운 소비",
-              value: d.fixed,
-              suffix: "원",
-              meta: "고정 지출",
-            },
-            {
-              title: "조절 가능한 소비",
-              value: d.variable,
-              suffix: "원",
-              meta: "변동 지출",
-            },
-          ]);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   /* 버킷 API */
   useEffect(() => {
