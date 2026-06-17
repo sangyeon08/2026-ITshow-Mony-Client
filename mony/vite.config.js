@@ -381,6 +381,21 @@ function localApiPlugin() {
             return;
           }
 
+          if (action === "memory" && method === "PATCH") {
+            const updated = {
+              ...bucket,
+              img: body.img ?? bucket.img ?? null,
+              day: body.day ?? bucket.day ?? null,
+            };
+            localApiState.buckets[bucketIndex] = updated;
+            sendJson(res, 200, {
+              success: true,
+              message: "추억이 저장되었습니다",
+              data: updated,
+            });
+            return;
+          }
+
           if (action === "doing" && method === "POST") {
             sendJson(res, 200, {
               success: true,
