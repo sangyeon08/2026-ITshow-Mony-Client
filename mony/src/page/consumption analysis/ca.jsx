@@ -556,9 +556,22 @@ export default function Ca() {
   /* 추억 데이터 */
   const [memories, setMemories] = useState(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem("mony_memories") || "{}");
-      return { ...DEMO_MEMORIES, ...saved };
+      const raw = localStorage.getItem("mony_memories");
+      if (!raw) return DEMO_MEMORIES;
+      const saved = JSON.parse(raw);
+      // 기존에 photoUrl(base64)이 저장된 경우 제거 후 재저장
+      let needsClean = false;
+      const cleaned = {};
+      Object.entries(saved).forEach(([id, mem]) => {
+        if (mem.photoUrl) needsClean = true;
+        cleaned[id] = { memo: mem.memo || "", date: mem.date || "" };
+      });
+      if (needsClean) {
+        try { localStorage.setItem("mony_memories", JSON.stringify(cleaned)); } catch { localStorage.removeItem("mony_memories"); }
+      }
+      return { ...DEMO_MEMORIES, ...cleaned };
     } catch {
+      localStorage.removeItem("mony_memories");
       return DEMO_MEMORIES;
     }
   });
@@ -642,7 +655,7 @@ export default function Ca() {
     if (!String(modalBucketId).startsWith("demo-")) {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/buckets/${modalBucketId}/memory`,
+          `/api/buckets/${modalBucketId}/memory`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -750,7 +763,16 @@ export default function Ca() {
   const handleSaveMemory = (bucketId, data) => {
     const updated = { ...memories, [bucketId]: data };
     setMemories(updated);
-    localStorage.setItem("mony_memories", JSON.stringify(updated));
+    try {
+      // photoUrl은 base64 이미지라 용량이 크므로 localStorage에서 제외
+      const toStore = {};
+      Object.entries(updated).forEach(([id, mem]) => {
+        toStore[id] = { memo: mem.memo, date: mem.date };
+      });
+      localStorage.setItem("mony_memories", JSON.stringify(toStore));
+    } catch {
+      // QuotaExceededError 등 localStorage 쓰기 실패는 무시 (API가 정상 동작하면 무관)
+    }
   };
 
   const handleCaSave = (amount) => {
