@@ -759,7 +759,15 @@ export default function Ca() {
   const handleSaveMemory = (bucketId, data) => {
     const updated = { ...memories, [bucketId]: data };
     setMemories(updated);
-    localStorage.setItem("mony_memories", JSON.stringify(updated));
+    // 사진(base64)은 localStorage 용량 초과 유발 — memo/date만 저장
+    try {
+      const forStorage = Object.fromEntries(
+        Object.entries(updated).map(([k, v]) => [k, { memo: v.memo, date: v.date }])
+      );
+      localStorage.setItem("mony_memories", JSON.stringify(forStorage));
+    } catch {
+      // 저장 실패해도 현재 세션 state는 유지됨
+    }
   };
 
   const handleCaSave = (amount) => {
