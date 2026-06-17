@@ -760,7 +760,7 @@ export default function Ca() {
           >
             <div className="ca-toolbar">
               <span>
-                월별 / 주별 지출ㅤ|ㅤ💳 카카오뱅크, {name}님의 카뱅카드
+                월별 / 주별 지출ㅤ|ㅤ 카카오뱅크, {name}님의 카뱅카드
               </span>
             </div>
 
