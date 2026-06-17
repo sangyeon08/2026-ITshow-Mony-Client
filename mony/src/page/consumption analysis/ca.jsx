@@ -556,22 +556,9 @@ export default function Ca() {
   /* 추억 데이터 */
   const [memories, setMemories] = useState(() => {
     try {
-      const raw = localStorage.getItem("mony_memories");
-      if (!raw) return DEMO_MEMORIES;
-      const saved = JSON.parse(raw);
-      // 기존에 photoUrl(base64)이 저장된 경우 제거 후 재저장
-      let needsClean = false;
-      const cleaned = {};
-      Object.entries(saved).forEach(([id, mem]) => {
-        if (mem.photoUrl) needsClean = true;
-        cleaned[id] = { memo: mem.memo || "", date: mem.date || "" };
-      });
-      if (needsClean) {
-        try { localStorage.setItem("mony_memories", JSON.stringify(cleaned)); } catch { localStorage.removeItem("mony_memories"); }
-      }
-      return { ...DEMO_MEMORIES, ...cleaned };
+      const saved = JSON.parse(localStorage.getItem("mony_memories") || "{}");
+      return { ...DEMO_MEMORIES, ...saved };
     } catch {
-      localStorage.removeItem("mony_memories");
       return DEMO_MEMORIES;
     }
   });
@@ -651,7 +638,6 @@ export default function Ca() {
   const saveModal = async () => {
     if (!modalBucketId) return;
 
-    // 데모 데이터는 DB 저장 스킵
     if (!String(modalBucketId).startsWith("demo-")) {
       try {
         const res = await fetch(
@@ -661,7 +647,7 @@ export default function Ca() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               img: modalPhoto,
-              day: `${modalDate}||${modalMemo}`, // 날짜 + 메모 같이 저장
+              day: `${modalDate}||${modalMemo}`,
             }),
           },
         );
@@ -669,9 +655,11 @@ export default function Ca() {
         console.log("추억 저장 결과:", json);
       } catch (err) {
         console.error("추억 저장 실패:", err);
+        // API 실패해도 아래로 계속 진행
       }
     }
 
+    // try/catch 바깥 — API 성공/실패 무관하게 항상 실행
     handleSaveMemory(modalBucketId, {
       photoUrl: modalPhoto,
       memo: modalMemo,
@@ -763,16 +751,7 @@ export default function Ca() {
   const handleSaveMemory = (bucketId, data) => {
     const updated = { ...memories, [bucketId]: data };
     setMemories(updated);
-    try {
-      // photoUrl은 base64 이미지라 용량이 크므로 localStorage에서 제외
-      const toStore = {};
-      Object.entries(updated).forEach(([id, mem]) => {
-        toStore[id] = { memo: mem.memo, date: mem.date };
-      });
-      localStorage.setItem("mony_memories", JSON.stringify(toStore));
-    } catch {
-      // QuotaExceededError 등 localStorage 쓰기 실패는 무시 (API가 정상 동작하면 무관)
-    }
+    localStorage.setItem("mony_memories", JSON.stringify(updated));
   };
 
   const handleCaSave = (amount) => {
