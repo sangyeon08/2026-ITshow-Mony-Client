@@ -640,7 +640,9 @@ export default function Ca() {
   const onModalFile = (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
-    setModalPhoto(URL.createObjectURL(f));
+    const reader = new FileReader();
+    reader.onload = (ev) => setModalPhoto(ev.target.result);
+    reader.readAsDataURL(f);
   };
 
   /* 버킷 API */
