@@ -79,7 +79,7 @@ export default function Splash() {
             >
                 <span className="scroll-cue-text">scroll</span>
                 <span className="scroll-cue-arrow" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="17" viewBox="0 0 32 17" fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="24" viewBox="0 0 32 17" fill="none">
                         <path d="M0.365234 0.369141L14.3652 15.3691L30.8652 0.369141" stroke="white"/>
                     </svg>
                 </span>
