@@ -628,20 +628,46 @@ export default function Ca() {
     setModalMemo("");
     setModalDate("");
   };
-  const saveModal = () => {
+  const saveModal = async () => {
     if (!modalBucketId) return;
+
+    // 데모 데이터는 DB 저장 스킵
+    if (!String(modalBucketId).startsWith("demo-")) {
+      try {
+        const res = await fetch(
+          `http://localhost:3001/api/buckets/${modalBucketId}/memory`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              img: modalPhoto,
+              day: `${modalDate}||${modalMemo}`, // 날짜 + 메모 같이 저장
+            }),
+          },
+        );
+        const json = await res.json();
+        console.log("추억 저장 결과:", json);
+      } catch (err) {
+        console.error("추억 저장 실패:", err);
+      }
+    }
+
     handleSaveMemory(modalBucketId, {
       photoUrl: modalPhoto,
       memo: modalMemo,
       date: modalDate,
     });
+
     closeModal();
   };
   const onModalFile = (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
+
     const reader = new FileReader();
-    reader.onload = (ev) => setModalPhoto(ev.target.result);
+    reader.onload = (event) => {
+      setModalPhoto(event.target.result);
+    };
     reader.readAsDataURL(f);
   };
 
@@ -690,6 +716,21 @@ export default function Ca() {
             })
             .map((b) => ({ ...b, category: resolveCategory(b) }));
 
+          // DB에서 온 img, day 데이터를 memories에 반영
+          const dbMemories = {};
+          done.forEach((b) => {
+            if (b.img || b.day) {
+              const [date, ...memoParts] = (b.day || "").split("||");
+              const memo = memoParts.join("||");
+              dbMemories[b.id] = {
+                photoUrl: b.img || null,
+                memo: memo || "",
+                date: date || "",
+              };
+            }
+          });
+
+          setMemories((prev) => ({ ...prev, ...dbMemories }));
           setCompletedBuckets(done.length > 0 ? done : DEMO_COMPLETED_BUCKETS);
         } catch {
           setCompletedBuckets(DEMO_COMPLETED_BUCKETS);
@@ -761,9 +802,7 @@ export default function Ca() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="ca-toolbar">
-              <span>
-                월별 / 주별 지출ㅤ|ㅤ 카카오뱅크, {name}님의 카뱅카드
-              </span>
+              <span>월별 / 주별 지출ㅤ|ㅤ 카카오뱅크, {name}님의 카뱅카드</span>
             </div>
 
             <motion.div
