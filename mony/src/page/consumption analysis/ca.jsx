@@ -21,6 +21,7 @@ import {
 import JejuImg from "../../assets/ca/jeju.png";
 import BusanImg from "../../assets/ca/busan.png";
 import JapanImg from "../../assets/ca/japan.png";
+import MonyAlert from "../../component/MonyAlert";
 
 const currentShortMonthLabel = getShortMonthLabel();
 const todayInputValue = toDateInputValue(getToday());
@@ -296,6 +297,7 @@ function getCalendarCells(viewDate) {
 function MemoryDateCalendar({ value, onChange }) {
   const selectedDate = parseDateInput(value);
   const [viewDate, setViewDate] = useState(selectedDate);
+  const [alertMsg, setAlertMsg] = useState(null);
   const todayValue = toDateInputValue(new Date());
   const selectedValue = toDateInputValue(selectedDate);
 
@@ -306,6 +308,10 @@ function MemoryDateCalendar({ value, onChange }) {
   };
 
   const selectDate = (date) => {
+    if (toDateInputValue(date) > todayValue) {
+      setAlertMsg("정확한 날짜를 선택해주세요.");
+      return;
+    }
     onChange(toDateInputValue(date));
     setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
   };
@@ -315,6 +321,7 @@ function MemoryDateCalendar({ value, onChange }) {
 
   return (
     <div className="ca-memoryCalendar">
+      <MonyAlert message={alertMsg} onClose={() => setAlertMsg(null)} />
       <div className="ca-memoryCalendar__top">
         <button
           type="button"
