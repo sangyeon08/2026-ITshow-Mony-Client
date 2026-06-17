@@ -847,7 +847,7 @@ export default function Ca() {
                       </div>
                       <div className="Two">
                         <strong className="sum">집중소비</strong>
-                        <strong className="mony">주간 소비 비중↑</strong>
+                        <strong className="mony">주말 소비 비중↑</strong>
                       </div>
                     </div>
                   </div>
@@ -878,8 +878,7 @@ export default function Ca() {
                         <strong className="mony">₩530,000</strong>
                       </div>
                       <div className="Two">
-                        <strong className="sum">예상 대비</strong>
-                        <strong className="mony">적정한 지출량</strong>
+                        <strong className="sum">예상 대비 적정한 지출량</strong>
                       </div>
                     </div>
                   </div>

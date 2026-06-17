@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./onboarding1.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
+import MonyAlert from "../../component/MonyAlert";
 
 export default function Onboarding1() {
   const navigate = useNavigate();
@@ -15,10 +16,11 @@ export default function Onboarding1() {
   const [name, setName] = useState(
     () => localStorage.getItem("joinName") ?? "",
   );
+  const [alertMsg, setAlertMsg] = useState(null);
 
   const isValid = useMemo(() => {
     const trimmed = name.trim();
-    return trimmed.length > 0 && trimmed.length <= 20;
+    return trimmed.length > 0 && trimmed.length <= 6;
   }, [name]);
 
   useEffect(() => {
@@ -69,6 +71,8 @@ export default function Onboarding1() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
+      <MonyAlert message={alertMsg} onClose={() => setAlertMsg(null)} />
+
       {/* Top Icon */}
       <div className="join1-iconWrap" aria-hidden="true">
         <JoinStarIcon />
@@ -96,7 +100,14 @@ export default function Onboarding1() {
             id="join-name"
             name="join-name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val.length > 6) {
+                setAlertMsg("이름은 최대 6글자까지 입력할 수 있어요.");
+                return;
+              }
+              setName(val);
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && isValid) {
                 const trimmed = name.trim();
@@ -104,8 +115,7 @@ export default function Onboarding1() {
                 navigate("/onboarding2", { state: { name: trimmed } });
               }
             }}
-            placeholder="최대 20자"
-            maxLength={20}
+            placeholder="최대 6자"
             autoComplete="nickname"
             className="join1-input"
           />

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./onboarding3.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
+import MonyAlert from "../../component/MonyAlert";
 import { goals, buckets, stats } from "../../api/index.js";
 
 const GOAL_PRESETS = [
@@ -28,6 +29,7 @@ export default function Onboarding3() {
   const [customAmount, setCustomAmount]     = useState("");
   const [savingsMethod, setSavingsMethod]   = useState(null);
   const [isSubmitting, setIsSubmitting]     = useState(false);
+  const [alertMsg, setAlertMsg]             = useState(null);
 
   const goalAmount = useMemo(() => {
     if (selectedPreset === "custom") {
@@ -93,6 +95,8 @@ export default function Onboarding3() {
 
   return (
     <main className="join1-page">
+      <MonyAlert message={alertMsg} onClose={() => setAlertMsg(null)} />
+
       <div className="join1-iconWrap" aria-hidden="true">
         <JoinStarIcon />
       </div>
@@ -147,6 +151,10 @@ export default function Onboarding3() {
                 const digits = e.target.value.replace(/[^0-9]/g, "");
                 if (digits === "") return setCustomAmount("");
                 const n = Number(digits);
+                if (n >= 1000000000) {
+                  setAlertMsg("10억 미만의 금액을 입력해주세요.");
+                  return;
+                }
                 setCustomAmount(Number.isFinite(n) ? n.toLocaleString() : "");
               }}
               onKeyDown={(e) => {
