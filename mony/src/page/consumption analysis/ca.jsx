@@ -641,7 +641,7 @@ export default function Ca() {
     if (!String(modalBucketId).startsWith("demo-")) {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/buckets/${modalBucketId}/memory`,
+          `/api/buckets/${modalBucketId}/memory`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
