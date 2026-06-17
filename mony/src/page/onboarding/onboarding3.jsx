@@ -71,6 +71,7 @@ export default function Onboarding3() {
         const targetAmt = Number(bucketGoal.targetAmount) || 0;
         const bucketRes = await buckets.create({
           title: bucketGoal.bucketList,
+          category: bucketGoal.category,
           one:   bucketGoal.steps[0].title,
           two:   bucketGoal.steps[1].title,
           three: bucketGoal.steps[2].title,
