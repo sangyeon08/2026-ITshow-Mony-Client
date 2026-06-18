@@ -141,10 +141,58 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  overflow: hidden;
+  overflow: visible;
   background: #ffd84d;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
   flex: 0 0 auto;
+  position: relative;
+}
+
+.homeheader-avatarTooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 10px;
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: -0.01em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  z-index: 20;
+}
+
+.homeheader-avatarTooltip strong {
+  color: #cfff4d;
+  font-weight: 700;
+}
+
+.homeheader-avatarTooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  right: 10px;
+  border: 5px solid transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.homeheader-avatarTooltip::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% - 1px);
+  right: 10px;
+  border: 5px solid transparent;
+  border-bottom-color: #1e1e1e;
+}
+
+.homeheader-avatarWrap:hover .homeheader-avatarTooltip {
+  opacity: 1;
 }
 
 .homeheader-avatar {
@@ -152,6 +200,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 999px;
 }
 
 @media (max-width: 640px) {
