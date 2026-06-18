@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
@@ -744,7 +745,7 @@ export default function Home() {
             </div>
           </motion.section>
 
-          {activeTalkItem && (
+          {activeTalkItem && createPortal(
             <div
               className="home-talkModalBackdrop"
               role="presentation"
@@ -784,7 +785,8 @@ export default function Home() {
                   <p className="home-talkModalFooter">{activeTalkItem.popupFooter}</p>
                 )}
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           <div className="footer">
