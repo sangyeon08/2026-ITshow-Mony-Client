@@ -12,6 +12,7 @@
   grid-template-columns: 228px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
+  overflow-x: clip;
 }
 
 .bg-main {
