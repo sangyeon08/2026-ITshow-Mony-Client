@@ -67,8 +67,11 @@ export default function HomeHeader() {
           </div>
         </div>
 
-        <div className="homeheader-avatarWrap" aria-hidden="true">
+        <div className="homeheader-avatarWrap">
           <img src={homeheaderimg} alt="" className="homeheader-avatar" />
+          <div className="homeheader-avatarTooltip" role="tooltip">
+            Mony를 개발한 팀이 결성된 지 <strong>{teamDays}일</strong> 째예요!
+          </div>
         </div>
       </div>
     </motion.header>
