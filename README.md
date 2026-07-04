@@ -98,7 +98,6 @@
 ### Frontend
 - React
 - TypeScript
-- Tailwind CSS
 - Recharts
 - Axios
 
