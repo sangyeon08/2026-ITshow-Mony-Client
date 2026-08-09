@@ -197,6 +197,7 @@ export default function Onboarding2() {
   const [bucketList, setBucketList] = useState(initialForm.bucketList ?? "");
   const [quickSaveAmount, setQuickSaveAmount] = useState(() =>
     formatNumericInput(
+
       initialForm.quickSaveAmount ?? DEFAULT_QUICK_SAVE_AMOUNT,
     ),
   );
