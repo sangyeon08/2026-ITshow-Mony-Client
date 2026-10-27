@@ -1,206 +1,3 @@
-/* onboarding2.css */
-
-*, *::before, *::after{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  background: #0f0f0f;
-}
-
-#root {
-  min-height: 100%;
-  background: #0f0f0f;
-}
-
-.join1-page {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 56px 16px 40px;
-
-  background:
-    radial-gradient(1200px 600px at 50% 35%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 60%),
-    linear-gradient(180deg, #141414 0%, #0f0f0f 100%);
-  color: #ededed;
-
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-}
-
-.join1-iconWrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  margin-bottom: 24px;
-}
-
-.join1-icon {
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
-}
-
-.join1-card {
-  width: min(620px, 92vw);
-  border-radius: 22px;
-  padding: 30px 34px 26px;
-
-  background: rgba(38, 38, 38, 0.66);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.join1-progressRow {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-bottom: 16px;
-
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.02em;
-}
-
-.join1-progressNow {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.join1-progressSlash {
-  font-size: 14px;
-  opacity: 0.5;
-}
-
-.join1-progressTotal {
-  font-size: 14px;
-  opacity: 0.6;
-  font-weight: 500;
-}
-
-.join1-titleBlock {
-  margin-bottom: 18px;
-}
-
-.join1-kicker {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.join1-title {
-  margin: 8px 0 0;
-  font-size: 18px;
-  line-height: 1.35;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.join1-formBlock {
-  margin-top: 10px;
-}
-
-.join1-label {
-  display: block;
-  margin: 0 0 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.86);
-}
-
-.join1-input {
-  width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  border-radius: 10px;
-
-  outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(22, 22, 22, 0.55);
-  color: rgba(255, 255, 255, 0.92);
-
-  font-size: 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  display: block;
-  box-sizing: border-box;
-}
-
-.join1-helper {
-  margin: 10px 0 18px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.join1-button {
-  width: 100%;
-  height: 44px;
-  border-radius: 12px;
-  border: none;
-
-  font-size: 15px;
-  font-weight: 700;
-
-  transition: transform 120ms ease, opacity 120ms ease;
-  display: block;
-  box-sizing: border-box;
-  padding: 0;
-}
-
-.join1-button.is-enabled {
-  background: #CDFF4E;
-  color: #000000;
-  cursor: pointer;
-}
-
-.join1-button.is-enabled:active {
-  transform: translateY(1px);
-}
-
-.join1-button.is-disabled {
-  background: rgba(120, 120, 120, 0.45);
-  color: rgba(255, 255, 255, 0.75);
-  cursor: not-allowed;
-  opacity: 0.85;
-}
-
-.join1-bottomNav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-
-  color: rgba(255, 255, 255, 0.48);
-  margin-top: 6px;
-}
-
-.join1-bottomLink {
-  background: transparent;
-  border: none;
-  padding: 0;
-
-  color: rgba(255, 255, 255, 0.48);
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.join1-bottomDivider {
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-/* ===== Onboarding2 additions ===== */
-
 .join2-card {
   padding-bottom: 22px;
 }
@@ -208,13 +5,13 @@ html, body {
 .join2-block {
   margin-top: 54px;
 }
+
 .join2-block1 {
   margin-top: 32px;
 }
 
-.join2-subtitle {
-  margin-top: 50px;
-  margin: 0;
+.join2-subtitle,
+.join2-subtitle1 {
   font-size: 18px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.86);
@@ -232,30 +29,28 @@ html, body {
   gap: 12px;
 }
 
-/* Keep each goal item consistent with Figma size */
-.goalItem {
-  height: 80px;
-}
-
+.goalItem,
 .goalItem > * {
-  height: 100%;
+  height: 80px;
 }
 
 .goalCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   height: 80px;
-  text-align: left;
-  border-radius: 18px;
   padding: 18px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
   background: rgba(22, 22, 22, 0.35);
-  color: rgba(255, 255, 255, 0.90);
-  display: flex;
-  gap: 12px;
-  align-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: left;
   cursor: pointer;
-  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
-  box-sizing: border-box;
+  transition:
+    transform 120ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
 }
 
 .goalCard:active {
@@ -263,21 +58,20 @@ html, body {
 }
 
 .goalCard.is-selected {
-  background: #CDFF4E;
-  border-color: rgba(255, 255, 255, 0.0);
-  color: #000000;
+  border-color: transparent;
+  background: #cdff4e;
+  color: #000;
 }
 
 .goalIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
   display: inline-flex;
+  flex: 0 0 34px;
   align-items: center;
   justify-content: center;
-  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
 }
-
 
 .goalText {
   display: flex;
@@ -294,81 +88,35 @@ html, body {
 
 .goalDesc {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.72);
   line-height: 1.3;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .goalCard.is-selected .goalDesc {
   color: rgba(0, 0, 0, 0.72);
 }
 
-.field {
-  margin-top: 14px;
-  gap: 14px;
-}
-
-.fieldLabel {
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.82);
-  margin-bottom: 6px;
-  margin-top: 20px;
-}
-
-.chipRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(22, 22, 22, 0.25);
-  color: rgba(255, 255, 255, 0.76);
-  padding: 8px 22px;
-  border-radius: 999px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.chip.is-on {
-  background: #CDFF4E;
-  border-color: #CDFF4E;
-  color: #000000;
-}
-
-.chip.is-disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.chipWrap {
-  gap: 10px 8px;
-}
-
 .join2-amount {
-  margin-top: 12px;
   width: 100%;
   height: 44px;
+  margin-top: 12px;
   padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(22, 22, 22, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.92);
   font-size: 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  box-sizing: border-box;
 }
 
 .join2-aiButton {
-  margin-top: 10px;
   width: 100%;
   min-height: 44px;
+  margin-top: 10px;
   border: 0;
   border-radius: 12px;
-  background: #CDFF4E;
+  background: #cdff4e;
   color: #000;
   font-family: inherit;
   font-size: 14px;
@@ -404,16 +152,16 @@ html, body {
 }
 
 .join2-category {
-  margin-top: 12px;
-  min-height: 42px;
-  padding: 0 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(205, 255, 78, 0.22);
-  background: rgba(205, 255, 78, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-height: 42px;
+  margin-top: 12px;
+  padding: 0 14px;
+  border: 1px solid rgba(205, 255, 78, 0.22);
+  border-radius: 12px;
+  background: rgba(205, 255, 78, 0.08);
 }
 
 .join2-category span {
@@ -423,21 +171,21 @@ html, body {
 }
 
 .join2-category strong {
-  color: #CDFF4E;
+  color: #cdff4e;
   font-size: 13px;
   font-weight: 800;
 }
 
 .join2-planList {
-  margin-top: 14px;
   display: grid;
   gap: 10px;
+  margin-top: 14px;
 }
 
 .join2-planCard {
   padding: 14px 16px;
-  border-radius: 14px;
   border: 1px solid rgba(205, 255, 78, 0.16);
+  border-radius: 14px;
   background: rgba(22, 22, 22, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
@@ -445,7 +193,7 @@ html, body {
 .join2-planCard span {
   display: inline-flex;
   margin-bottom: 7px;
-  color: #CDFF4E;
+  color: #cdff4e;
   font-size: 11px;
   font-weight: 700;
 }
@@ -462,24 +210,6 @@ html, body {
   color: rgba(255, 255, 255, 0.62);
   font-size: 12px;
   line-height: 1.45;
-}
-
-.join2-footnote {
-  margin: 10px 0 0;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.join2-footnoteList {
-  margin: 6px 0 32px;
-  padding-left: 18px; /* 들여쓰기 */
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-  list-style-position: outside;
-}
-
-.join2-footnoteList li {
-  margin: 4px 0;
 }
 
 @media (max-width: 420px) {

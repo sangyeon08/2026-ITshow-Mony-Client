@@ -1,155 +1,5 @@
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  background: #0f0f0f;
-}
-
-#root {
-  min-height: 100%;
-  background: #0f0f0f;
-}
-
-.join1-page {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 56px 16px 40px;
-
-  background:
-    radial-gradient(1200px 600px at 50% 35%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 60%),
-    linear-gradient(180deg, #141414 0%, #0f0f0f 100%);
-  color: #ededed;
-
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-}
-
-.join1-iconWrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  margin-bottom: 24px;
-}
-
-.join1-card {
-  width: min(620px, 92vw);
-  border-radius: 22px;
-  padding: 30px 34px 26px;
-
-  background: rgba(38, 38, 38, 0.66);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.join1-progressRow {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-bottom: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.02em;
-}
-
-.join1-progressNow {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.join1-progressSlash {
-  font-size: 14px;
-  opacity: 0.5;
-}
-
-.join1-progressTotal {
-  font-size: 14px;
-  opacity: 0.6;
-  font-weight: 500;
-}
-
-.join1-titleBlock {
-  margin-bottom: 20px;
-}
-
-.join1-kicker {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.join1-title {
-  margin: 8px 0 0;
-  font-size: 18px;
-  line-height: 1.35;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.join1-input {
-  width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  border-radius: 10px;
-  outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(22, 22, 22, 0.55);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  display: block;
-  box-sizing: border-box;
-}
-
-.join1-button {
-  margin-top: 28px;
-  width: 100%;
-  height: 44px;
-  border-radius: 12px;
-  border: none;
-  font-size: 15px;
-  font-weight: 700;
-  transition: transform 120ms ease, opacity 120ms ease;
-  display: block;
-  box-sizing: border-box;
-  padding: 0;
-}
-
-.join1-button.is-enabled {
-  background: #cdff4e;
-  color: #000000;
-  cursor: pointer;
-}
-
-.join1-button.is-enabled:active {
-  transform: translateY(1px);
-}
-
-.join1-button.is-disabled {
-  background: rgba(120, 120, 120, 0.45);
-  color: rgba(255, 255, 255, 0.75);
-  cursor: not-allowed;
-  opacity: 0.85;
-}
-
-/* ── ob3: 저축 목표 설정 전용 ── */
-
 .ob3-desc {
-  margin: 8px 0 0;
+  margin-top: 8px;
   font-size: 13px;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.6);
@@ -160,85 +10,71 @@ html, body {
 }
 
 .ob3-sectionLabel {
+  margin: 10px 0;
   font-size: 13px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.86);
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 
-.ob3-presetGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.ob3-presetBtn {
-  height: 52px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(22, 22, 22, 0.35);
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 140ms, border-color 140ms, color 140ms;
-  font-family: inherit;
-}
-
-.ob3-presetBtn.is-on {
-  background: #cdff4e;
-  border-color: #cdff4e;
-  color: #000000;
-}
-
-.ob3-customInput {
-  margin-top: 10px;
-}
-
+.ob3-presetGrid,
 .ob3-methodRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
+.ob3-presetBtn,
 .ob3-methodBtn {
-  min-height: 68px;
-  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(22, 22, 22, 0.35);
   color: rgba(255, 255, 255, 0.86);
+  font-family: inherit;
   cursor: pointer;
-  padding: 14px 16px;
+  transition:
+    background 140ms,
+    border-color 140ms,
+    color 140ms;
+}
+
+.ob3-presetBtn {
+  height: 52px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ob3-presetBtn.is-on,
+.ob3-methodBtn.is-on {
+  border-color: #cdff4e;
+  background: #cdff4e;
+  color: #000;
+}
+
+.ob3-customInput {
+  margin-top: 10px;
+}
+
+.ob3-methodBtn {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
+  min-height: 68px;
+  padding: 14px 16px;
+  border-radius: 14px;
   text-align: left;
-  transition: background 140ms, border-color 140ms, color 140ms;
-  font-family: inherit;
-}
-
-.ob3-methodBtn.is-on {
-  background: #cdff4e;
-  border-color: #cdff4e;
-  color: #000000;
 }
 
 .ob3-methodLabel {
+  color: inherit;
   font-size: 13px;
   font-weight: 700;
-  color: inherit;
   line-height: 1.2;
 }
 
-.ob3-methodBtn.is-on .ob3-methodLabel {
-  color: #000000;
-}
-
 .ob3-methodDesc {
-  font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
   line-height: 1.3;
 }
 
@@ -246,8 +82,6 @@ html, body {
   color: rgba(0, 0, 0, 0.62);
 }
 
-@media (max-width: 420px) {
-  .join1-card {
-    padding: 28px 22px 24px;
-  }
+.ob3-confirmButton {
+  margin-top: 28px;
 }

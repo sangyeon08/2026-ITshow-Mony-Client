@@ -1,54 +1,72 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./onboarding1.css";
-import Navigate from "../../component/navigate";
-import JoinStarIcon from "../../component/JoinStarIcon";
 import MonyAlert from "../../component/MonyAlert";
+import OnboardingLayout from "./OnboardingLayout";
+import { ONBOARDING_STORAGE_KEYS } from "./onboarding.utils";
+import "./onboarding1.css";
+
+const MAX_NAME_LENGTH = 6;
+const SPLASH_NAVIGATION_DELAY = 420;
 
 export default function Onboarding1() {
   const navigate = useNavigate();
   const location = useLocation();
-  const fromSplashScroll = location.state?.fromSplashScroll === true;
+  const [name, setName] = useState(
+    () => localStorage.getItem(ONBOARDING_STORAGE_KEYS.name) ?? "",
+  );
+  const [alertMessage, setAlertMessage] = useState(null);
   const [isReturningToSplash, setIsReturningToSplash] = useState(false);
   const isNavigatingRef = useRef(false);
   const touchStartYRef = useRef(null);
   const navigateTimerRef = useRef(null);
-  const [name, setName] = useState(
-    () => localStorage.getItem("joinName") ?? "",
-  );
-  const [alertMsg, setAlertMsg] = useState(null);
 
   const isValid = useMemo(() => {
-    const trimmed = name.trim();
-    return trimmed.length > 0 && trimmed.length <= 6;
+    const trimmedName = name.trim();
+    return trimmedName.length > 0 && trimmedName.length <= MAX_NAME_LENGTH;
   }, [name]);
 
   useEffect(() => {
-    localStorage.setItem("joinName", name);
+    localStorage.setItem(ONBOARDING_STORAGE_KEYS.name, name);
   }, [name]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (navigateTimerRef.current !== null) {
         window.clearTimeout(navigateTimerRef.current);
       }
-    };
-  }, []);
+    },
+    [],
+  );
 
-  const goToSplash = useCallback(() => {
+  const continueOnboarding = useCallback(() => {
+    if (!isValid) return;
+
+    const trimmedName = name.trim();
+    localStorage.setItem(ONBOARDING_STORAGE_KEYS.name, trimmedName);
+    navigate("/onboarding2", { state: { name: trimmedName } });
+  }, [isValid, name, navigate]);
+
+  const returnToSplash = useCallback(() => {
     if (isNavigatingRef.current) return;
+
     isNavigatingRef.current = true;
     setIsReturningToSplash(true);
-
     navigateTimerRef.current = window.setTimeout(() => {
       navigate("/splash", { state: { fromOnboardingScroll: true } });
-    }, 420);
+    }, SPLASH_NAVIGATION_DELAY);
   }, [navigate]);
 
-  const handleWheel = (event) => {
-    if (event.deltaY < -12) {
-      goToSplash();
+  const handleNameChange = (event) => {
+    const nextName = event.target.value;
+    if (nextName.length > MAX_NAME_LENGTH) {
+      setAlertMessage(`이름은 최대 ${MAX_NAME_LENGTH}글자까지 입력할 수 있어요.`);
+      return;
     }
+    setName(nextName);
+  };
+
+  const handleWheel = (event) => {
+    if (event.deltaY < -12) returnToSplash();
   };
 
   const handleTouchStart = (event) => {
@@ -59,89 +77,63 @@ export default function Onboarding1() {
     if (touchStartYRef.current === null) return;
 
     const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
-    if (currentY - touchStartYRef.current > 28) {
-      goToSplash();
-    }
+    if (currentY - touchStartYRef.current > 28) returnToSplash();
   };
 
+  const pageClassName = [
+    location.state?.fromSplashScroll && "join1-page-enter",
+    isReturningToSplash && "join1-page-return",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <main
-      className={`join1-page ${fromSplashScroll ? "join1-page-enter" : ""} ${isReturningToSplash ? "join1-page-return" : ""}`}
+    <OnboardingLayout
+      step={1}
+      kicker="MONY와 함께할 첫 번째 단계"
+      title="회원님을 어떻게 불러 드릴까요?"
+      overlay={
+        <MonyAlert
+          message={alertMessage}
+          onClose={() => setAlertMessage(null)}
+        />
+      }
+      pageClassName={pageClassName}
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
-      <MonyAlert message={alertMsg} onClose={() => setAlertMsg(null)} />
+      <div className="join1-formBlock">
+        <label htmlFor="join-name" className="join1-label">
+          사용할 이름이나 닉네임을 알려주세요
+        </label>
 
-      {/* Top Icon */}
-      <div className="join1-iconWrap" aria-hidden="true">
-        <JoinStarIcon />
+        <input
+          id="join-name"
+          name="join-name"
+          value={name}
+          onChange={handleNameChange}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") continueOnboarding();
+          }}
+          placeholder={`최대 ${MAX_NAME_LENGTH}자`}
+          autoComplete="nickname"
+          className="join1-input"
+        />
+
+        <p className="join1-helper">
+          입력한 이름 · 닉네임으로 기록이 저장돼요
+        </p>
+
+        <button
+          type="button"
+          disabled={!isValid}
+          className={`join1-button ${isValid ? "is-enabled" : "is-disabled"}`}
+          onClick={continueOnboarding}
+        >
+          확인
+        </button>
       </div>
-
-      {/* Card */}
-      <section className="join1-card" aria-label="회원가입 1단계">
-        <div className="join1-progressRow">
-          <span className="join1-progressNow">01</span>
-          <span className="join1-progressSlash">/</span>
-          <span className="join1-progressTotal">03</span>
-        </div>
-
-        <div className="join1-titleBlock">
-          <p className="join1-kicker">MONY와 함께할 첫 번째 단계</p>
-          <h1 className="join1-title">회원님을 어떻게 불러 드릴까요?</h1>
-        </div>
-
-        <div className="join1-formBlock">
-          <label htmlFor="join-name" className="join1-label">
-            사용할 이름이나 닉네임을 알려주세요
-          </label>
-
-          <input
-            id="join-name"
-            name="join-name"
-            value={name}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (val.length > 6) {
-                setAlertMsg("이름은 최대 6글자까지 입력할 수 있어요.");
-                return;
-              }
-              setName(val);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && isValid) {
-                const trimmed = name.trim();
-                localStorage.setItem("joinName", trimmed);
-                navigate("/onboarding2", { state: { name: trimmed } });
-              }
-            }}
-            placeholder="최대 6자"
-            autoComplete="nickname"
-            className="join1-input"
-          />
-
-          <p className="join1-helper">
-            입력한 이름 · 닉네임으로 기록이 저장돼요
-          </p>
-
-          <button
-            type="button"
-            disabled={!isValid}
-            className={`join1-button ${isValid ? "is-enabled" : "is-disabled"}`}
-            onClick={() => {
-              if (!isValid) return;
-              const trimmed = name.trim();
-              localStorage.setItem("joinName", trimmed);
-              navigate("/onboarding2", { state: { name: trimmed } });
-            }}
-          >
-            확인
-          </button>
-        </div>
-      </section>
-
-      {/* Bottom Nav */}
-      <Navigate />
-    </main>
+    </OnboardingLayout>
   );
 }

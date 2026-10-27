@@ -6,6 +6,7 @@
 
 ---
 
+
 ## 📌 프로젝트 소개
 
 **Mony**는 청년 1인 가구를 대상으로 한 개인 금융 관리 웹 애플리케이션입니다.
@@ -97,7 +98,6 @@
 ### Frontend
 - React
 - TypeScript
-- Tailwind CSS
 - Recharts
 - Axios
 

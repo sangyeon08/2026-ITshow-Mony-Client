@@ -1,0 +1,158 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background: #0f0f0f;
+}
+
+#root {
+  min-height: 100%;
+  background: #0f0f0f;
+}
+
+.join1-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 56px 16px 40px;
+  background:
+    radial-gradient(
+      1200px 600px at 50% 35%,
+      rgba(255, 255, 255, 0.06),
+      rgba(0, 0, 0, 0) 60%
+    ),
+    linear-gradient(180deg, #141414 0%, #0f0f0f 100%);
+  color: #ededed;
+  font-family:
+    Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+
+.join1-iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0 24px;
+}
+
+.join1-icon {
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
+}
+
+.join1-card {
+  width: min(620px, 92vw);
+  padding: 30px 34px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px;
+  background: rgba(38, 38, 38, 0.66);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.join1-progressRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+}
+
+.join1-progressNow,
+.join1-progressSlash,
+.join1-progressTotal {
+  font-size: 14px;
+}
+
+.join1-progressNow {
+  font-weight: 600;
+}
+
+.join1-progressSlash {
+  opacity: 0.5;
+}
+
+.join1-progressTotal {
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.join1-titleBlock {
+  margin-bottom: 18px;
+}
+
+.join1-kicker {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.join1-title {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.join1-input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  outline: none;
+  background: rgba(22, 22, 22, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+}
+
+.join1-button {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.join1-button.is-enabled {
+  background: #cdff4e;
+  color: #000;
+  cursor: pointer;
+}
+
+.join1-button.is-enabled:active {
+  transform: translateY(1px);
+}
+
+.join1-button.is-disabled {
+  background: rgba(120, 120, 120, 0.45);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+@media (max-width: 420px) {
+  .join1-card {
+    padding: 28px 22px 24px;
+  }
+}
